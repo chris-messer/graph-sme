@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Roadmap to Graph — Speaker notes</title>
+  <style>
+    :root {
+      --ink: #1b3139; --muted: #52666d; --dim: #75868b;
+      --oat: #f9f7f4; --oat-2: #eeede9; --line: #d7d6d1;
+      --signal: #ff3621; --blue: #2272b4;
+      --display: "DM Sans", "Avenir Next", "Inter", sans-serif;
+      --body: "Inter", "DM Sans", "Avenir Next", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: var(--oat); color: var(--ink); font-family: var(--body); }
+    body {
+      display: grid; grid-template-rows: auto 1fr auto;
+      background:
+        radial-gradient(circle at 92% 0%, rgba(255,54,33,.07), transparent 34%),
+        linear-gradient(160deg, #f9f7f4 0%, #f5f3ef 60%, #eeede9 100%);
+    }
+    header {
+      padding: 18px 22px 14px; border-bottom: 1px solid var(--line);
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+    }
+    .brand { color: var(--signal); font: 700 11px/1 var(--display); letter-spacing: .16em; text-transform: uppercase; }
+    .counter { font: 700 13px/1 var(--display); color: var(--dim); font-variant-numeric: tabular-nums; }
+    h1 { margin: 10px 0 0; font: 700 24px/1.15 var(--display); letter-spacing: -.02em; }
+    .on-screen {
+      margin-top: 10px; color: var(--muted); font-size: 13px; line-height: 1.4;
+      padding: 10px 12px; background: rgba(255,255,255,.7); border-left: 3px solid var(--signal);
+    }
+    main { overflow: auto; padding: 18px 22px 24px; }
+    .say {
+      font-size: 16px; line-height: 1.55; color: var(--ink);
+      background: rgba(255,255,255,.82); border: 1px solid var(--line); border-radius: 10px;
+      padding: 16px 18px; margin-bottom: 16px;
+    }
+    .say .label { display: block; color: var(--signal); font: 700 11px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; }
+    .block { margin-bottom: 14px; }
+    .block h2 { margin: 0 0 8px; font: 700 12px/1 var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--blue); }
+    .block ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; line-height: 1.45; }
+    .block li { margin-bottom: 4px; }
+    .transition {
+      margin-top: 8px; padding: 12px 14px; border-left: 3px solid var(--blue);
+      background: rgba(34,114,180,.07); color: var(--ink); font-size: 14px; line-height: 1.4;
+    }
+    footer {
+      border-top: 1px solid var(--line); padding: 12px 16px;
+      display: flex; gap: 10px; align-items: center; justify-content: space-between;
+      background: rgba(255,255,255,.75);
+    }
+    .nav { display: flex; gap: 8px; }
+    button {
+      appearance: none; border: 1px solid var(--line); background: white; color: var(--ink);
+      font: 700 12px/1 var(--display); letter-spacing: .06em; text-transform: uppercase;
+      padding: 11px 14px; border-radius: 8px; cursor: pointer;
+    }
+    button:hover { border-color: var(--signal); color: var(--signal); }
+    .hint { color: var(--dim); font-size: 11px; letter-spacing: .04em; }
+    .deck-link { color: var(--blue); font-size: 12px; text-decoration: none; }
+    .deck-link:hover { color: var(--signal); }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <div class="brand">Roadmap to Graph · Talk track</div>
+      <h1 id="title">Title</h1>
+      <div class="on-screen" id="onscreen"></div>
+    </div>
+    <div class="counter" id="counter">01 / 14</div>
+  </header>
+  <main>
+    <div class="say"><span class="label">Say this</span><div id="say"></div></div>
+    <div id="bullets"></div>
+    <div class="transition" id="transition"></div>
+  </main>
+  <footer>
+    <div class="nav">
+      <button type="button" id="prev">← Prev</button>
+      <button type="button" id="next">Next →</button>
+    </div>
+    <a class="deck-link" id="deck-link" href="graph-sme-walkthrough.html" target="graph-sme-main">Open main deck</a>
+    <span class="hint">Synced · ← → · Space</span>
+  </footer>
+
+  <script>
+    (() => {
+      const CHANNEL = 'graph-sme-deck';
+      const STORAGE_KEY = 'graph-sme-slide';
+      const bc = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel(CHANNEL) : null;
+      let index = 0;
+      let applyingRemote = false;
+      let lastNavAt = 0;
+
+      const NOTES = [
+        {
+          title: 'Title',
+          onscreen: 'Roadmap to Graph — match need to lowest rung, climb only with proof.',
+          say: 'Here\'s how I\'d open: "This is a decision briefing, not a product tour. Teams say they need a graph. What they often need is governed relationships, better agent context, or multi-hop answers. We\'ll map those needs to a ladder on Databricks — starting managed, climbing only when your own queries force it."',
+          bullets: [
+            ['Purpose', ['Set the operating rule: lowest rung that answers the benchmark']],
+            ['Frame', ['Customer-facing; avoid dumping the full internal catalog of kits']],
+          ],
+          transition: 'Transition: "Quick map of where we\'re going."'
+        },
+        {
+          title: 'Agenda',
+          onscreen: 'Six beats: need, vocabulary, ladder, algorithms/GraphRAG, decision, discussion.',
+          say: 'Don\'t read the cards. Promise them the network visuals will do the teaching, and the discussion at the end will map their use case to a starting rung.',
+          bullets: [
+            ['Keep it crisp', ['~45–60 min with discussion', 'Visuals carry Graph 101 and algorithms']],
+          ],
+          transition: 'Transition: "First — what people usually mean when they say graph."'
+        },
+        {
+          title: 'What customers want',
+          onscreen: 'Three metrics: 2 families, managed path first, 3 query shapes.',
+          say: 'Here\'s how I\'d say it: "Graph databases and graph virtualization are real categories. Knowledge graphs sit beside them as organizational understanding rendered as interconnected data. In the field, most teams are satisfied with ontology-enriched Genie and a knowledge explorer for agents — not a net-new graph estate. When they do need graph, it\'s usually because of the query shape: algorithms, deep traversal, or structural learning — not because the industry vertical is labeled fraud or supply chain."',
+          bullets: [
+            ['Purpose', ['Reframe "we need Neo4j" into "what query shape fails today?"']],
+            ['Discovery', [
+              'What does "graph" mean in your RFP or architecture board notes today?',
+              'Is the ask exploration for people, context for agents, or production traversal SLAs?',
+            ]],
+          ],
+          transition: 'Transition: "Before the ladder — sixty seconds of vocabulary, with a live network."'
+        },
+        {
+          title: 'Graph 101',
+          onscreen: 'Interactive force graph; seed Ann with a highlighted 2-hop path.',
+          say: 'Here\'s how I\'d say it: "A graph is two sets — entities and relationships. Degree is how busy a node is. A hop is one edge; traversal is walking a path. The trick behind this whole briefing: in the lakehouse the graph is an edge table. Subject, predicate, object. There is no separate magic structure you have to stand up first." Drag a node if they lean in; point at the coral seed and the green 2-hop path.',
+          bullets: [
+            ['Purpose', ['Demystify graph; plant the edge-table idea']],
+            ['How to demo live', ['Drag Ann or Acme; call out CALLED as a 2-hop walk', 'Say: "most graph-DB asks are multi-hop SQL in disguise"']],
+            ['Discovery', ['Which business questions are 2-hop or deeper today?']],
+          ],
+          transition: 'Transition: "Ontology and graph travel together — here\'s why, visually."'
+        },
+        {
+          title: 'Ontology · taxonomy · KG',
+          onscreen: 'Three cards with mini D3: tree, typed schema, instance network.',
+          say: 'Here\'s how I\'d say it: "Taxonomy is a classification tree. Ontology is the allowed types and rules — the schema of meaning. The knowledge graph is the instance data under that schema. That\'s why Labs splits the work: OntoBricks builds and reasons over the graph; Ontos governs the business meaning. You may need neither on day one if Genie Ontology plus the Glossary already cover the ask."',
+          bullets: [
+            ['Purpose', ['Separate classification, schema, and instances']],
+            ['Key nuance', ['RDF/OWL when formal reasoning matters; LPG when app/analytics Cypher is the culture']],
+            ['Discovery', ['Do you need formal OWL/SHACL, or curated business terms and relationships?']],
+          ],
+          transition: 'Transition: "So before we build anything custom — check the managed stack."'
+        },
+        {
+          title: 'Managed semantic path',
+          onscreen: 'Four-stage flow: Genie Ontology → Glossary → Metric Views → Relationships.',
+          say: 'Here\'s how I\'d say it: "This is now a product surface. Genie Ontology builds a semantic map from tables, queries, dashboards, and docs. You steer it with Knowledge Concepts and the Unity Catalog Glossary. Metric Views give you governed metrics. Relationships is the product-native version of the edge-table pattern we\'ll talk about next. Days to enable, then curation is the work — not a six-week graph program."',
+          bullets: [
+            ['Purpose', ['Force the "have you tried the managed path?" gate']],
+            ['Discovery', [
+              'Has Genie Ontology preview been requested through the account team?',
+              'Which Metric Views already exist over the core entities?',
+            ]],
+            ['Key nuance', ['Ontology is LLM-friendly, not OWL-editable; external OWL ingest is not the current plan']],
+          ],
+          transition: 'Transition: "If that\'s not enough, here\'s the climb."'
+        },
+        {
+          title: 'Complexity ladder',
+          onscreen: 'Five rungs from managed ontology to partner/engine.',
+          say: 'Here\'s how I\'d say it: "Read left to right. Rung one is managed. Rung two is an edge table into Genie — often enough for interconnectivity. Rung three standardizes on gold_triplets and puts a Supervisor and explorer on top. Rung four is when queries are genuinely graph-shaped — hop tables or Text-to-SPARQL-to-SQL. Rung five is a dedicated engine or partner database — only when benchmarks prove the simpler rungs short."',
+          bullets: [
+            ['Purpose', ['Give them a shared language for scoping']],
+            ['Discovery', [
+              'How fast do you need a first POC that answers a real question?',
+              'Do you have ontology or graph experts on staff for a higher rung?',
+            ]],
+          ],
+          transition: 'Transition: "The reusable decision across every engagement: standardize the edge contract early."'
+        },
+        {
+          title: 'gold_triplets contract',
+          onscreen: 'D3 ownership/ops network beside a gold_triplets table.',
+          say: 'Here\'s how I\'d say it: "This table is the graph. Same contract feeds Genie, UC functions, batch algorithms, and the explorer. Teams that can land gold_triplets — agentically or with their own ETL — get the consumption layer for free. Point at a row, then at the matching edge in the network so the room feels the isomorphism."',
+          bullets: [
+            ['Purpose', ['Make the edge contract visceral']],
+            ['How to demo live', ['Trace Acme→Maya→Acct-441 across table and graph']],
+            ['Discovery', [
+              'Can you produce subject–predicate–object with entity types and confidence today?',
+              'Where does entity resolution sit in your pipeline today?',
+            ]],
+          ],
+          transition: 'Transition: "So when do you actually need a graph database?"'
+        },
+        {
+          title: 'Decision fork',
+          onscreen: 'Prefer lakehouse edges vs when partner/OntoBricks fits.',
+          say: 'Here\'s how I\'d say it: "Default to edges on Databricks. Add a graph engine when you have existing Cypher or SPARQL apps, true sub-second high-concurrency traversal, or formal OWL reasoning. Even then, keep Delta as the system of record and sync outward so Unity Catalog remains the governance anchor."',
+          bullets: [
+            ['Purpose', ['Give an honest fork without overselling partners or under-selling them']],
+            ['Discovery', [
+              'What latency and concurrency do traversal queries need in production?',
+              'Is there an existing Neo4j/Stardog/Kobai estate you must meet halfway?',
+            ]],
+          ],
+          transition: 'Transition: "Algorithms are a different ask — usually batch, not a live engine."'
+        },
+        {
+          title: 'Algorithm families',
+          onscreen: 'Four clickable algorithm families; each selection redraws the network.',
+          say: 'Here\'s how I\'d say it: "Ninety-five percent of algorithm asks fall into four families: who matters, who clusters, how do I get from A to B, and who looks alike." Click each family as you name it so the network changes from influence, to communities, to a shortest path, to shared-neighbor similarity. Then land the platform point: "On Databricks you run these with NetworkX, SparkGraph, or cuGraph depending on scale. The pattern that scales is to precompute to Delta and serve lookups, not recompute the world on every question."',
+          bullets: [
+            ['Purpose', ['Separate algorithm needs from "we need a graph DB"']],
+            ['How to demo live', ['Click all four rows in order; pause briefly on the highlighted path and shared neighbors']],
+            ['Key nuance', ['Naive connected components percolates on real data — corroboration and community split matter at scale']],
+            ['Discovery', [
+              'Which algorithm family shows up in your benchmark queries?',
+              'Roughly how many nodes and daily-changing edges are we talking about?',
+            ]],
+          ],
+          transition: 'Transition: "One more pattern teams label GraphRAG — usually without needing query-time traversal."'
+        },
+        {
+          title: 'GraphRAG pattern',
+          onscreen: 'Plain RAG failure modes vs structure-enriched retrieval units.',
+          say: 'Here\'s how I\'d say it: "Plain vector search fails on enumeration and cross-document composition. GraphRAG\'s job is to bring relationship structure into retrieval. The field pattern that wins on latency: extract typed edges, embed entity-plus-neighborhood units, and do one fast vector lookup. You get graph-shaped answers without walking the graph at query time. Separately, if the ask is governed agent memory — what the agent is allowed to treat as true — that\'s a ledger and policy layer on top, not just better search."',
+          bullets: [
+            ['Purpose', ['Deflate GraphRAG hype into two concrete patterns']],
+            ['Discovery', [
+              'What should GraphRAG do for you — find more, or control what agents may assert?',
+              'Have you tried structure-enriched chunks before committing to a graph DB for RAG?',
+            ]],
+          ],
+          transition: 'Transition: "Pull it into an operating rule."'
+        },
+        {
+          title: 'Operating rule',
+          onscreen: 'Six check rows: managed first, contract, benchmark, precompute, Delta SoR, entity resolution.',
+          say: 'Here\'s how I\'d say it: "If you remember six things: try the managed semantic stack; land gold_triplets early; climb only when benchmarks fail; precompute heavy graph work; keep Delta as system of record; and treat entity resolution as first-class — it\'s usually the hardest part of a real knowledge graph."',
+          bullets: [
+            ['Purpose', ['Leave them with a reusable decision checklist']],
+            ['Discovery', ['What would a two-week pilot need to prove for you to expand?']],
+          ],
+          transition: 'Transition: "Let\'s map your situation to a starting rung."'
+        },
+        {
+          title: 'Discussion',
+          onscreen: 'Proposal plus four numbered open questions.',
+          say: 'Sit on this slide. Don\'t rush. Use their language. Your job is to leave with a starting rung and a short list of benchmark queries — not a commitment to rung five.',
+          bullets: [
+            ['Purpose', ['Drive discovery toward a scoped next step']],
+            ['Facilitation', [
+              'Capture 3–5 benchmark questions on a whiteboard',
+              'Name owners for ontology curation and implementation',
+              'Agree whether managed path or edge+Genie is the pilot',
+            ]],
+          ],
+          transition: 'Transition: "Close on the rule."'
+        },
+        {
+          title: 'Close',
+          onscreen: 'Lowest rung. Then proof.',
+          say: 'Close with: "Pick the queries that matter. Run them on the managed path or edge-plus-Genie. Climb only when the results demand it. Happy to help scope that first rung with your team."',
+          bullets: [
+            ['Purpose', ['End on the operating rule, not a feature dump']],
+            ['Ask', ['Workshop to list benchmark queries and choose rung 1 or 2']],
+          ],
+          transition: 'End.'
+        },
+      ];
+
+      const els = {
+        title: document.getElementById('title'),
+        counter: document.getElementById('counter'),
+        onscreen: document.getElementById('onscreen'),
+        say: document.getElementById('say'),
+        bullets: document.getElementById('bullets'),
+        transition: document.getElementById('transition'),
+      };
+
+      function broadcastSlide(i) {
+        try { localStorage.setItem(STORAGE_KEY, String(i)); } catch (_) {}
+        if (bc) bc.postMessage({ slideIndex: i, source: 'notes' });
+      }
+
+      function render() {
+        const note = NOTES[index];
+        const n = String(index + 1).padStart(2, '0');
+        const total = String(NOTES.length).padStart(2, '0');
+        els.title.textContent = note.title;
+        els.counter.textContent = `${n} / ${total}`;
+        els.onscreen.textContent = note.onscreen;
+        els.say.textContent = note.say;
+        els.transition.textContent = note.transition;
+        els.bullets.innerHTML = (note.bullets || []).map(([heading, items]) => `
+          <div class="block">
+            <h2>${heading}</h2>
+            <ul>${items.map(item => `<li>${item}</li>`).join('')}</ul>
+          </div>
+        `).join('');
+        document.title = `Notes ${n} — ${note.title}`;
+      }
+
+      function show(next, opts = {}) {
+        index = Math.max(0, Math.min(NOTES.length - 1, next));
+        render();
+        history.replaceState(null, '', `#${index + 1}`);
+        if (!opts.silent && !applyingRemote) broadcastSlide(index);
+      }
+
+      function applyRemote(i) {
+        if (!Number.isFinite(i) || i === index) return;
+        applyingRemote = true;
+        show(i, { silent: true });
+        applyingRemote = false;
+      }
+
+      if (bc) {
+        bc.onmessage = (event) => {
+          const i = event?.data?.slideIndex;
+          if (typeof i === 'number') applyRemote(i);
+        };
+      }
+      window.addEventListener('storage', (event) => {
+        if (event.key !== STORAGE_KEY || event.newValue == null) return;
+        applyRemote(Number(event.newValue));
+      });
+
+      document.getElementById('prev').addEventListener('click', () => show(index - 1));
+      document.getElementById('next').addEventListener('click', () => show(index + 1));
+
+      document.addEventListener('keydown', (event) => {
+        if (['ArrowRight', 'PageDown', ' ', 'ArrowLeft', 'PageUp', 'Home', 'End'].includes(event.key)) {
+          event.preventDefault();
+        }
+      });
+      document.addEventListener('keyup', (event) => {
+        const isStepKey = ['ArrowRight', 'PageDown', ' ', 'ArrowLeft', 'PageUp'].includes(event.key);
+        const now = Date.now();
+        if (isStepKey && (event.repeat || now - lastNavAt < 180)) return;
+        if (isStepKey) lastNavAt = now;
+        if (['ArrowRight', 'PageDown', ' '].includes(event.key)) show(index + 1);
+        else if (['ArrowLeft', 'PageUp'].includes(event.key)) show(index - 1);
+        else if (event.key === 'Home') show(0);
+        else if (event.key === 'End') show(NOTES.length - 1);
+      });
+
+      let start = Number(location.hash.slice(1)) - 1;
+      if (!Number.isFinite(start) || start < 0) {
+        try { start = Number(localStorage.getItem(STORAGE_KEY)); } catch (_) { start = 0; }
+      }
+      show(Number.isFinite(start) && start >= 0 ? start : 0, { silent: true });
+      broadcastSlide(index);
+    })();
+  </script>
+</body>
+</html>
