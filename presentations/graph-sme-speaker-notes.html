@@ -66,7 +66,7 @@
 <body>
   <header>
     <div>
-      <div class="brand">Roadmap to Graph · Talk track</div>
+      <div class="brand">Roadmap to Graph · SA discovery talk track</div>
       <h1 id="title">Title</h1>
       <div class="on-screen" id="onscreen"></div>
     </div>
@@ -99,19 +99,20 @@
         {
           title: 'Title',
           onscreen: 'Roadmap to Graph — match need to lowest rung, climb only with proof.',
-          say: 'Here\'s how I\'d open: "This is a decision briefing, not a product tour. Teams say they need a graph. What they often need is governed relationships, better agent context, or multi-hop answers. We\'ll map those needs to a ladder on Databricks — starting managed, climbing only when your own queries force it."',
+          say: 'Here\'s how I\'d open: "This is a decision briefing for discovery — not a product tour and not an SME deep dive yet. Teams say they need a graph. What they often need is governed relationships, better agent context, or multi-hop answers. We\'ll map those needs to a ladder on Databricks — starting managed, climbing only when your own queries force it. My goal today is to leave with the right questions answered so we know whether to bring Graph or Ontology SMEs in."',
           bullets: [
-            ['Purpose', ['Set the operating rule: lowest rung that answers the benchmark']],
-            ['Frame', ['Customer-facing; avoid dumping the full internal catalog of kits']],
+            ['Purpose', ['Set the operating rule; frame this as SA-led discovery before SME escalation']],
+            ['SA cue', ['Listen for query shape, existing tooling, and urgency — not industry buzzwords']],
           ],
           transition: 'Transition: "Quick map of where we\'re going."'
         },
         {
           title: 'Agenda',
           onscreen: 'Six beats: need, vocabulary, ladder, algorithms/GraphRAG, decision, discussion.',
-          say: 'Don\'t read the cards. Promise them the network visuals will do the teaching, and the discussion at the end will map their use case to a starting rung.',
+          say: 'Don\'t read the cards. Promise them the network visuals will do the teaching, and the discussion at the end will map their use case to a starting rung — and decide whether an SME session is the next step.',
           bullets: [
             ['Keep it crisp', ['~45–60 min with discussion', 'Visuals carry Graph 101 and algorithms']],
+            ['SA outcome', ['Leave with: starting rung hypothesis, 3–5 benchmark queries, owners, escalate-or-not']],
           ],
           transition: 'Transition: "First — what people usually mean when they say graph."'
         },
@@ -122,20 +123,28 @@
           bullets: [
             ['Purpose', ['Reframe "we need Neo4j" into "what query shape fails today?"']],
             ['Discovery', [
-              'What does "graph" mean in your RFP or architecture board notes today?',
-              'Is the ask exploration for people, context for agents, or production traversal SLAs?',
+              'What does "graph" mean in your RFP, architecture board notes, or vendor shortlist today?',
+              'Is the priority exploration for people, context for agents, production traversal SLAs, or all three?',
+              'Which workloads or business units are driving this ask first?',
             ]],
           ],
           transition: 'Transition: "Before the ladder — sixty seconds of vocabulary, with a live network."'
         },
         {
           title: 'Graph 101',
-          onscreen: 'Interactive force graph; seed Ann with a highlighted 2-hop path.',
-          say: 'Here\'s how I\'d say it: "A graph is two sets — entities and relationships. Degree is how busy a node is. A hop is one edge; traversal is walking a path. The trick behind this whole briefing: in the lakehouse the graph is an edge table. Subject, predicate, object. There is no separate magic structure you have to stand up first." Drag a node if they lean in; point at the coral seed and the green 2-hop path.',
+          onscreen: 'Interactive force graph; hop controls and clickable seed; drag to reposition.',
+          say: 'Here\'s how I\'d say it: "A graph is two sets — entities and relationships. Degree is how busy a node is. A hop is one edge; traversal is walking a path. The trick behind this whole briefing: in the lakehouse the graph is an edge table. Subject, predicate, object. There is no separate magic structure you have to stand up first."',
           bullets: [
             ['Purpose', ['Demystify graph; plant the edge-table idea']],
-            ['How to demo live', ['Drag Ann or Acme; call out CALLED as a 2-hop walk', 'Say: "most graph-DB asks are multi-hop SQL in disguise"']],
-            ['Discovery', ['Which business questions are 2-hop or deeper today?']],
+            ['How to demo live', [
+              'Click 1-hop / 2-hop / 3-hop and watch the neighborhood grow from Ann',
+              'Click Acme or Cara to change the seed; drag any node to reposition',
+              'Say: "most graph-DB asks are multi-hop SQL in disguise"',
+            ]],
+            ['Discovery', [
+              'Which business questions are 2-hop or deeper today — and where do they fail in the current stack?',
+              'Are those questions answered in BI today, in ad-hoc SQL, or not at all?',
+            ]],
           ],
           transition: 'Transition: "Ontology and graph travel together — here\'s why, visually."'
         },
@@ -146,19 +155,23 @@
           bullets: [
             ['Purpose', ['Separate classification, schema, and instances']],
             ['Key nuance', ['RDF/OWL when formal reasoning matters; LPG when app/analytics Cypher is the culture']],
-            ['Discovery', ['Do you need formal OWL/SHACL, or curated business terms and relationships?']],
+            ['Discovery', [
+              'Do you need formal OWL/SHACL validation, or curated business terms and relationships?',
+              'Who owns business definitions today — data governance, domain stewards, or nobody clearly?',
+            ]],
           ],
           transition: 'Transition: "So before we build anything custom — check the managed stack."'
         },
         {
           title: 'Managed semantic path',
           onscreen: 'Four-stage flow: Genie Ontology → Glossary → Metric Views → Relationships.',
-          say: 'Here\'s how I\'d say it: "This is now a product surface. Genie Ontology builds a semantic map from tables, queries, dashboards, and docs. You steer it with Knowledge Concepts and the Unity Catalog Glossary. Metric Views give you governed metrics. Relationships is the product-native version of the edge-table pattern we\'ll talk about next. Days to enable, then curation is the work — not a six-week graph program."',
+          say: 'Here\'s how I\'d say it: "This is now a product surface. Genie Ontology builds a semantic map from tables, queries, dashboards, and docs. You steer it with Knowledge Concepts and the Unity Catalog Glossary. Metric Views give you governed metrics. Relationships is the product-native version of the edge-table pattern we\'ll talk about next. Days to enable, then curation is the work — not a six-week graph program. If this path hasn\'t been tried against your questions, escalate to SME only after that gap is clear."',
           bullets: [
-            ['Purpose', ['Force the "have you tried the managed path?" gate']],
+            ['Purpose', ['Force the "have you tried the managed path?" gate before SME escalation']],
             ['Discovery', [
-              'Has Genie Ontology preview been requested through the account team?',
-              'Which Metric Views already exist over the core entities?',
+              'Has Genie Ontology, UC Glossary, Metric Views, or Relationships been tried against the failing questions?',
+              'Which Metric Views already exist over the core entities you care about?',
+              'What BI tools and refresh schedules sit on top of those entities today?',
             ]],
             ['Key nuance', ['Ontology is LLM-friendly, not OWL-editable; external OWL ingest is not the current plan']],
           ],
@@ -166,27 +179,37 @@
         },
         {
           title: 'Complexity ladder',
-          onscreen: 'Five rungs from managed ontology to partner/engine.',
+          onscreen: 'Five clickable rungs; detail panel shows when / what / timeline.',
           say: 'Here\'s how I\'d say it: "Read left to right. Rung one is managed. Rung two is an edge table into Genie — often enough for interconnectivity. Rung three standardizes on gold_triplets and puts a Supervisor and explorer on top. Rung four is when queries are genuinely graph-shaped — hop tables or Text-to-SPARQL-to-SQL. Rung five is a dedicated engine or partner database — only when benchmarks prove the simpler rungs short."',
           bullets: [
-            ['Purpose', ['Give them a shared language for scoping']],
+            ['Purpose', ['Give them a shared language for scoping and SME escalation']],
+            ['How to demo live', [
+              'Click each rung; narrate When it fits / What you get / Timeline from the detail panel',
+              'Ask which rung they think they\'re on today vs which they think they need',
+            ]],
             ['Discovery', [
               'How fast do you need a first POC that answers a real question?',
-              'Do you have ontology or graph experts on staff for a higher rung?',
+              'Who owns budget and implementation for phase one — and what does success look like?',
+              'Do you have ontology or graph experts on staff, or would that be partner/SME capacity?',
             ]],
           ],
           transition: 'Transition: "The reusable decision across every engagement: standardize the edge contract early."'
         },
         {
           title: 'gold_triplets contract',
-          onscreen: 'D3 ownership/ops network beside a gold_triplets table.',
-          say: 'Here\'s how I\'d say it: "This table is the graph. Same contract feeds Genie, UC functions, batch algorithms, and the explorer. Teams that can land gold_triplets — agentically or with their own ETL — get the consumption layer for free. Point at a row, then at the matching edge in the network so the room feels the isomorphism."',
+          onscreen: 'D3 network beside gold_triplets; row ↔ edge selection is linked.',
+          say: 'Here\'s how I\'d say it: "This table is the graph. Same contract feeds Genie, UC functions, batch algorithms, and the explorer. Teams that can land gold_triplets — agentically or with their own ETL — get the consumption layer for free."',
           bullets: [
-            ['Purpose', ['Make the edge contract visceral']],
-            ['How to demo live', ['Trace Acme→Maya→Acct-441 across table and graph']],
+            ['Purpose', ['Make the edge contract visceral; test data readiness']],
+            ['How to demo live', [
+              'Click Acme→Maya EMPLOYS in the table; show the matching edge light up',
+              'Click an edge or node in the network; show the matching row select',
+              'Trace Acme→Maya→Acct-441 as a two-hop story',
+            ]],
             ['Discovery', [
               'Can you produce subject–predicate–object with entity types and confidence today?',
-              'Where does entity resolution sit in your pipeline today?',
+              'Where does entity resolution sit in your pipeline — and how complete is SAME_AS coverage?',
+              'What is the approximate volume and daily change rate for the entities and edges that matter?',
             ]],
           ],
           transition: 'Transition: "So when do you actually need a graph database?"'
@@ -194,12 +217,13 @@
         {
           title: 'Decision fork',
           onscreen: 'Prefer lakehouse edges vs when partner/OntoBricks fits.',
-          say: 'Here\'s how I\'d say it: "Default to edges on Databricks. Add a graph engine when you have existing Cypher or SPARQL apps, true sub-second high-concurrency traversal, or formal OWL reasoning. Even then, keep Delta as the system of record and sync outward so Unity Catalog remains the governance anchor."',
+          say: 'Here\'s how I\'d say it: "Default to edges on Databricks. Add a graph engine when you have existing Cypher or SPARQL apps, true sub-second high-concurrency traversal, or formal OWL reasoning. Even then, keep Delta as the system of record and sync outward so Unity Catalog remains the governance anchor. If they already run Neo4j or Stardog, that\'s an integration conversation — often SME territory."',
           bullets: [
-            ['Purpose', ['Give an honest fork without overselling partners or under-selling them']],
+            ['Purpose', ['Give an honest fork; flag when to escalate to Graph/Ontology SMEs']],
             ['Discovery', [
               'What latency and concurrency do traversal queries need in production?',
-              'Is there an existing Neo4j/Stardog/Kobai estate you must meet halfway?',
+              'Is there an existing Neo4j, Stardog, Kobai, or similar estate you must meet halfway?',
+              'Do you have Cypher or SPARQL expertise on staff today?',
             ]],
           ],
           transition: 'Transition: "Algorithms are a different ask — usually batch, not a live engine."'
@@ -213,21 +237,27 @@
             ['How to demo live', ['Click all four rows in order; pause briefly on the highlighted path and shared neighbors']],
             ['Key nuance', ['Naive connected components percolates on real data — corroboration and community split matter at scale']],
             ['Discovery', [
-              'Which algorithm family shows up in your benchmark queries?',
+              'Which algorithm family shows up in your benchmark queries — or is the real ask explorer/agent context?',
               'Roughly how many nodes and daily-changing edges are we talking about?',
+              'Do algorithm results need to refresh hourly, daily, or weekly?',
             ]],
           ],
           transition: 'Transition: "One more pattern teams label GraphRAG — usually without needing query-time traversal."'
         },
         {
           title: 'GraphRAG pattern',
-          onscreen: 'Plain RAG failure modes vs structure-enriched retrieval units.',
+          onscreen: 'Toggle: Plain vector RAG vs Structure-enriched; sample question highlights chunks.',
           say: 'Here\'s how I\'d say it: "Plain vector search fails on enumeration and cross-document composition. GraphRAG\'s job is to bring relationship structure into retrieval. The field pattern that wins on latency: extract typed edges, embed entity-plus-neighborhood units, and do one fast vector lookup. You get graph-shaped answers without walking the graph at query time. Separately, if the ask is governed agent memory — what the agent is allowed to treat as true — that\'s a ledger and policy layer on top, not just better search."',
           bullets: [
             ['Purpose', ['Deflate GraphRAG hype into two concrete patterns']],
+            ['How to demo live', [
+              'Toggle Plain vector RAG — show scattered chunk hits for "Who leads the parent of Beta?"',
+              'Toggle Structure-enriched — show neighborhood units + mini path Beta→Acme→Maya',
+            ]],
             ['Discovery', [
-              'What should GraphRAG do for you — find more, or control what agents may assert?',
+              'What should GraphRAG do for you — find more relevant context, or control what agents may assert?',
               'Have you tried structure-enriched chunks before committing to a graph DB for RAG?',
+              'What governance or audit requirements apply to agent-asserted facts?',
             ]],
           ],
           transition: 'Transition: "Pull it into an operating rule."'
@@ -235,23 +265,32 @@
         {
           title: 'Operating rule',
           onscreen: 'Six check rows: managed first, contract, benchmark, precompute, Delta SoR, entity resolution.',
-          say: 'Here\'s how I\'d say it: "If you remember six things: try the managed semantic stack; land gold_triplets early; climb only when benchmarks fail; precompute heavy graph work; keep Delta as system of record; and treat entity resolution as first-class — it\'s usually the hardest part of a real knowledge graph."',
+          say: 'Here\'s how I\'d say it: "If you remember six things: try the managed semantic stack; land gold_triplets early; climb only when benchmarks fail; precompute heavy graph work; keep Delta as system of record; and treat entity resolution as first-class — it\'s usually the hardest part of a real knowledge graph. As your SA, I use this list to decide whether we stay in product discovery or bring Graph/Ontology SMEs."',
           bullets: [
-            ['Purpose', ['Leave them with a reusable decision checklist']],
-            ['Discovery', ['What would a two-week pilot need to prove for you to expand?']],
+            ['Purpose', ['Leave them with a reusable decision checklist; clarify escalate criteria']],
+            ['Discovery', [
+              'What would a two-week pilot need to prove for you to expand — or to call in SMEs?',
+              'What history, retention, or PHI/client-isolation constraints shape the edge contract?',
+              'Can you write down 3–5 benchmark queries before we schedule a deeper session?',
+            ]],
           ],
           transition: 'Transition: "Let\'s map your situation to a starting rung."'
         },
         {
           title: 'Discussion',
           onscreen: 'Proposal plus four numbered open questions.',
-          say: 'Sit on this slide. Don\'t rush. Use their language. Your job is to leave with a starting rung and a short list of benchmark queries — not a commitment to rung five.',
+          say: 'Sit on this slide. Don\'t rush. Use their language. Your job as SA is to leave with a starting rung hypothesis, a short list of benchmark queries, named owners, and a clear call on whether to escalate to Graph/Ontology SMEs — not a commitment to rung five.',
           bullets: [
-            ['Purpose', ['Drive discovery toward a scoped next step']],
+            ['Purpose', ['Drive discovery toward a scoped next step and escalate-or-not decision']],
+            ['Discovery', [
+              'Which of the on-screen questions is the hardest for your team to answer today?',
+              'If we pick rung 1 or 2 for a pilot, who owns ontology curation and who owns implementation?',
+              'What decision criteria or procurement timelines are already in motion vs alternatives?',
+            ]],
             ['Facilitation', [
               'Capture 3–5 benchmark questions on a whiteboard',
-              'Name owners for ontology curation and implementation',
-              'Agree whether managed path or edge+Genie is the pilot',
+              'Name owners and a phase-one success criterion',
+              'Agree: stay on managed/edge path with SA, or schedule SME deep dive — and why',
             ]],
           ],
           transition: 'Transition: "Close on the rule."'
@@ -259,10 +298,10 @@
         {
           title: 'Close',
           onscreen: 'Lowest rung. Then proof.',
-          say: 'Close with: "Pick the queries that matter. Run them on the managed path or edge-plus-Genie. Climb only when the results demand it. Happy to help scope that first rung with your team."',
+          say: 'Close with: "Pick the queries that matter. Run them on the managed path or edge-plus-Genie. Climb only when the results demand it. I\'ll help scope that first rung with your team — and bring Graph or Ontology SMEs in when the discovery says we need them."',
           bullets: [
-            ['Purpose', ['End on the operating rule, not a feature dump']],
-            ['Ask', ['Workshop to list benchmark queries and choose rung 1 or 2']],
+            ['Purpose', ['End on the operating rule and a concrete follow-up']],
+            ['Ask', ['Workshop to list benchmark queries, choose rung 1 or 2, and decide SME escalate yes/no']],
           ],
           transition: 'End.'
         },
