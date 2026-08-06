@@ -1,0 +1,56 @@
+/* ── 08 encoding chip strip + paired diagram/table ── */
+.enc-strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 12px; }
+.enc-split { display: grid; grid-template-columns: 1.02fr .98fr; gap: 16px; margin-top: 10px; align-items: stretch; }
+.enc-diagram { display: flex; flex-direction: column; }
+.enc-diagram .viz-caption { margin-top: 12px; }
+/* an inline predicate inside the caption body — a <b> here would be picked up by
+   the caption's uppercase title styling */
+.enc-diagram .viz-caption .q { font-family: var(--mono); color: var(--green); font-size: 12.5px; }
+.enc-table { display: flex; flex-direction: column; margin-top: 0; padding: 12px 14px; }
+.enc-table .label { font-family: var(--mono); text-transform: none; letter-spacing: .04em; font-size: 11.5px; }
+.enc-table th, .enc-table td { white-space: nowrap; }
+.enc-table td { padding: 6px 10px 6px 0; }
+/* room for the row marker on highlighted rows, kept on every row and the header
+   so the first column stays aligned in all six encodings */
+.enc-table th:first-child, .enc-table td:first-child { padding-left: 9px; }
+.enc-table tbody tr { cursor: default; }
+.enc-table tbody tr:hover td { background: transparent; }
+.enc-table .gloss { color: var(--dim); }
+/* the segment definition rides in the gloss line, so it has to out-read it */
+.enc-table p.gloss b { color: var(--ink); font-weight: 700; }
+.enc-table .hot { color: var(--signal); }
+.enc-table .good { color: var(--green); font-weight: 700; }
+.enc-table .edge-hint { margin-top: auto; padding-top: 12px; }
+/* the rows a single equality returns, against the ones that ride along with them */
+.enc-table tbody tr.hit td { background: rgba(0,169,114,.09); }
+.enc-table tbody tr.hit td:first-child { box-shadow: inset 3px 0 0 var(--green); }
+.enc-table tbody tr.quiet td { color: var(--dim); }
+.enc-chip {
+  appearance: none; text-align: left; cursor: pointer; font-family: var(--body); color: var(--ink);
+  background: rgba(255,255,255,.75); border: 1px solid var(--line); border-radius: 10px;
+  padding: 10px 11px; transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+.enc-chip:hover { transform: translateY(-2px); border-color: rgba(255,54,33,.4); }
+.enc-chip.active { border-color: var(--signal); background: rgba(255,54,33,.07); box-shadow: inset 0 -3px 0 var(--signal); }
+.enc-chip b { display: block; font: 700 13px/1.15 var(--display); margin-bottom: 3px; }
+.enc-chip span { color: var(--muted); font-size: 11.5px; line-height: 1.28; }
+.enc-chip.active span { color: var(--ink); }
+
+/* The last two chips are the recommendation. Selection owns the bottom edge in
+   coral, the recommendation owns the top edge in green, so the two never sit on
+   the same edge and both survive whichever chip is selected. The other four are
+   left plain rather than dulled — not-the-recommendation, not broken. */
+.enc-chip.rec { border-color: rgba(0,169,114,.5); background: rgba(0,169,114,.07); box-shadow: inset 0 3px 0 var(--green); }
+.enc-chip.rec:hover { border-color: rgba(0,169,114,.85); }
+.enc-chip.rec b { color: var(--green); }
+.enc-chip.rec.active {
+  border-color: var(--signal); background: rgba(255,54,33,.07);
+  box-shadow: inset 0 3px 0 var(--green), inset 0 -3px 0 var(--signal);
+}
+.enc-chip .tick { font-style: normal; margin-right: 4px; }
+.enc-legend {
+  display: flex; align-items: baseline; gap: 7px; margin: 8px 0 0;
+  color: var(--muted); font-size: 11.5px; line-height: 1.3;
+}
+.enc-legend .sw { width: 9px; height: 9px; border-radius: 2px; background: var(--green); flex: 0 0 auto; position: relative; top: 1px; }
+.enc-legend b { color: var(--green); font: 700 10px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; }

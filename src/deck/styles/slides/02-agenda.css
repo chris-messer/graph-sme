@@ -1,6 +1,52 @@
-/* ── Agenda ──────────────────────────────────────── */
-.agenda { counter-reset: item; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 56px; max-width: 1200px; margin-top: 8px; }
-.agenda-item { counter-increment: item; display: grid; grid-template-columns: 48px 1fr; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--line); }
-.agenda-item::before { content: "0" counter(item); color: var(--signal); font: 700 22px/1 var(--display); }
-.agenda-item b { display: block; font: 700 19px/1.15 var(--display); margin-bottom: 4px; }
-.agenda-item span { color: var(--muted); font-size: 14px; line-height: 1.35; }
+/* ── Agenda · three bands ────────────────────────────
+   The three semantic layers are the deck's spine, so they get the only cards
+   on the slide and a coral bracket. The framing that precedes them and the
+   synthesis that follows sit flat on the canvas as hairline rows, one
+   typographic step down, so the middle band reads as a different kind of
+   thing rather than three more list items. */
+.agenda { display: grid; gap: 16px; max-width: 1400px; margin-top: 18px; }
+
+.agenda-band { display: grid; grid-template-columns: 158px 1fr; gap: 26px; align-items: start; }
+.band-label {
+  padding-top: 3px; color: var(--dim);
+  font: 700 11px/1.3 var(--display); letter-spacing: .14em; text-transform: uppercase;
+}
+
+/* ── flanks: before and after ─────────────────────── */
+.flank-items { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; }
+.flank-items li { padding: 8px 0; border-top: 1px solid var(--line); }
+.flank-items b { display: block; font: 700 15px/1.2 var(--display); margin-bottom: 3px; }
+.flank-items span { color: var(--muted); font-size: 13px; line-height: 1.35; }
+
+/* ── spine: the three layers, as one set ──────────── */
+.agenda-band.spine {
+  position: relative; padding: 16px 0;
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+}
+.agenda-band.spine::before {
+  content: ""; position: absolute; left: -20px; top: -1px; bottom: -1px;
+  width: 3px; border-radius: 2px; background: var(--signal);
+}
+.band-label.spine-label { color: var(--ink); }
+.band-label.spine-label span {
+  display: block; margin-top: 8px; color: var(--dim);
+  font: 400 12px/1.4 var(--body); letter-spacing: .01em; text-transform: none;
+}
+
+.layer-set { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.layer-card {
+  background: var(--panel); border: 1px solid var(--line); border-top: 3px solid var(--line);
+  border-radius: 12px; padding: 12px 15px 14px;
+}
+.layer-card.tax { border-top-color: var(--green); }
+.layer-card.onto { border-top-color: var(--blue); }
+.layer-card.kg { border-top-color: var(--signal); }
+.layer-card .kicker { margin-bottom: 7px; }
+.layer-card h3 { font-size: 18px; line-height: 1.1; margin-bottom: 6px; }
+.layer-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.4; }
+
+@media (max-width: 1000px) {
+  .agenda-band { grid-template-columns: 1fr; gap: 10px; }
+  .agenda-band.spine::before { left: -12px; }
+  .flank-items, .layer-set { grid-template-columns: 1fr; }
+}

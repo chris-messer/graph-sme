@@ -1,16 +1,49 @@
-    <!-- 02 · Agenda · layout: numbered two-column list -->
+    <!-- 02 · Agenda · layout: three-band map — framing flank, semantic-layer spine, closing flank -->
     <section class="slide" aria-label="Agenda">
       <div class="eyebrow"><span class="num">02</span> Agenda</div>
       <div class="content">
-        <h2>What this walkthrough covers</h2>
+        <h2>Three semantic layers carry the walkthrough, with framing before them and the climb after</h2>
+        <p class="lead">Taxonomy, ontology and knowledge graphs are peers — three different answers to “what does this data mean?” Everything else on the agenda either sets them up or acts on them.</p>
         <div class="agenda">
-          <div class="agenda-item"><div><b>Vocabulary in one screen</b><span>Nodes, edges, hops — and the table that already holds them</span></div></div>
-          <div class="agenda-item"><div><b>Managed path and the ladder</b><span>Where every engagement starts, and what triggers a climb</span></div></div>
-          <div class="agenda-item"><div><b>Taxonomy</b><span>What one is, the client need, six storage options, and where we land</span></div></div>
-          <div class="agenda-item"><div><b>Ontology</b><span>Meaning as metadata, the two needs clients bring, and the four Labs projects behind them</span></div></div>
-          <div class="agenda-item"><div><b>Knowledge graphs</b><span>One need — an agent that cannot connect the dots — split into seed selection and hop retrieval, then governed memory, algorithms, extreme scale, and GNNs</span></div></div>
-          <div class="agenda-item"><div><b>Operating rule and discussion</b><span>Map your needs to a semantic layer and a starting rung</span></div></div>
+
+          <div class="agenda-band flank">
+            <div class="band-label">Opens with</div>
+            <ul class="flank-items">
+              <li><b>What a graph request turns out to be</b><span>Two implementation families, three semantic layers, one place to start</span></li>
+              <li><b>Vocabulary in one screen</b><span>Nodes, edges, hops — and the table that already holds them</span></li>
+            </ul>
+          </div>
+
+          <div class="agenda-band spine">
+            <div class="band-label spine-label">Three semantic layers<span>The spine of the deck — set side by side once, then a beat each</span></div>
+            <div class="layer-set">
+              <div class="layer-card tax">
+                <div class="kicker green">Taxonomy</div>
+                <h3>Classifies</h3>
+                <p>A hierarchy of categories. The need is interconnectivity across the tree, and the storage pattern you choose decides what a query costs.</p>
+              </div>
+              <div class="layer-card onto">
+                <div class="kicker blue">Ontology</div>
+                <h3>Constrains, as metadata</h3>
+                <p>Entity types, relationship types and rules — meaning with no rows of its own. The needs clients bring, and the Labs work behind them.</p>
+              </div>
+              <div class="layer-card kg">
+                <div class="kicker">Knowledge graph</div>
+                <h3>Instantiates the rows</h3>
+                <p>Records and typed edges an agent can traverse. Seed selection, hop retrieval, algorithms, extreme scale, GNNs.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="agenda-band flank">
+            <div class="band-label">Closes on</div>
+            <ul class="flank-items">
+              <li><b>Three rungs to climb</b><span>Managed semantics, tailored agentic context, partner-accelerated use cases</span></li>
+              <li><b>Operating rule and discussion</b><span>Map each need to a layer and a rung, then your open questions</span></li>
+            </ul>
+          </div>
+
         </div>
       </div>
-      <div class="footer"><span class="brand">Databricks × Graph SME</span><span class="counter">02 / 30</span></div>
+      <div class="footer"><span class="brand">Databricks × Graph SME</span><span class="counter">02 / 27</span></div>
     </section>

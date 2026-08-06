@@ -1,0 +1,24 @@
+/* ── 13 rows ⇄ network hero + question ledger ──── */
+.struct-hero { height: min(34vh, 292px); margin-top: 12px; }
+.q-ledger { margin-top: 14px; border-top: 1px solid var(--line); }
+.q-row {
+  display: grid; grid-template-columns: 1.55fr 1fr 1.2fr; gap: 20px;
+  padding: 10px 2px; border-bottom: 1px solid rgba(215,214,209,.65); align-items: baseline;
+}
+.q-row:last-child { border-bottom: 0; }
+.q-row.head {
+  padding: 8px 2px;
+  font: 700 10px/1.2 var(--display); letter-spacing: .12em; text-transform: uppercase; color: var(--dim);
+}
+.q-row .q { font-size: 14px; line-height: 1.3; }
+.q-row .cell { font-size: 13px; line-height: 1.3; }
+.q-row .cell.no { color: var(--dim); }
+.q-row .cell.yes { color: var(--ink); }
+.q-row .cell::before { margin-right: 8px; font-size: 11px; font-weight: 700; }
+.q-row .cell.no::before { content: "✕"; color: var(--danger); }
+.q-row .cell.yes::before { content: "✓"; color: var(--green); }
+
+@media (max-width: 1000px) {
+  .q-row, .q-row.head { grid-template-columns: 1fr; gap: 3px; }
+  .q-row.head span:not(:first-child) { display: none; }
+}

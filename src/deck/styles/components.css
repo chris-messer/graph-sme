@@ -125,7 +125,7 @@
 }
 .hop-btn:hover, .mode-btn:hover { border-color: rgba(255,54,33,.45); color: var(--signal); }
 .hop-btn.active, .mode-btn.active { border-color: var(--signal); background: rgba(255,54,33,.08); color: var(--signal); }
-.hop-btn:focus-visible, .mode-btn:focus-visible, .rung:focus-visible,
+.hop-btn:focus-visible, .mode-btn:focus-visible, .lad-rung:focus-visible,
 .enc-chip:focus-visible, .step-btn:focus-visible {
   outline: 3px solid rgba(34,114,180,.28); outline-offset: 2px;
 }

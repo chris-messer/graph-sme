@@ -248,6 +248,7 @@ function drawEncoding(host, kind) {
   });
   arrowDef(svg, 'enc-arrow', C.muted);
   arrowDef(svg, 'enc-arrow-hot', C.signal);
+  arrowDef(svg, 'enc-arrow-good', C.green);
 
   const faded = kind === 'closure' || segments;
   const note = t => svg.append('text').attr('class', 'axis-label').attr('x', small ? 18 : 24).attr('y', 15).text(t);
@@ -255,15 +256,23 @@ function drawEncoding(host, kind) {
     .attr('x', x).attr('y', y).attr('text-anchor', 'middle')
     .style('font-size', small ? '8px' : '9.5px').attr('fill', fill).text(text);
 
+  /* The closure view centres on one ancestor, so its subtree is what stays at
+     full strength — the edges below and the nodes at the end both read from it. */
+  const CLOSURE_ANCESTOR = 2;
+  const closureKids = descendantsOf(CLOSURE_ANCESTOR);
+  const closureSubtree = new Set([CLOSURE_ANCESTOR, ...closureKids.map(k => k.id)]);
+  const inFocus = kind === 'closure' ? (id => closureSubtree.has(id)) : (() => true);
+
   svg.append('g').selectAll('line.tree').data(hierEdges()).join('line').attr('class', 'tree')
     .attr('x1', d => pos.get(d.from).x).attr('y1', d => pos.get(d.from).y)
     .attr('x2', d => pos.get(d.to).x).attr('y2', d => pos.get(d.to).y)
     .attr('stroke', faded ? C.line : C.green)
     .attr('stroke-width', 1.3)
     .attr('stroke-dasharray', kind === 'adjacency' ? '5 3' : null)
-    .attr('opacity', faded ? .45 : .7);
+    .attr('opacity', d => (faded ? .45 : .7) * (inFocus(d.to) ? 1 : .55));
 
   let ring = () => null;
+  let fade = () => 1;
 
   if (kind === 'flattened') {
     const leaves = new Set(H_NODES.filter(n => H_IS_LEAF(n.id)).map(n => n.id));
@@ -303,25 +312,26 @@ function drawEncoding(host, kind) {
   }
 
   if (kind === 'closure') {
-    /* One drawn connector per row in the closure table beside it. */
-    const pairs = [
-      { a: 3, d: 4, depth: 1, hot: true },
-      { a: 3, d: 5, depth: 1, hot: true },
-      { a: 2, d: 4, depth: 2, hot: false },
-      { a: 2, d: 5, depth: 2, hot: false },
-      { a: 1, d: 4, depth: 3, hot: false },
-    ];
-    pairs.forEach(p => {
-      const arc = hArc(pos, p.a, p.d, p.hot ? .2 : .24);
+    /* The payoff view: one ancestor, and every row `ancestor_id = 2` returns.
+       Leaf descendants read green because they are what the question wanted;
+       the intermediate ones stay quiet but present, since the equality returns
+       them too. Everything outside the Electronics subtree recedes. */
+    const leaves = closureKids.filter(k => H_IS_LEAF(k.id)).map(k => k.id);
+    fade = id => (inFocus(id) ? 1 : .3);
+
+    closureKids.forEach(k => {
+      const isLeaf = leaves.includes(k.id);
+      const arc = hArc(pos, CLOSURE_ANCESTOR, k.id, isLeaf ? .2 : .34);
       svg.append('path').attr('d', arc.d).attr('fill', 'none')
-        .attr('stroke', p.hot ? C.signal : C.blue)
-        .attr('stroke-width', p.hot ? 1.8 : 1.2)
-        .attr('opacity', p.hot ? .9 : .55)
-        .attr('marker-end', p.hot ? 'url(#enc-arrow-hot)' : 'url(#enc-arrow)');
-      label(arc.lx, arc.ly - 6, p.depth, p.hot ? C.signal : C.blue);
+        .attr('stroke', isLeaf ? C.green : C.blue)
+        .attr('stroke-width', isLeaf ? 1.8 : 1.1)
+        .attr('opacity', isLeaf ? .9 : .4)
+        .attr('marker-end', isLeaf ? 'url(#enc-arrow-good)' : 'url(#enc-arrow)');
+      label(arc.lx, arc.ly - 6, k.depth, isLeaf ? C.green : C.blue);
     });
-    ring = id => (id === 3 ? C.signal : null);
-    note('one connector per row · the ringed node 3 also stores its own depth-0 row');
+    ring = id => (id === CLOSURE_ANCESTOR ? C.signal : (leaves.includes(id) ? C.green : null));
+    note(`ancestor_id = ${CLOSURE_ANCESTOR} · ${H_NAME(CLOSURE_ANCESTOR)} — one equality returns the whole `
+      + `subtree, leaf categories ${leaves.join(' · ')} included`);
   }
 
   if (segments) {
@@ -351,5 +361,5 @@ function drawEncoding(host, kind) {
     note('the set reaches under 3 and under 11 — no single ancestor covers both');
   }
 
-  drawHierNodes(svg, pos, { R, nameSize, idSize, ring, fade: () => 1 });
+  drawHierNodes(svg, pos, { R, nameSize, idSize, ring, fade });
 }

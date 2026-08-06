@@ -1,0 +1,33 @@
+    <!-- 19 · KG need 2 · layout: four small multiples + log-scale compute range chart -->
+    <section class="slide" aria-label="Graph algorithms at scale">
+      <div class="eyebrow"><span class="num">19</span> Client need</div>
+      <div class="content">
+        <h2>&ldquo;We need to know who matters, who clusters, and how one entity reaches another&rdquo;</h2>
+        <p class="lead algo-lead">One network, read four ways. Almost every algorithm request a client brings is one of these four families.</p>
+        <div class="algo-multiples" role="group" aria-label="Algorithm families">
+          <button type="button" class="algo-cell active" data-algo="centrality" aria-pressed="true">
+            <span class="ac-head"><span class="n">01</span>Centrality</span>
+            <span class="ac-viz" id="viz-algo-centrality"></span>
+            <span class="ac-foot">who matters</span>
+          </button>
+          <button type="button" class="algo-cell" data-algo="community" aria-pressed="false">
+            <span class="ac-head"><span class="n">02</span>Community detection</span>
+            <span class="ac-viz" id="viz-algo-community"></span>
+            <span class="ac-foot">who clusters together</span>
+          </button>
+          <button type="button" class="algo-cell" data-algo="pathfinding" aria-pressed="false">
+            <span class="ac-head"><span class="n">03</span>Pathfinding</span>
+            <span class="ac-viz" id="viz-algo-pathfinding"></span>
+            <span class="ac-foot">how one reaches another</span>
+          </button>
+          <button type="button" class="algo-cell" data-algo="similarity" aria-pressed="false">
+            <span class="ac-head"><span class="n">04</span>Similarity</span>
+            <span class="ac-viz" id="viz-algo-similarity"></span>
+            <span class="ac-foot">who looks alike</span>
+          </button>
+        </div>
+        <p class="viz-caption algo-detail" id="algo-detail"></p>
+        <p class="bench-note algo-note">All four families are engine-agnostic — nothing above depends on how the computation is run, or on a graph database being involved. What the choice of engine actually changes is the next slide.</p>
+      </div>
+      <div class="footer"><span class="brand">Databricks × Graph SME</span><span class="counter">19 / 27</span></div>
+    </section>

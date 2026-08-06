@@ -1,7 +1,12 @@
-/* ── Metric row ──────────────────────────────────── */
+/* ── Metric row ──────────────────────────────────────
+   The row counts down left to right — 3 semantic layers, 2 implementation
+   families, 1st rung — so the coral sits on the last cell, which is the cell
+   the count arrives at. The terminal divider carries the same coral, which is
+   the only thing marking direction in an otherwise symmetric row. */
 .metric-showcase { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 28px; }
 .metric-cell { padding: 0 24px 0 0; }
 .metric-cell + .metric-cell { padding-left: 24px; border-left: 1px solid var(--line); }
+.metric-cell.terminal { border-left-color: rgba(255, 54, 33, .45); }
 .metric-cell .big-num { font: 700 clamp(44px, 5vw, 76px)/1 var(--display); letter-spacing: -.04em; }
 .metric-cell .big-num.signal { color: var(--signal); }
 .metric-cell .metric-label { display: block; margin-top: 10px; margin-bottom: 6px; font: 700 11px/1 var(--display); text-transform: uppercase; letter-spacing: .14em; color: var(--signal); }

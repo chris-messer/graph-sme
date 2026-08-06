@@ -22,10 +22,12 @@ OUTLINE = [
             "title",
             "agenda",
         ]),
+        # The climb used to sit here and now closes the deck, so this run is
+        # purely the setup: why the request usually is not a graph estate, the
+        # vocabulary, and the three layers the middle of the deck walks through.
         ("Framing", [
             "framing",
             "graph-101",
-            "ladder",
             "semantic-layers",
         ]),
     ]),
@@ -45,10 +47,11 @@ OUTLINE = [
         ("What it is", [
             "ontology-overview",
         ]),
+        # Two client needs and no options slide: the tooling answer now lands
+        # inside the second need rather than as a survey after it.
         ("The two needs", [
             "genie-ontology-path",
             "ontology-design",
-            "ontology-options",
         ]),
     ]),
 
@@ -56,17 +59,15 @@ OUTLINE = [
         ("What it is", [
             "kg-overview",
         ]),
-        # The consolidated arc is deliberately one subsection: seed selection and
-        # hop retrieval are two problems inside a single need, and the rail
-        # should show these seven slides as one thing.
+        # One need, its two decisions, the options and the recommendation —
+        # deliberately one subsection, because seed selection and hop retrieval
+        # are two problems inside a single need rather than two needs.
         ("Connecting the dots", [
             "agent-disconnect",
             "graph-answer",
             "problem-space",
-            "seed-options",
             "hop-options",
             "retrieval-recommendation",
-            "memory-options",
         ]),
         ("Algorithms", [
             "graph-algorithms",
@@ -82,6 +83,11 @@ OUTLINE = [
     ]),
 
     ("Next steps", [
+        # The climb is the closing synthesis: it reads the whole deck back as
+        # three rungs before the operating rule turns that into a way to work.
+        ("Where you land", [
+            "ladder",
+        ]),
         ("Operating rules", [
             "operating-rule",
         ]),

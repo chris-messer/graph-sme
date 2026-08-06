@@ -1,0 +1,29 @@
+    <!-- 18 · retrieval recommendation · layout: three-step lane progression -->
+    <section class="slide" aria-label="Recommendation: where we land on graph retrieval">
+      <div class="eyebrow"><span class="num">18</span> Recommendation</div>
+      <div class="content">
+        <h2>Start with agent traversal; each step up needs a failed benchmark query</h2>
+        <p class="lead rec-lead">Three steps, each a bigger commitment than the one before it. Nothing moves up on preference — a query has to fail first, and most never do.</p>
+        <div class="rec-lanes">
+          <div class="rec-lane rec-start">
+            <span class="kicker green">Start here</span>
+            <h3>Agent traversal over the stored node and edge tables</h3>
+            <p>Hand Genie agents the nodes and the edges and let the agent do the walk — query, read what came back, follow the next edge. Nothing new to stand up, nothing new to govern.</p>
+            <p class="rec-gate">Earned by default. This is where every graph question starts.</p>
+          </div>
+          <div class="rec-lane rec-climb">
+            <span class="kicker blue">Next step</span>
+            <h3>Lakebase-native graph retrieval</h3>
+            <p>Text → SPARQL → SQL, or a Postgres graph extension running over Lakebase. Real graph semantics and deterministic answers, still on the same edges and still nothing to buy.</p>
+            <p class="rec-gate">Earned by a benchmark query the walk gets wrong, or too slowly.</p>
+          </div>
+          <div class="rec-lane rec-bound">
+            <span class="kicker">Last resort</span>
+            <h3>A partner graph database such as Neo4j</h3>
+            <p>The biggest commitment on the page: a second engine to stand up, govern and keep in sync. Delta stays the system of record and the edges sync outward.</p>
+            <p class="rec-gate">Earned only when that same query still fails on Lakebase.</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span class="brand">Databricks × Graph SME</span><span class="counter">18 / 27</span></div>
+    </section>

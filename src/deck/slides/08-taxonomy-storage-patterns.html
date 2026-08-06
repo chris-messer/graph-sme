@@ -1,0 +1,25 @@
+    <!-- 08 · TAXONOMY options · layout: chip selector over paired diagram + storage table -->
+    <section class="slide" aria-label="Taxonomy storage patterns">
+      <div class="eyebrow"><span class="num">08</span> Options</div>
+      <div class="content">
+        <h2>A hierarchy is a graph, but nothing about agent traversal requires one</h2>
+        <p class="lead">One tree, six storage patterns. Select one to see its shape on the left and the rows it actually writes on the right. Numbers belong to nodes and products are lettered SKUs, so the two never read as each other.</p>
+        <div class="enc-strip" role="group" aria-label="Storage patterns">
+          <button type="button" class="enc-chip active" data-enc="flattened" aria-pressed="true"><b>Flattened</b><span>Level columns per row</span></button>
+          <button type="button" class="enc-chip" data-enc="adjacency" aria-pressed="false"><b>Adjacency</b><span>parent_id per node</span></button>
+          <button type="button" class="enc-chip" data-enc="path" aria-pressed="false"><b>Materialized path</b><span>Full path string</span></button>
+          <button type="button" class="enc-chip" data-enc="nested" aria-pressed="false"><b>Nested set</b><span>lft / rgt intervals</span></button>
+          <button type="button" class="enc-chip rec" data-enc="closure" aria-pressed="false"><b><i class="tick" aria-hidden="true">✓</i>Closure table</b><span>Ancestor → descendant</span></button>
+          <button type="button" class="enc-chip rec" data-enc="segments" aria-pressed="false"><b><i class="tick" aria-hidden="true">✓</i>Closure + segments</b><span>Named set across branches</span></button>
+        </div>
+        <p class="enc-legend"><i class="sw" aria-hidden="true"></i><b>Recommended</b> — the two in green keep selecting a whole subtree to one equality, at any depth. The other four are workable, not where we would land.</p>
+        <div class="enc-split">
+          <div class="enc-diagram">
+            <div class="viz-shell" id="viz-hier" style="height:min(34vh,282px);margin-top:0;"></div>
+            <p class="viz-caption" id="hier-callout"></p>
+          </div>
+          <div class="edge-table enc-table" id="enc-table" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="footer"><span class="brand">Databricks × Graph SME</span><span class="counter">08 / 27</span></div>
+    </section>
