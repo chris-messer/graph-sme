@@ -1,0 +1,42 @@
+    <!-- 20 · hop retrieval options · layout: banded five-option strip over a synced detail panel -->
+    <section class="slide" aria-label="Options: five ways to retrieve the hops">
+      <div class="eyebrow"><span class="num">20</span> Options</div>
+      <div class="content">
+        <h2>One edge table retrieves the hops five ways, and only two need an engine</h2>
+        <p class="lead opt-lead">The seed is resolved, so something has to walk outward from it. Every option below reads the same <b>gold_triplets</b> edge table unchanged — what separates them is what has to be standing up when the question arrives.</p>
+        <div class="opt-bands" aria-hidden="true">
+          <span class="ob sql">No engine · SQL over the same Delta table</span>
+          <span class="ob eng">An engine to stand up and operate</span>
+        </div>
+        <div class="opt-strip" role="group" aria-label="Hop retrieval options">
+          <button type="button" class="opt o1 active" data-opt="hops" aria-pressed="true">
+            <span class="ol">Low · 1–2 weeks</span>
+            <span class="oh">Pre-materialized hop tables</span>
+            <span class="op">5, 10, and 15-hop tables built ahead of the question.</span>
+          </button>
+          <button type="button" class="opt o2" data-opt="cte" aria-pressed="false">
+            <span class="ol">Low · days</span>
+            <span class="oh">Agent Generated SQL</span>
+            <span class="op">The agent writes a recursive CTE over the edges at query time.</span>
+          </button>
+          <button type="button" class="opt o3" data-opt="sparql" aria-pressed="false">
+            <span class="ol">Medium · 2–4 weeks</span>
+            <span class="oh">Text → SPARQL → SQL</span>
+            <span class="op">Graph questions compile down to SQL. Nothing else runs.</span>
+          </button>
+          <button type="button" class="opt o4" data-opt="engine" aria-pressed="false">
+            <span class="ol">Medium · 2–4 weeks</span>
+            <span class="oh">Graph engine inside Databricks</span>
+            <span class="op">A triple store and graph query surface on the lakehouse.</span>
+          </button>
+          <button type="button" class="opt o5" data-opt="partner" aria-pressed="false">
+            <span class="ol">Medium–high · 4–8 weeks</span>
+            <span class="oh">External partner database</span>
+            <span class="op">Neo4j, Stardog, Kobai, PuppyGraph.</span>
+          </button>
+        </div>
+        <div class="opt-panel" id="opt-panel" aria-live="polite"></div>
+        <p class="viz-caption opt-foot"><b>Reading this slide</b>These five are the patterns the field has actually run. Anything marked <em>Extension</em> is our proposal on top of them rather than a pattern with mileage behind it, and it is labelled wherever it appears.</p>
+      </div>
+      <div class="footer"><span class="brand">Databricks × Graph SME</span><span class="counter">20 / 30</span></div>
+    </section>

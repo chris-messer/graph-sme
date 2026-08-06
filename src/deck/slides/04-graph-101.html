@@ -1,0 +1,38 @@
+    <!-- 04 · Graph 101 · layout: linked dual view (network ⇄ table) -->
+    <section class="slide" aria-label="Graph 101">
+      <div class="eyebrow"><span class="num">04</span> Vocabulary</div>
+      <div class="content">
+        <h2>A graph is nodes, edges, and hops — the same relationships live in a table</h2>
+        <div class="dual-toolbar" role="group" aria-label="View mode">
+          <span class="ctrl-label">View</span>
+          <button type="button" class="mode-btn active" data-dual="both" aria-pressed="true">Both</button>
+          <button type="button" class="mode-btn" data-dual="graph" aria-pressed="false">Network</button>
+          <button type="button" class="mode-btn" data-dual="table" aria-pressed="false">Table</button>
+        </div>
+        <div class="dual-view" id="dual-view" data-view="both">
+          <div class="viz-shell dv-graph" id="viz-basics" style="margin-top:8px;">
+            <div class="viz-controls" id="hop-controls" role="group" aria-label="Hop depth">
+              <span class="ctrl-label">Hops</span>
+              <button type="button" class="hop-btn" data-hops="1">1</button>
+              <button type="button" class="hop-btn active" data-hops="2" aria-pressed="true">2</button>
+              <button type="button" class="hop-btn" data-hops="3">3</button>
+            </div>
+            <div class="viz-callout" id="basics-callout"><b>Seed → 2 hops</b>Neighborhood from Ann.</div>
+            <div class="viz-legend">
+              <span><i style="background:#ff3621"></i> Seed</span>
+              <span><i style="background:#00a972"></i> In neighborhood</span>
+              <span><i style="background:#2272b4"></i> Beyond</span>
+            </div>
+          </div>
+          <div class="edge-table dv-table" style="margin-top:8px;">
+            <div class="label">edges · Delta</div>
+            <table>
+              <thead><tr><th>subject</th><th>predicate</th><th>object</th><th style="text-align:right">hops</th></tr></thead>
+              <tbody id="edge-tbody"></tbody>
+            </table>
+            <div class="edge-hint">Click a row to trace one edge · click a node to reseed · drag to reposition</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span class="brand">Databricks × Graph SME</span><span class="counter">04 / 30</span></div>
+    </section>

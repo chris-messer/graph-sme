@@ -1,0 +1,48 @@
+    <!-- 20 · KG algorithm engine options · layout: shared log-scale range axis above three engine columns -->
+    <section class="slide" aria-label="Options: three engines for graph algorithms">
+      <div class="eyebrow"><span class="num">24</span> Options</div>
+      <div class="content">
+        <h2>Three engines run those same four families, and the edge count picks which one</h2>
+        <p class="lead eng-lead">None of these is a graph database, and all three read the same <b>gold_triplets</b> edge table and write results back to Delta. The only question is where the computation lands.</p>
+        <div class="eng-axis">
+          <span class="ea-label">Where each engine runs, by edge count</span>
+          <div class="ea-viz" id="viz-eng-tiers"></div>
+        </div>
+        <div class="eng-cols">
+          <div class="eng blue">
+            <div class="eng-head"><b>NetworkX</b><span class="eng-where">serverless notebook</span></div>
+            <span class="eng-runs">Load edges into NetworkX, run PageRank, Louvain or betweenness, write results back to Delta. No cluster libraries, no GPU, no ceremony.</span>
+            <div class="eng-rows">
+              <div class="er"><b>Fits</b><span>Up to the low millions of edges, when the client wants an answer this week rather than a platform.</span></div>
+              <div class="er fail"><b>Fails</b><span>Past a few million edges it exhausts one machine, and there is no distributed path to grow into.</span></div>
+              <div class="er trade"><b>Tradeoff</b><span>The least setup of the three, and the least headroom. Outgrowing it means rewriting.</span></div>
+            </div>
+            <span class="eng-eff">Low · days</span>
+          </div>
+
+          <div class="eng green">
+            <div class="eng-head"><b>SparkGraph</b><span class="eng-where">serverless Spark</span></div>
+            <span class="eng-runs">A GraphFrames-style API built for serverless that tiers its own execution — pure-Python driver path when the graph fits in driver memory, coarsen-then-solve for mid-size, fully distributed beyond that. <b>pip install</b>, point it at nodes and edges.</span>
+            <div class="eng-rows">
+              <div class="er"><b>Fits</b><span>The final graph size is not settled, or one codebase has to hold up at both ends of the range.</span></div>
+              <div class="er fail"><b>Fails</b><span>A hard latency target on a very large batch job. The distributed tier buys scale, not speed.</span></div>
+              <div class="er trade"><b>Tradeoff</b><span>One more package to standardize on, against never rewriting when the graph outgrows its tier.</span></div>
+            </div>
+            <span class="eng-eff">Low–Medium · 1–2 weeks</span>
+          </div>
+
+          <div class="eng signal">
+            <div class="eng-head"><b>NVIDIA cuGraph</b><span class="eng-where">GPU cluster</span></div>
+            <span class="eng-runs">RAPIDS cuGraph on a GPU cluster. Load edges from Delta, run, write results back to Delta for Genie and agents to read. Field-proven on a utility power network — shortest path and Louvain.</span>
+            <div class="eng-rows">
+              <div class="er"><b>Fits</b><span>Very large graphs, or batch analytics with a latency target — Louvain over tens of millions of edges.</span></div>
+              <div class="er fail"><b>Fails</b><span>The graph is small, or nobody wants to operate a GPU cluster for a job that runs weekly.</span></div>
+              <div class="er trade"><b>Tradeoff</b><span>Order-of-magnitude speedups over CPU, paid in GPU time and a second runtime to maintain.</span></div>
+            </div>
+            <span class="eng-eff">Medium · 1–2 weeks</span>
+          </div>
+        </div>
+        <p class="viz-caption eng-foot"><b>Reading this slide</b>No column wins outright — the bands overlap on purpose. But one property is worth naming: because SparkGraph&rsquo;s driver path is pure Python, the same package runs inside a model serving endpoint, where Spark does not exist. That is what lets an agent compute PageRank mid-conversation rather than read a number precomputed last night. At every tier the durable pattern is unchanged: precompute the heavy work to Delta, then serve cheap lookups.</p>
+      </div>
+      <div class="footer"><span class="brand">Databricks × Graph SME</span><span class="counter">24 / 30</span></div>
+    </section>

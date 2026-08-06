@@ -1,0 +1,45 @@
+    <!-- 18 · the problem space · layout: one frontier canvas driven by two independent control groups -->
+    <section class="slide" aria-label="The problem space: seed selection versus hop retrieval">
+      <div class="eyebrow"><span class="num">18</span> Problem space</div>
+      <div class="content">
+        <h2>Two independent decisions sit inside every graph retrieval, and they fail in different ways</h2>
+        <p class="lead ps-lead">One picture, two controls. A user asks for <b>&ldquo;everything connected to Delta Holdings&rdquo;</b> — three entities match that string, and the answer is however far out you choose to walk. Move either control and the frontier changes for a completely different reason.</p>
+        <div class="ps-controls">
+          <div class="ps-ctrl" role="group" aria-label="Problem one: which node to start from">
+            <span class="ps-num">Problem 1</span>
+            <span class="ps-name">Which node do we start from?</span>
+            <div class="ps-btns">
+              <button type="button" class="ps-btn active" data-seed="sql" aria-pressed="true">Deterministic SQL</button>
+              <button type="button" class="ps-btn" data-seed="vector" aria-pressed="false">Vector similarity</button>
+              <button type="button" class="ps-btn" data-seed="llm" aria-pressed="false">LLM-assisted</button>
+              <button type="button" class="ps-btn" data-seed="human" aria-pressed="false">User in the loop</button>
+            </div>
+          </div>
+          <div class="ps-ctrl" role="group" aria-label="Problem two: how far to walk">
+            <span class="ps-num">Problem 2</span>
+            <span class="ps-name">How far out do we walk?</span>
+            <div class="ps-btns">
+              <button type="button" class="ps-btn active" data-seedhops="1" aria-pressed="true">1 hop</button>
+              <button type="button" class="ps-btn" data-seedhops="2" aria-pressed="false">2</button>
+              <button type="button" class="ps-btn" data-seedhops="3" aria-pressed="false">3</button>
+              <button type="button" class="ps-btn" data-seedhops="4" aria-pressed="false">4</button>
+            </div>
+          </div>
+        </div>
+        <div class="viz-shell seed-canvas" id="viz-seed">
+          <div class="viz-callout" id="seed-callout"></div>
+        </div>
+        <div class="ps-fails">
+          <div class="ps-fail one">
+            <b>Get problem 1 wrong and the answer is wrong at every depth</b>
+            <span>Resolve to the wrong company and every hop after it is confidently, silently wrong. No amount of tuning the traversal recovers from it, and nothing in the output looks broken.</span>
+          </div>
+          <div class="ps-fail two">
+            <b>Get problem 2 wrong and the answer is right but unaffordable</b>
+            <span>Walk to three hops here and a shared registered-agent address enters the frontier, dragging everything attached to it in. The answer is still correct. The bill and the latency are not.</span>
+          </div>
+        </div>
+        <p class="viz-caption ps-foot"><b>Why this slide exists</b>Almost every &ldquo;we need a graph database&rdquo; conversation is really one of these two problems, and the two have completely different option sets. The next two slides take them one at a time, in this order.</p>
+      </div>
+      <div class="footer"><span class="brand">Databricks × Graph SME</span><span class="counter">18 / 30</span></div>
+    </section>

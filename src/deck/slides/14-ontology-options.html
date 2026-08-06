@@ -1,0 +1,66 @@
+    <!-- 14 · ONTOLOGY options · layout: four-row tiered ledger, ascending from describing meaning to governing it -->
+    <section class="slide" aria-label="Options: four Labs projects for governed semantics">
+      <div class="eyebrow"><span class="num">14</span> Options</div>
+      <div class="content">
+        <h2>Four open source Labs projects, each owning a different tier of meaning</h2>
+        <p class="lead sem-lead">All four deploy into your own workspace and read the same Unity Catalog assets. None of them is a rival to the others — the question is which tier your programme is actually short of.</p>
+        <div class="sem-ledger">
+          <div class="sl-head" aria-hidden="true">
+            <span>Tier and project</span>
+            <span>Fits when</span>
+            <span class="f">Fails when</span>
+            <span class="t">The tradeoff</span>
+          </div>
+
+          <div class="sl-row describe">
+            <div class="sl-who">
+              <span class="sl-tier">Tier 1 · Describe what you already have</span>
+              <b>dbxmetagen</b>
+              <span class="sl-runs">GenAI-assisted metadata toolkit with an ontology layer. Classifies tables and columns into a configurable entity taxonomy and emits UC tags, metric views or a knowledge graph.</span>
+              <span class="sl-eff unsized">Not sized in source</span>
+            </div>
+            <span class="sl-fit">Nobody has written down what the assets mean yet, and hand-curation would stall the programme before it starts.</span>
+            <span class="sl-fail">You need formal semantics. A taxonomy of entity types is not an ontology and will not infer anything.</span>
+            <span class="sl-trade">AI-proposed classifications need a human to validate them before anything downstream is allowed to trust them.</span>
+          </div>
+
+          <div class="sl-row virtual">
+            <div class="sl-who">
+              <span class="sl-tier">Tier 2 · Answer in place, store nothing</span>
+              <b>Ontop VKG</b>
+              <span class="sl-runs">Virtual Knowledge Graph forked to run as a Databricks App. SPARQL translates at runtime into SQL over UC tables through R2RML mappings, with JDBC federation to sources outside the lakehouse.</span>
+              <span class="sl-eff unsized">Not sized in source</span>
+            </div>
+            <span class="sl-fit">The data cannot be copied, or it genuinely lives across several systems and you need one SPARQL surface over all of it.</span>
+            <span class="sl-fail">The questions are traversal-heavy. Every hop becomes runtime SQL and the whole cost lands on whoever asked.</span>
+            <span class="sl-trade">Nothing materialized means nothing to refresh — and nothing precomputed to lean on when a query gets expensive.</span>
+          </div>
+
+          <div class="sl-row build">
+            <div class="sl-who">
+              <span class="sl-tier">Tier 3 · Materialize and reason</span>
+              <b>OntoBricks</b>
+              <span class="sl-runs">OWL ontology design, R2RML mapping to UC tables, triples materialized to a Delta triple store plus Lakebase, OWL 2 RL / SWRL / SHACL reasoning, generated GraphQL API, ontology tools exposed over MCP.</span>
+              <span class="sl-eff">Low–Medium · days to a working graph, 1–2 weeks to a curated ontology</span>
+            </div>
+            <span class="sl-fit">The client wants formal semantics — inferred classes, rules, validation — or you want to pressure-test in days whether they need one at all.</span>
+            <span class="sl-fail">The real problem is organizational rather than logical. No amount of OWL settles a vocabulary nobody owns.</span>
+            <span class="sl-trade">A materialized triple store is another copy of the truth, on a refresh schedule someone has to own.</span>
+          </div>
+
+          <div class="sl-row govern">
+            <div class="sl-who">
+              <span class="sl-tier">Tier 4 · Govern what the meaning is</span>
+              <b>Ontos</b>
+              <span class="sl-runs">Data products and contracts on ODCS/ODPS, a semantic-model layer binding UC assets to business concepts, domains and stewardship, a declarative compliance DSL, review workflows with audit trails, MCP.</span>
+              <span class="sl-eff">Medium · 2–4 weeks for the first domains</span>
+            </div>
+            <span class="sl-fit">The vocabulary itself is contested, and the programme needs named owners, contracts and review to survive its own pilot.</span>
+            <span class="sl-fail">You need inference. Ontos governs what a term means; it does not derive new facts from it.</span>
+            <span class="sl-trade">Organizational adoption is the work here, not the software. The app installs in an afternoon; the agreement does not.</span>
+          </div>
+        </div>
+        <p class="viz-caption sem-foot"><b>Reading this slide</b>The source treats tiers 3 and 4 as primary and pairs them rather than choosing between them — both sit alongside a Genie stack over the same assets. Tiers 1 and 2 carry no effort figure in it, so we would size those with you.</p>
+      </div>
+      <div class="footer"><span class="brand">Databricks × Graph SME</span><span class="counter">14 / 30</span></div>
+    </section>

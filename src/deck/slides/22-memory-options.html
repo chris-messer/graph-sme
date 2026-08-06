@@ -1,0 +1,55 @@
+    <!-- 22 · memory options · layout: four rungs ascending, each with what runs, fits, fails -->
+    <section class="slide" aria-label="Options: four ways to give an agent memory">
+      <div class="eyebrow"><span class="num">22</span> Options</div>
+      <div class="content">
+        <h2>Four ways to give an agent memory, and only the top rung can retire a fact</h2>
+        <p class="lead mo-lead">Retrieval decides what is <em>found</em>. Only the last rung decides what may be <em>said</em>. Most clients are on rung two today, which is exactly where the two failures we opened with come from.</p>
+        <div class="mo-rungs">
+          <div class="mo-rung ext">
+            <div class="mo-side">
+              <span class="mo-tag">Extension · not from the source</span>
+              <b>Framework session memory</b>
+              <span class="mo-eff">No build · nothing durable</span>
+            </div>
+            <span class="mo-runs">The agent framework&rsquo;s own scratchpad or rolling summary. Whatever was said earlier in this conversation is in context, and nothing is written down anywhere.</span>
+            <span class="mo-fit">A prototype, or a single-session assistant where no claim outlives the conversation.</span>
+            <span class="mo-fail">Nothing survives the session, nothing is governed, and supersession is not even expressible — there is no store in which one fact could replace another.</span>
+          </div>
+
+          <div class="mo-rung base">
+            <div class="mo-side">
+              <span class="mo-tag">Where most clients are today</span>
+              <b>Plain vector RAG, no graph</b>
+              <span class="mo-eff">Already in place</span>
+            </div>
+            <span class="mo-runs">Embed the corpus, retrieve the nearest chunks, answer from them. This is the stack that produced both wrong answers three slides ago.</span>
+            <span class="mo-fit">Single-document factual lookup, where the answer sits inside one passage and nothing contradicts it.</span>
+            <span class="mo-fail">Measured at <b>0.13</b> mean judged against <b>0.51</b> for a typed graph on multi-hop ownership questions — a roughly fourfold gap. And a vector index has no way to state that one fact supersedes another: the 2018 and 2019 records are simply two similar passages, so whichever matches the wording better wins.</span>
+          </div>
+
+          <div class="mo-rung enrich">
+            <div class="mo-side">
+              <span class="mo-tag">Fixes connecting the dots</span>
+              <b>Structure-enriched retrieval</b>
+              <span class="mo-eff">Medium · 2–4 weeks</span>
+            </div>
+            <span class="mo-runs">Extract a typed graph from the corpus with schema-constrained extraction, then embed retrieval units that carry the verbatim text <em>and</em> its relationship skeleton. One vector lookup, no traversal at query time, no graph database.</span>
+            <span class="mo-fit">Enumeration and cross-document composition — the two shapes plain vector search reliably misses.</span>
+            <span class="mo-fail">It maximizes what is found and says nothing about what may be said. A retired fact that is well connected is retrieved just as happily as a current one.</span>
+          </div>
+
+          <div class="mo-rung govern">
+            <div class="mo-side">
+              <span class="mo-tag">Fixes what may be asserted</span>
+              <b>Governed graph memory</b>
+              <span class="mo-eff">Medium–high · 4+ weeks</span>
+            </div>
+            <span class="mo-runs">A typed graph and compiler layer decides what the agent may treat as true, running the four checks from slide 17 at retrieval time. Supersedes edges mean memory <em>updates</em> rather than only appends — the agent can change its mind.</span>
+            <span class="mo-fit">The agent&rsquo;s assertions carry consequences, and someone has to be able to audit why it said what it said.</span>
+            <span class="mo-fail">The longest build in this section, and the evidence is one composed benchmark rather than a track record. Standing it up before rung three answers the wrong question first.</span>
+          </div>
+        </div>
+        <p class="viz-caption mo-foot"><b>Reading this slide</b>Rungs three and four are layers rather than alternatives — the source pairs them deliberately and has benchmarked them as one stack. So the sequence is rung three to fix what is found, then rung four when what the agent is permitted to say starts to matter. The dashed rung is ours, included because it is where a surprising number of agents actually are.</p>
+      </div>
+      <div class="footer"><span class="brand">Databricks × Graph SME</span><span class="counter">22 / 30</span></div>
+    </section>

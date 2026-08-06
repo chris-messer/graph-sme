@@ -1,0 +1,14 @@
+/* Narrow-viewport fallback, emitted last so it wins on ties.
+
+   Only layouts whose own per-slide stylesheet has no @media block belong here.
+   Slides 07, 08, 10, 12, 14, 15, 16, 17, 18, 20, 21 and 22 collapse their own
+   grids. */
+@media (max-width: 1000px) {
+  .slide { padding: 22px 22px 20px; }
+  .agenda, .metric-showcase, .triple-compare, .ladder, .rd-facets, .dual-view,
+  .graphrag-split, .discuss, .decision-grid, .onto-split, .gnn-split,
+  .enc-strip, .enc-split, .brain-lanes {
+    grid-template-columns: 1fr;
+  }
+  .rung-lane { grid-template-columns: 1fr; }
+}

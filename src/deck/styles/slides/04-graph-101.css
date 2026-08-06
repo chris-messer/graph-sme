@@ -1,0 +1,6 @@
+/* ── 04 dual view (graph ⇄ table) ────────────────── */
+.dual-view { display: grid; grid-template-columns: 1.25fr .75fr; gap: 20px; margin-top: 10px; align-items: stretch; }
+.dual-view[data-view="graph"] { grid-template-columns: 1fr; }
+.dual-view[data-view="graph"] .dv-table { display: none; }
+.dual-view[data-view="table"] { grid-template-columns: 1fr; }
+.dual-view[data-view="table"] .dv-graph { display: none; }

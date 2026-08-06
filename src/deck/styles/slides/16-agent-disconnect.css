@@ -1,0 +1,73 @@
+/* ── 16 the consolidated need: one corpus, two failing questions ────── */
+.ad-lead { margin-top: 6px; font-size: clamp(14px, 1.15vw, 17px); }
+.ad-q {
+  margin: 10px 0 0; font: 600 clamp(15px, 1.25vw, 19px)/1.22 var(--display); color: var(--ink);
+  border-left: 3px solid var(--danger); padding-left: 12px;
+}
+.ev.note { background: transparent; border: 1px dashed var(--line); color: var(--dim); font-family: var(--body); }
+.ad-lesson { margin-top: 12px; }
+
+.gr-ask {
+  display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-top: 8px;
+  border-left: 3px solid var(--signal); padding: 4px 0 4px 14px;
+}
+.gr-ask-label { font: 700 9.5px/1 var(--display); letter-spacing: .13em; text-transform: uppercase; color: var(--dim); }
+.gr-ask-text { font: 600 clamp(17px, 1.55vw, 23px)/1.2 var(--display); color: var(--ink); }
+
+.gr-sources { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.gr-src-label { font: 700 9.5px/1 var(--display); letter-spacing: .11em; text-transform: uppercase; color: var(--dim); margin-right: 4px; }
+.gr-src {
+  appearance: none; cursor: pointer; font-family: var(--body); color: var(--ink); font-size: 12px;
+  background: rgba(255,255,255,.85); border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px 6px 9px;
+  transition: border-color .2s ease, background .2s ease, color .2s ease;
+}
+.gr-src b {
+  display: inline-grid; place-items: center; width: 17px; height: 17px; margin-right: 7px;
+  border-radius: 50%; background: var(--oat-2); color: var(--muted);
+  font: 700 10px/1 var(--display); vertical-align: -3px;
+}
+.gr-src:hover { border-color: rgba(255,54,33,.45); }
+.gr-src.active { border-color: var(--signal); background: rgba(255,54,33,.07); }
+.gr-src.active b { background: var(--signal); color: #fff; }
+.gr-src:focus-visible { outline: 3px solid rgba(34,114,180,.28); outline-offset: 2px; }
+.gr-quote {
+  margin: 9px 0 0; color: var(--muted); font-size: 13px; line-height: 1.35; min-height: 19px;
+}
+.gr-quote b { color: var(--ink); font-weight: 600; }
+
+.graphrag-split { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 12px; }
+.gr-lane {
+  border-radius: 14px; padding: 14px 16px 13px; border: 1px solid var(--line); background: rgba(255,255,255,.72);
+}
+.gr-lane.fail { border-left: 4px solid var(--danger); }
+.gr-lane.win { border-left: 4px solid var(--green); }
+.gr-lane-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.gr-lane-head .kicker { margin-bottom: 0; }
+.gr-verdict { font: 700 10px/1.2 var(--display); letter-spacing: .04em; }
+.gr-verdict.bad { color: var(--danger); }
+.gr-verdict.bad::before { content: "✕ "; }
+.gr-verdict.good { color: var(--green); }
+.gr-verdict.good::before { content: "✓ "; }
+
+.gr-evidence { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 11px; }
+.ev {
+  font-family: var(--mono); font-size: 10.5px; line-height: 1; padding: 6px 9px; border-radius: 6px;
+  background: var(--oat-2); color: var(--muted); border: 1px solid transparent;
+  transition: box-shadow .2s ease, opacity .2s ease, border-color .2s ease;
+}
+.ev.miss { opacity: .5; border: 1px dashed var(--line); }
+.ev.hit { background: rgba(0,169,114,.1); border-color: rgba(0,169,114,.4); color: var(--ink); }
+.gr-lane.fail .ev.hit { background: rgba(255,54,33,.09); border-color: rgba(255,54,33,.4); }
+.ev.skeleton { flex-basis: 100%; background: rgba(34,114,180,.08); border-color: rgba(34,114,180,.35); color: var(--ink); letter-spacing: -.01em; }
+.ev.sel { box-shadow: 0 0 0 2px rgba(27,49,57,.28); opacity: 1; }
+
+.gr-out { margin-top: 11px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.gr-out-label { display: block; font: 700 9.5px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; color: var(--dim); margin-bottom: 6px; }
+.gr-out p { margin: 0; font-size: 14px; line-height: 1.32; color: var(--ink); }
+.gr-why { margin: 10px 0 0; color: var(--muted); font-size: 12.5px; line-height: 1.36; }
+
+.gr-lesson {
+  margin-top: 13px; border-top: 1px solid var(--line); padding-top: 11px;
+  color: var(--muted); font-size: 12.5px; line-height: 1.42; max-width: 1300px;
+}
+.gr-lesson b { color: var(--ink); }

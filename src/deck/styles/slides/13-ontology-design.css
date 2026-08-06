@@ -1,0 +1,23 @@
+/* ── 13 nested scope map + capability chips ─────── */
+.brain-viz { height: min(32vh, 278px); margin-top: 12px; }
+.brain-viz .badge-sub { font: 400 11.5px/1 var(--body); fill: var(--muted); }
+.brain-viz .brain-note { font: 400 12px/1 var(--body); fill: var(--muted); }
+.brain-lanes { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 14px; }
+.bl { border-top: 3px solid var(--line); padding-top: 11px; }
+.bl.build { border-top-color: var(--blue); }
+.bl.govern { border-top-color: var(--green); }
+.bl-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 9px; }
+.bl-head b { font: 700 17px/1.15 var(--display); letter-spacing: -.02em; color: var(--ink); }
+.bl-head i { font-style: normal; color: var(--dim); font-size: 11.5px; letter-spacing: .03em; }
+.bl-one { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.4; }
+.bl.build .bl-one b, .bl.govern .bl-one b { color: var(--ink); font-weight: 600; }
+.brain-foot { margin-top: 12px; font-size: 12px; }
+
+.bl .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.bl .chips span {
+  font-size: 12px; line-height: 1; color: var(--muted);
+  background: rgba(255,255,255,.8); border: 1px solid var(--line);
+  border-radius: 999px; padding: 7px 11px;
+}
+.bl.build .chips span { border-color: rgba(34,114,180,.28); }
+.bl.govern .chips span { border-color: rgba(0,169,114,.28); }

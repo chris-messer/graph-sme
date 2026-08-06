@@ -1,0 +1,57 @@
+    <!-- 17 · why graphs · layout: as-of ledger + governance gates over the two answers restored -->
+    <section class="slide" aria-label="Why graphs: the structure that answers both questions">
+      <div class="eyebrow"><span class="num">17</span> Why graphs</div>
+      <div class="content">
+        <h2>Store the edges between those facts and both questions answer themselves</h2>
+        <p class="lead mem-lead">A graph adds two things a vector index has no way to hold: a typed edge saying <b>which fact relates to which</b>, and a supersedes edge saying <b>which fact replaced which</b>. Move the clock and watch the second one work.</p>
+        <div class="mem-split">
+          <div class="mem-ledger">
+            <div class="mem-toolbar" role="group" aria-label="Point in time">
+              <span class="ctrl-label">Asked &ldquo;who leads Acme Holdings?&rdquo; as of</span>
+              <button type="button" class="mode-btn" data-asof="2018" aria-pressed="false">2018</button>
+              <button type="button" class="mode-btn active" data-asof="now" aria-pressed="true">Today</button>
+            </div>
+            <div class="mem-rows" id="mem-rows"></div>
+            <div class="mem-answer">
+              <span class="mem-answer-label">What the agent may assert</span>
+              <p id="mem-answer"></p>
+            </div>
+          </div>
+          <div class="mem-gates">
+            <span class="mem-gates-label">Four checks the graph runs before anything is exposed</span>
+            <div class="mem-gate">
+              <b>Lifecycle</b>
+              <span>Is this still live, or has a supersedes edge retired it? A correction updates memory here instead of appending a second, contradictory fact beside the first.</span>
+            </div>
+            <div class="mem-gate">
+              <b>Scope</b>
+              <span>Was it recorded for the context being asked about, or borrowed from a different engagement, region, or client?</span>
+            </div>
+            <div class="mem-gate">
+              <b>Authorization</b>
+              <span>May this particular asker see it? The check reads the same Unity Catalog permissions as every other asset.</span>
+            </div>
+            <div class="mem-gate">
+              <b>Source grounding</b>
+              <span>Does a citable source actually state it? Vector search is treated as a candidate generator, never as the authority.</span>
+            </div>
+          </div>
+        </div>
+        <div class="ga-restored">
+          <span class="gar-label">Both failures from the previous slide, with the edges in place</span>
+          <div class="gar-items">
+            <div class="gar-item">
+              <b>&ldquo;Who leads the parent company of Beta Logistics?&rdquo;</b>
+              <span class="gar-path">Beta Logistics —PARENT→ Acme Holdings —LED_BY→ Maya Okonjo</span>
+              <span class="gar-note">The two documents never had to be matched to each other. The edge between them was extracted once, at write time.</span>
+            </div>
+            <div class="gar-item">
+              <b>&ldquo;Who leads Acme Holdings?&rdquo;</b>
+              <span class="gar-path">Ray Duval —SUPERSEDED_BY→ Maya Okonjo</span>
+              <span class="gar-note">The 2018 record is not deleted and not repeated. It is retired, still auditable, and still the right answer to a question asked about 2018.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span class="brand">Databricks × Graph SME</span><span class="counter">17 / 30</span></div>
+    </section>

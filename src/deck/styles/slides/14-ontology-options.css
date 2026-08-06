@@ -1,0 +1,58 @@
+/* ── 14 ontology options: four-row tiered ledger ── */
+.sem-lead { margin-top: 6px; font-size: clamp(14px, 1.15vw, 17px); }
+
+.sem-ledger { margin-top: 14px; }
+.sl-head, .sl-row {
+  display: grid; grid-template-columns: 1.65fr 1fr 1fr .95fr; gap: 0 20px;
+}
+.sl-head {
+  padding-bottom: 6px; border-bottom: 1px solid var(--line);
+}
+.sl-head span {
+  font: 700 9.5px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; color: var(--dim);
+}
+.sl-head .f { color: var(--danger); }
+.sl-head .t { color: var(--signal); }
+
+.sl-row {
+  padding: 11px 0; border-bottom: 1px solid var(--line);
+  align-items: start; position: relative;
+}
+.sl-row:last-child { border-bottom: 0; }
+.sl-row::before {
+  content: ""; position: absolute; left: -10px; top: 11px; bottom: 11px; width: 3px; border-radius: 2px;
+  background: var(--line);
+}
+.sl-row.describe::before { background: rgba(122,132,145,.55); }
+.sl-row.virtual::before  { background: rgba(34,114,180,.55); }
+.sl-row.build::before    { background: var(--green); }
+.sl-row.govern::before   { background: var(--signal); }
+
+.sl-who { display: grid; align-content: start; gap: 3px; }
+.sl-tier {
+  font: 700 9.5px/1 var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--dim);
+}
+.sl-row.build .sl-tier   { color: var(--green); }
+.sl-row.govern .sl-tier  { color: var(--signal); }
+.sl-who b { font: 700 17px/1.12 var(--display); letter-spacing: -.02em; color: var(--ink); }
+.sl-runs { color: var(--muted); font-size: 12px; line-height: 1.34; }
+.sl-eff {
+  justify-self: start; margin-top: 3px; padding: 3px 8px; border-radius: 999px;
+  background: rgba(0,169,114,.08); border: 1px solid rgba(0,169,114,.3);
+  color: var(--ink); font: 600 10.5px/1.25 var(--body); letter-spacing: .01em;
+}
+.sl-eff.unsized {
+  background: transparent; border-style: dashed; border-color: var(--line); color: var(--dim);
+}
+
+.sl-fit, .sl-fail, .sl-trade { color: var(--muted); font-size: 12.5px; line-height: 1.36; }
+
+.sem-foot { margin-top: 12px; font-size: 12px; }
+
+@media (max-width: 1000px) {
+  .sl-head { display: none; }
+  .sl-row { grid-template-columns: 1fr; gap: 8px; }
+  .sl-fit::before  { content: "Fits when · "; color: var(--dim); font-weight: 700; }
+  .sl-fail::before { content: "Fails when · "; color: var(--danger); font-weight: 700; }
+  .sl-trade::before { content: "Tradeoff · "; color: var(--signal); font-weight: 700; }
+}

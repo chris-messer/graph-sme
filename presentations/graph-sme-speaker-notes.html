@@ -1,4 +1,6 @@
 <!doctype html>
+<!-- GENERATED FILE — do not edit.
+     Source lives in src/. Rebuild with: python3 build.py -->
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -8,7 +10,7 @@
     :root {
       --ink: #1b3139; --muted: #52666d; --dim: #75868b;
       --oat: #f9f7f4; --oat-2: #eeede9; --line: #d7d6d1;
-      --signal: #ff3621; --blue: #2272b4;
+      --signal: #ff3621; --blue: #2272b4; --green: #00a972;
       --display: "DM Sans", "Avenir Next", "Inter", sans-serif;
       --body: "Inter", "DM Sans", "Avenir Next", sans-serif;
     }
@@ -27,6 +29,14 @@
     .brand { color: var(--signal); font: 700 11px/1 var(--display); letter-spacing: .16em; text-transform: uppercase; }
     .counter { font: 700 13px/1 var(--display); color: var(--dim); font-variant-numeric: tabular-nums; }
     h1 { margin: 10px 0 0; font: 700 24px/1.15 var(--display); letter-spacing: -.02em; }
+    .section-tag {
+      display: inline-block; margin-top: 8px; font: 700 10px/1 var(--display);
+      letter-spacing: .14em; text-transform: uppercase; color: var(--blue);
+      border: 1px solid rgba(34,114,180,.3); background: rgba(34,114,180,.07);
+      padding: 5px 8px; border-radius: 999px;
+    }
+    /* Section › subsection, matching the deck rail's two upper levels. */
+    .section-tag i { font-style: normal; opacity: .55; margin: 0 6px; }
     .on-screen {
       margin-top: 10px; color: var(--muted); font-size: 13px; line-height: 1.4;
       padding: 10px 12px; background: rgba(255,255,255,.7); border-left: 3px solid var(--signal);
@@ -68,9 +78,10 @@
     <div>
       <div class="brand">Roadmap to Graph · SA discovery talk track</div>
       <h1 id="title">Title</h1>
+      <div id="section"></div>
       <div class="on-screen" id="onscreen"></div>
     </div>
-    <div class="counter" id="counter">01 / 14</div>
+    <div class="counter" id="counter">01 / 23</div>
   </header>
   <main>
     <div class="say"><span class="label">Say this</span><div id="say"></div></div>
@@ -95,220 +106,782 @@
       let applyingRemote = false;
       let lastNavAt = 0;
 
-      const NOTES = [
-        {
-          title: 'Title',
-          onscreen: 'Roadmap to Graph — match need to lowest rung, climb only with proof.',
-          say: 'This is a decision briefing for discovery — not a product tour and not an SME deep dive yet. Teams say they need a graph. What they often need is governed relationships, better agent context, or multi-hop answers. We\'ll map those needs to a ladder on Databricks — starting managed, climbing only when your own queries force it. My goal today is to leave with the right questions answered so we know whether to bring Graph or Ontology SMEs in.',
-          bullets: [
-            ['Purpose', ['Set the operating rule; frame this as SA-led discovery before SME escalation']],
-            ['SA cue', ['Listen for query shape, existing tooling, and urgency — not industry buzzwords']],
-          ],
-          transition: 'Transition: "Quick map of where we\'re going."'
-        },
-        {
-          title: 'Agenda',
-          onscreen: 'Six beats: need, vocabulary, ladder, algorithms/GraphRAG, decision, discussion.',
-          say: 'Don\'t read the cards. Promise them the network visuals will do the teaching, and the discussion at the end will map their use case to a starting rung — and decide whether an SME session is the next step.',
-          bullets: [
-            ['Keep it crisp', ['~45–60 min with discussion', 'Visuals carry Graph 101 and algorithms']],
-            ['SA outcome', ['Leave with: starting rung hypothesis, 3–5 benchmark queries, owners, escalate-or-not']],
-          ],
-          transition: 'Transition: "First — what people usually mean when they say graph."'
-        },
-        {
-          title: 'What customers want',
-          onscreen: 'Three metrics: 2 families, managed path first, 3 query shapes.',
-          say: 'Graph databases and graph virtualization are real categories. Knowledge graphs sit beside them as organizational understanding rendered as interconnected data. In the field, most teams are satisfied with ontology-enriched Genie and a knowledge explorer for agents — not a net-new graph estate. When they do need graph, it\'s usually because of the query shape: algorithms, deep traversal, or structural learning — not because the industry vertical is labeled fraud or supply chain.',
-          bullets: [
-            ['Purpose', ['Reframe "we need Neo4j" into "what query shape fails today?"']],
-            ['Discovery', [
-              'What does "graph" mean in your RFP, architecture board notes, or vendor shortlist today?',
-              'Is the priority exploration for people, context for agents, production traversal SLAs, or all three?',
-              'Which workloads or business units are driving this ask first?',
-            ]],
-          ],
-          transition: 'Transition: "Before the ladder — sixty seconds of vocabulary, with a live network."'
-        },
-        {
-          title: 'Graph 101',
-          onscreen: 'Interactive force graph; hop controls and clickable seed; drag to reposition.',
-          say: 'A graph is two sets — entities and relationships. Degree is how busy a node is. A hop is one edge; traversal is walking a path. The trick behind this whole briefing: in the lakehouse the graph is an edge table. Subject, predicate, object. There is no separate magic structure you have to stand up first.',
-          bullets: [
-            ['Purpose', ['Demystify graph; plant the edge-table idea']],
-            ['How to demo live', [
-              'Click 1-hop / 2-hop / 3-hop and watch the neighborhood grow from Ann',
-              'Click Acme or Cara to change the seed; drag any node to reposition',
-              'Say: "most graph-DB asks are multi-hop SQL in disguise"',
-            ]],
-            ['Discovery', [
-              'Which business questions are 2-hop or deeper today — and where do they fail in the current stack?',
-              'Are those questions answered in BI today, in ad-hoc SQL, or not at all?',
-            ]],
-          ],
-          transition: 'Transition: "Ontology and graph travel together — here\'s why, visually."'
-        },
-        {
-          title: 'Ontology · taxonomy · KG',
-          onscreen: 'Three cards with mini D3: tree, typed schema, instance network.',
-          say: 'Taxonomy is a classification tree. Ontology is the allowed types and rules — the schema of meaning. The knowledge graph is the instance data under that schema. That\'s why Labs splits the work: OntoBricks builds and reasons over the graph; Ontos governs the business meaning. You may need neither on day one if Genie Ontology plus the Glossary already cover the ask.',
-          bullets: [
-            ['Purpose', ['Separate classification, schema, and instances']],
-            ['Key nuance', ['RDF/OWL when formal reasoning matters; LPG when app/analytics Cypher is the culture']],
-            ['Discovery', [
-              'Do you need formal OWL/SHACL validation, or curated business terms and relationships?',
-              'Who owns business definitions today — data governance, domain stewards, or nobody clearly?',
-            ]],
-          ],
-          transition: 'Transition: "So before we build anything custom — check the managed stack."'
-        },
-        {
-          title: 'Managed semantic path',
-          onscreen: 'Four-stage flow: Genie Ontology → Glossary → Metric Views → Relationships.',
-          say: 'This is now a product surface. Genie Ontology builds a semantic map from tables, queries, dashboards, and docs. You steer it with Knowledge Concepts and the Unity Catalog Glossary. Metric Views give you governed metrics. Relationships is the product-native version of the edge-table pattern we\'ll talk about next. Days to enable, then curation is the work — not a six-week graph program. If this path hasn\'t been tried against your questions, escalate to SME only after that gap is clear.',
-          bullets: [
-            ['Purpose', ['Force the "have you tried the managed path?" gate before SME escalation']],
-            ['Discovery', [
-              'Has Genie Ontology, UC Glossary, Metric Views, or Relationships been tried against the failing questions?',
-              'Which Metric Views already exist over the core entities you care about?',
-              'What BI tools and refresh schedules sit on top of those entities today?',
-            ]],
-            ['Key nuance', ['Ontology is LLM-friendly, not OWL-editable; external OWL ingest is not the current plan']],
-          ],
-          transition: 'Transition: "If that\'s not enough, here\'s the climb."'
-        },
-        {
-          title: 'Complexity ladder',
-          onscreen: 'Five clickable rungs; detail panel shows when / what / timeline.',
-          say: 'Read left to right. Rung one is managed. Rung two is an edge table into Genie — often enough for interconnectivity. Rung three standardizes on gold_triplets and puts a Supervisor and explorer on top. Rung four is when queries are genuinely graph-shaped — hop tables or Text-to-SPARQL-to-SQL. Rung five is a dedicated engine or partner database — only when benchmarks prove the simpler rungs short.',
-          bullets: [
-            ['Purpose', ['Give them a shared language for scoping and SME escalation']],
-            ['How to demo live', [
-              'Click each rung; narrate When it fits / What you get / Timeline from the detail panel',
-              'Ask which rung they think they\'re on today vs which they think they need',
-            ]],
-            ['Discovery', [
-              'How fast do you need a first POC that answers a real question?',
-              'Who owns budget and implementation for phase one — and what does success look like?',
-              'Do you have ontology or graph experts on staff, or would that be partner/SME capacity?',
-            ]],
-          ],
-          transition: 'Transition: "The reusable decision across every engagement: standardize the edge contract early."'
-        },
-        {
-          title: 'gold_triplets contract',
-          onscreen: 'D3 network beside gold_triplets; row ↔ edge selection is linked.',
-          say: 'This table is the graph. Same contract feeds Genie, UC functions, batch algorithms, and the explorer. Teams that can land gold_triplets — agentically or with their own ETL — get the consumption layer for free.',
-          bullets: [
-            ['Purpose', ['Make the edge contract visceral; test data readiness']],
-            ['How to demo live', [
-              'Click Acme→Maya EMPLOYS in the table; show the matching edge light up',
-              'Click an edge or node in the network; show the matching row select',
-              'Trace Acme→Maya→Acct-441 as a two-hop story',
-            ]],
-            ['Discovery', [
-              'Can you produce subject–predicate–object with entity types and confidence today?',
-              'Where does entity resolution sit in your pipeline — and how complete is SAME_AS coverage?',
-              'What is the approximate volume and daily change rate for the entities and edges that matter?',
-            ]],
-          ],
-          transition: 'Transition: "So when do you actually need a graph database?"'
-        },
-        {
-          title: 'Decision fork',
-          onscreen: 'Prefer lakehouse edges vs when partner/OntoBricks fits.',
-          say: 'Default to edges on Databricks. Add a graph engine when you have existing Cypher or SPARQL apps, true sub-second high-concurrency traversal, or formal OWL reasoning. Even then, keep Delta as the system of record and sync outward so Unity Catalog remains the governance anchor. If they already run Neo4j or Stardog, that\'s an integration conversation — often SME territory.',
-          bullets: [
-            ['Purpose', ['Give an honest fork; flag when to escalate to Graph/Ontology SMEs']],
-            ['Discovery', [
-              'What latency and concurrency do traversal queries need in production?',
-              'Is there an existing Neo4j, Stardog, Kobai, or similar estate you must meet halfway?',
-              'Do you have Cypher or SPARQL expertise on staff today?',
-            ]],
-          ],
-          transition: 'Transition: "Algorithms are a different ask — usually batch, not a live engine."'
-        },
-        {
-          title: 'Algorithm families',
-          onscreen: 'Four clickable algorithm families; each selection redraws the network.',
-          say: 'Ninety-five percent of algorithm asks fall into four families: who matters, who clusters, how do I get from A to B, and who looks alike. Click each family as you name it so the network changes from influence, to communities, to a shortest path, to shared-neighbor similarity. On Databricks you run these with NetworkX, SparkGraph, or cuGraph depending on scale. The pattern that scales is to precompute to Delta and serve lookups, not recompute the world on every question.',
-          bullets: [
-            ['Purpose', ['Separate algorithm needs from "we need a graph DB"']],
-            ['How to demo live', ['Click all four rows in order; pause briefly on the highlighted path and shared neighbors']],
-            ['Key nuance', ['Naive connected components percolates on real data — corroboration and community split matter at scale']],
-            ['Discovery', [
-              'Which algorithm family shows up in your benchmark queries — or is the real ask explorer/agent context?',
-              'Roughly how many nodes and daily-changing edges are we talking about?',
-              'Do algorithm results need to refresh hourly, daily, or weekly?',
-            ]],
-          ],
-          transition: 'Transition: "One more pattern teams label GraphRAG — usually without needing query-time traversal."'
-        },
-        {
-          title: 'GraphRAG pattern',
-          onscreen: 'Toggle: Plain vector RAG vs Structure-enriched; sample question highlights chunks.',
-          say: 'Plain vector search fails on enumeration and cross-document composition. GraphRAG\'s job is to bring relationship structure into retrieval. The field pattern that wins on latency: extract typed edges, embed entity-plus-neighborhood units, and do one fast vector lookup. You get graph-shaped answers without walking the graph at query time. Separately, if the ask is governed agent memory — what the agent is allowed to treat as true — that\'s a ledger and policy layer on top, not just better search.',
-          bullets: [
-            ['Purpose', ['Deflate GraphRAG hype into two concrete patterns']],
-            ['How to demo live', [
-              'Toggle Plain vector RAG — show scattered chunk hits for "Who leads the parent of Beta?"',
-              'Toggle Structure-enriched — show neighborhood units + mini path Beta→Acme→Maya',
-            ]],
-            ['Discovery', [
-              'What should GraphRAG do for you — find more relevant context, or control what agents may assert?',
-              'Have you tried structure-enriched chunks before committing to a graph DB for RAG?',
-              'What governance or audit requirements apply to agent-asserted facts?',
-            ]],
-          ],
-          transition: 'Transition: "Pull it into an operating rule."'
-        },
-        {
-          title: 'Operating rule',
-          onscreen: 'Six check rows: managed first, contract, benchmark, precompute, Delta SoR, entity resolution.',
-          say: 'If you remember six things: try the managed semantic stack; land gold_triplets early; climb only when benchmarks fail; precompute heavy graph work; keep Delta as system of record; and treat entity resolution as first-class — it\'s usually the hardest part of a real knowledge graph. As your SA, I use this list to decide whether we stay in product discovery or bring Graph/Ontology SMEs.',
-          bullets: [
-            ['Purpose', ['Leave them with a reusable decision checklist; clarify escalate criteria']],
-            ['Discovery', [
-              'What would a two-week pilot need to prove for you to expand — or to call in SMEs?',
-              'What history, retention, or PHI/client-isolation constraints shape the edge contract?',
-              'Can you write down 3–5 benchmark queries before we schedule a deeper session?',
-            ]],
-          ],
-          transition: 'Transition: "Let\'s map your situation to a starting rung."'
-        },
-        {
-          title: 'Discussion',
-          onscreen: 'Proposal plus four numbered open questions.',
-          say: 'Sit on this slide. Don\'t rush. Use their language. Your job as SA is to leave with a starting rung hypothesis, a short list of benchmark queries, named owners, and a clear call on whether to escalate to Graph/Ontology SMEs — not a commitment to rung five.',
-          bullets: [
-            ['Purpose', ['Drive discovery toward a scoped next step and escalate-or-not decision']],
-            ['Discovery', [
-              'Which of the on-screen questions is the hardest for your team to answer today?',
-              'If we pick rung 1 or 2 for a pilot, who owns ontology curation and who owns implementation?',
-              'What decision criteria or procurement timelines are already in motion vs alternatives?',
-            ]],
-            ['Facilitation', [
-              'Capture 3–5 benchmark questions on a whiteboard',
-              'Name owners and a phase-one success criterion',
-              'Agree: stay on managed/edge path with SA, or schedule SME deep dive — and why',
-            ]],
-          ],
-          transition: 'Transition: "Close on the rule."'
-        },
-        {
-          title: 'Close',
-          onscreen: 'Lowest rung. Then proof.',
-          say: 'Pick the queries that matter. Run them on the managed path or edge-plus-Genie. Climb only when the results demand it. I\'ll help scope that first rung with your team — and bring Graph or Ontology SMEs in when the discovery says we need them.',
-          bullets: [
-            ['Purpose', ['End on the operating rule and a concrete follow-up']],
-            ['Ask', ['Workshop to list benchmark queries, choose rung 1 or 2, and decide SME escalate yes/no']],
-          ],
-          transition: 'End.'
-        },
+      const NOTES = [];
+      NOTES.push({
+        title: 'Title',
+        onscreen: 'Roadmap to Graph — name the need, map it to a semantic layer, climb with proof.',
+        say: 'This is a discovery briefing, not a product tour and not an SME deep dive. Teams tell us they need a graph. What they usually need is one of three things: a hierarchy that behaves, a meaning layer their agents can read, or genuine row-level relationships. Those are taxonomy, ontology, and knowledge graph, and they map to very different work on Databricks. Today we sort your needs into those three buckets, place each one on a ladder, and leave knowing whether this stays a product conversation or becomes an SME engagement.',
+        bullets: [
+          ['Purpose', ['Set the sorting frame: need first, semantic layer second, technology last']],
+          ['SA cue', ['Listen for the shape of the failing question, not the vendor name in the RFP']],
+        ],
+        transition: 'Transition: "Quick map of where we\'re going."'
+      });
+
+      NOTES.push({
+        title: 'Agenda',
+        onscreen: 'Six beats: vocabulary, managed path and ladder, then taxonomy, ontology, knowledge graphs.',
+        say: 'Six beats. Vocabulary first, and it takes one screen because the visual does the work. Then where every engagement starts and what actually justifies a climb. Then the three sections, and each one opens with a short overview before the specific client needs we keep hearing. Taxonomy runs as one argument after that — what a taxonomy is, the need, the options, and where we land. Ontology brings two needs, knowledge graphs bring five. We close on an operating rule and open discussion.',
+        bullets: [
+          ['Keep it moving', ['Roughly 60–75 minutes with discussion', 'Every section has at least one interactive visual — let it teach instead of narrating']],
+          ['SA outcome', ['Leave with: which of the three layers each need belongs to, a starting rung, 3–5 benchmark questions, owners, and an escalate-or-not call']],
+        ],
+        transition: 'Transition: "First — what people usually mean when they say graph."'
+      });
+
+      NOTES.push({
+        title: 'Framing',
+        onscreen: 'Three metrics: two implementation families, three semantic layers, managed path first.',
+        say: 'Graph databases and graph virtualization are both real categories with good vendors in them. Knowledge graphs sit beside them as a third thing — organizational understanding rendered as interconnected data. In the field, most teams turn out to want relationships their agents can use and a way to explore what connects to what, not a new estate to run. And when a graph genuinely is the answer, it is because of the shape of the query — algorithms, deep traversal, structural learning — not because the industry vertical is labelled fraud or supply chain.',
+        bullets: [
+          ['Purpose', ['Reframe "we need Neo4j" into "which question fails today, and what shape is it?"']],
+          ['Discovery', [
+            'What does the word graph mean in your architecture notes or vendor shortlist right now?',
+            'Is the priority exploration for people, context for agents, production traversal SLAs, or all three?',
+            'Which business unit or workload is pushing this first, and what is their deadline?',
+          ]],
+        ],
+        transition: 'Transition: "Sixty seconds of vocabulary, and the visual will do most of it."'
+      });
+
+      NOTES.push({
+        title: 'Vocabulary · network and table',
+        onscreen: 'Linked dual view: force network beside the edge table, hop controls, clickable rows and nodes.',
+        say: 'A graph is two sets — entities and relationships. Degree is how busy a node is. A hop is one edge, and traversal is walking a path. Now the part that carries this entire briefing: the same information is sitting in the table on the right. Subject, predicate, object. Nothing about that requires a new database. When you hear "we need a graph database," what is usually being described is a multi-hop query, and a multi-hop query is a join you have not written yet.',
+        bullets: [
+          ['Purpose', ['Demystify the vocabulary and plant the edge-table idea before the ladder']],
+          ['How to demo live', [
+            'Start on Both. Step hops 1, 2, 3 and watch the hop column in the table change with the network',
+            'Click a table row — the matching edge lights up in the network',
+            'Click a node to reseed, then drag it to show the layout is cosmetic and the data is not',
+            'Switch to Table only and say: this is what actually ships',
+          ]],
+          ['Discovery', [
+            'Which business questions are two hops or deeper today, and where do they break?',
+            'Are those answered in BI, in ad-hoc SQL, or genuinely not at all?',
+          ]],
+        ],
+        transition: 'Transition: "So where does every engagement actually start?"'
+      });
+
+      NOTES.push({
+        title: 'Managed path and ladder',
+        onscreen: 'Five clickable rungs, and one panel below that redraws on selection — components, four facets, and a planning-range note.',
+        say: 'A benchmark query is just one of your own real questions used as the test. Whichever rung answers it is the rung you need, and nothing above it is justified yet. Start on the left. Rung one is not a build — Genie Ontology generates a semantic map from your tables, queries, dashboards, and docs, the Glossary is how you correct it, Metric Views give certified numbers, and Relationships lets you declare entity relationships as a governed asset. Days, because nothing is being built. Everything to the right of it is a build, and the timings say so. Watch the panel as I move across: the components change, and so does the last facet, when it fails. That failure signal is the only thing that should move you up a rung. Not ambition, not a vendor demo. A specific query the rung below cannot answer.',
+        bullets: [
+          ['Purpose', ['Establish the shared vocabulary for scoping and SME escalation, and set honest expectations on delivery time']],
+          ['How to demo live', [
+            'Land on rung one first and point out the panel is showing rung one — the label, the components, and the facets all move together',
+            'Click across two, three, four, five and let the components redraw each time — the audience should see the stack change, not just the prose',
+            'On each click read "When it fails" last, then the delivery range, so the failure signal and the cost of climbing land together',
+            'Then ask which rung they believe they are on today, and which one they believe they need',
+            'The gap between those two answers is the whole discovery conversation',
+          ]],
+          ['Key nuance', [
+            'The ranges assume the edge data still has to be produced and resolved. If they already have a clean, resolved edge set, the middle rungs compress',
+            'Entity resolution is reliably the longest pole. When someone pushes back on the timings, that is almost always the variable being underestimated',
+            'Rung one is the only one measured in days because nothing is being built — it is enable and curate',
+            'Rung five reads as months because two systems have to be synced, secured, and governed, not because the engine is hard to stand up',
+            'These are planning ranges for scoping, not a quote or a commitment — keep them framed that way',
+            'Rung five is not a failure state. Existing Cypher estates and formal reasoning requirements are legitimate reasons to be there on day one',
+          ]],
+          ['Discovery', [
+            'Which rung do you believe you are on today, and which one do you believe the questions require?',
+            'What state is the source data in for the entities you would build edges from — is entity resolution solved, partial, or untouched?',
+            'How quickly do you need a POC that answers a real question end to end?',
+            'Who owns budget and who owns implementation for phase one?',
+            'Do you have ontology or graph expertise on staff, or would that be partner or SME capacity?',
+            'What does a security or governance review add to a project like this in your organization?',
+          ]],
+        ],
+        transition: 'Transition: "Before the three sections, one slide that separates them cleanly."'
+      });
+
+      NOTES.push({
+        title: 'Three semantic layers',
+        onscreen: 'Section opener — same oat canvas as the content slides, oversized headline under a full-bleed coral rule. Three hairline-separated columns with mini visuals: taxonomy tree, ontology types with metadata badge, KG with predicate values.',
+        say: 'Three words that get used interchangeably and should not be. A taxonomy is a classification tree — mammal, dog, poodle. An ontology is the allowed types, relationship types, and rules, and the important word on that middle card is metadata. It describes meaning. It holds no records. The knowledge graph is the instance layer: real records, and every edge carries an actual predicate value, like Acme owns eighty-two percent of Beta. Those three cards are the next three sections of this deck, in that order, because the work gets heavier as you move right.',
+        bullets: [
+          ['Purpose', ['Give the room a clean sorting rule they can apply to their own backlog']],
+          ['Key nuance', ['RDF and OWL when formal reasoning or interoperability matter; labelled property graphs when application development and analytics are the culture. Regulated industries ask for RDF far more often']],
+          ['Discovery', [
+            'When your team says ontology, do you mean formal validation or curated business terms?',
+            'Who owns business definitions today — governance, domain stewards, or nobody clearly?',
+          ]],
+        ],
+        transition: 'Transition: "Start with taxonomy, because it is the simplest of the three to pin down — and where the most avoidable pain lives."'
+      });
+
+      NOTES.push({
+        title: 'Taxonomy overview',
+        onscreen: 'Section opener — same oat canvas as the content slides, oversized headline under a full-bleed coral rule. The product hierarchy with each depth band named root, category, subcategory, leaf category, one edge drawn coral, and a closing band showing where taxonomy sits against the other two layers.',
+        say: 'A taxonomy is a classification tree. Every node has exactly one parent, and you read it from the root down: category, subcategory, and then the lowest category, the one products actually hang under. This is the product hierarchy — all products, electronics, computers, laptops — and it is the same tree for the rest of this section. Now look at what that drawing actually is. Twelve nodes, eleven edges, one edge type, and the coral one is doing nothing special — it just says that computers is a child of electronics. So yes, a taxonomy is a graph. It is the simplest graph there is. And that matters mainly because of what it does not imply: nothing on this canvas needs a graph database or a traversal engine. A table holds this perfectly well, and every question anyone will ask of it can be answered in SQL. The decision this section is really about is how you encode the tree in that table, because that is what determines whether an agent writes correct SQL over it or quietly writes wrong SQL. There are several encodings, they are not equivalent, and we compare them on the next two slides.',
+        bullets: [
+          ['Purpose', ['Define taxonomy plainly, kill the assumption that a tree implies a graph engine, and set up encoding as the only decision that matters here']],
+          ['Key nuance', [
+            'The three layers stay distinct: taxonomy classifies, ontology constrains meaning as metadata, a knowledge graph holds row-level relationships. Point at the strip bottom-right if anyone is blending them',
+            'Resist walking the encodings here — the next slide earns them by showing a query that comes back empty',
+            'The bands stop at the lowest category. Products are not nodes in this tree — they hang below it and they are where revenue lives, which is the distinction the next slide is built on',
+          ]],
+          ['Discovery', [
+            'How many separate hierarchies are in play — product, org, location, account — and are they all stored the same way?',
+            'When your teams say taxonomy, is it one shared tree or does each domain keep its own?',
+            'Are there named sets or business rules that cut across the tree rather than sitting under a single parent?',
+            'How does a new level or a re-parent get made today, and what breaks downstream when it does?',
+          ]],
+        ],
+        transition: 'Transition: "So here is the client need, and it starts with a question that comes back empty."'
+      });
+
+      NOTES.push({
+        title: 'Taxonomy · the client need',
+        onscreen: 'One matrix: the four totals the need calls for, against the same stored hierarchy, ordered by how far each total sits above the products, with what came back beside what the right answer was. A small banded reference tree sits under it, showing where each named node lives and how far it is from the product row.',
+        say: 'The need here is simple to state. A user should be able to ask for a total at any level of the hierarchy and get it — product, category, department — and they should be able to ask for the named sets the business actually runs on, even when those cut across branches. Four asks, and the only thing that changes down the rows is how far above the products the total sits. Before the rows, look at the small tree underneath. Those are the same bands from the previous slide, and I have added the row the tree does not have nodes for: the products. Revenue lives on that bottom row and nowhere else, so levels to roll up just counts bands from the node in the question down to it. Now the first row is the need already being met. Laptops is one band above the products, the things underneath it are SKU-A and SKU-B, products carry revenue, and the number comes back correct. Climb one rung. Computers is two bands up, and what sits directly underneath it is not products, it is two more categories — and categories have no revenue of their own. No rows. Climb again to Electronics and it is the same story one band deeper. And the last row is the part of the need that is furthest from being met: Strategic Assortment is a business rule, everything under Computers plus everything under Living Room, and no parent_id in this table names that set at all. So the assistant is not bad at arithmetic. It can total anything stored at the level it can see. Every one of these rollups needs a walk up the tree, and the walk is not in the row it is reading. Look at the right-hand column while I say this: the money exists in all four cases. Only one of the four answers does.',
+        bullets: [
+          ['Purpose', ['State the need as totals at every level plus cross-branch segments, and use the matrix as evidence that today\'s encoding cannot deliver it — before anyone proposes a graph database']],
+          ['How to demo live', [
+            'Start on the reference tree for ten seconds — point at the product band, then count bands up to Laptops, Computers, Electronics. After that the first column reads itself',
+            'Then read the left column down — one, two, three, cross-branch. That is the only variable on the slide',
+            'Then read the two right-hand columns as a pair: one real number returned against four real numbers the business needs',
+            'The middle column is why the need goes unmet — products carry revenue, categories do not, and this encoding only ever shows one hop',
+            'Numbers on the circles are node ids and products are lettered SKUs, so nothing on the tree is ambiguous when you point at it',
+            'The line to land: all four queries succeeded. Nothing in the response tells the user the rollup never reached a product',
+          ]],
+          ['Key nuance', [
+            'This came out of a real customer situation: a hierarchy stored one hop at a time plus semantic rules that did not follow the tree, which forced them to bend Genie instructions until the deeper questions became unanswerable',
+            'Across the hierarchy benchmark the model never once wrote a recursive CTE for the rollup, even with a worked example in its instructions',
+            'Silent empties are the expensive gap. A wrong number gets challenged in a meeting; a null gets read as "no revenue there"',
+            'Strategic Assortment reaches under node 3 Computers and node 11 Living Room. Two subtrees, one set, and that is the shape the segment table on the next slide exists for',
+            'Keep this on what they need, not on what is broken — and resist jumping to the fix. The options are the next slide, and SAs who solve it here lose the discovery',
+          ]],
+          ['Discovery', [
+            'What is the assistant getting wrong today, and how did someone notice?',
+            'How deep do your hierarchies actually go, and is the depth the same across every branch?',
+            'Where is a rollup defined today — in the warehouse, in the BI tool, or in someone\'s head?',
+            'Which business terms do your users ask for that are not category names in the tree?',
+            'Who owns the hierarchy, and who finds out when it changes?',
+          ]],
+        ],
+        transition: 'Transition: "So the question is how you store it. There are six answers, and they are not equally good for an agent."'
+      });
+
+      NOTES.push({
+        title: 'Taxonomy · the options',
+        onscreen: 'Six clickable storage patterns over a paired view: the numbered product tree on the left, the rows that pattern actually writes on the right.',
+        say: 'A hierarchy is a graph — it is nodes and edges, and you can draw it. That does not mean an agent needs graph traversal to use it. What decides whether the agent gets the right number is how the hierarchy is stored, and there are six realistic answers. The tree on the left is the same every time. Numbers on the circles are node ids and products are lettered SKUs, so anything you see in a table you can point at in the picture without wondering which is which. Flattened copies every ancestor name onto every product row and has no ids at all. Adjacency keeps one row per node holding only its parent. Materialized path carries the ancestors inline as a string. Nested set numbers a depth-first walk. Closure stores every ancestor pair once, with its hop depth. And the last one adds a named set beside the tree for the rules that ignore the tree. A semantic segment is just that: a named set defined as the union of one or more subtrees. Strategic Assortment is everything under Computers plus everything under Living Room — two subtrees, one name — and that is why no single ancestor can define it and why it needs its own table. Core Home Furniture in the same table is the contrast: one subtree, so an ancestor could have named that one. None of these changes the information. What changes is what it costs to query and how much SQL the agent has to get right.',
+        bullets: [
+          ['Purpose', ['Lay out the real option space so the recommendation lands as a choice rather than a preference']],
+          ['How to demo live', [
+            'Click through all six and keep pointing at the storage table — the diagram is the same tree every time, the rows are not',
+            'On Flattened, put a finger on the repeated Electronics and Computers cells, then note there is no id column anywhere',
+            'On Adjacency, read node 4 to node 3 to node 2 to node 1 out loud so the recursion is physical',
+            'On Closure, read one row at a time and touch the matching connector — six rows, six lines, and the depth column is written on the arcs',
+            'Finish on Closure plus segments: the segment sits below the tree on purpose, reaching up to nodes 4, 5 and 11 across two branches. Read the from_subtree column down — Computers, Computers, Computers, Living Room — then ask what single ancestor could name that set, and let the silence answer',
+          ]],
+          ['Key nuance', [
+            'The node ids are the ids from our own hierarchy benchmark, so the tables are the real encodings a customer would actually see',
+            'Products are lettered SKUs on this slide and the two either side of it. A number always means a node, which keeps the segment example from reading as a contradiction',
+            'A segment is a union of subtrees, not a filter and not a new level in the tree. If someone asks whether they could just add a category for it, the answer is only when the set is one subtree — which is the Core Home Furniture row',
+            'The segment is deliberately drawn off the tree. It is not a category, and treating it like one is exactly the failure on the previous slide',
+            'This slide is the shape of each option. The measured comparison and the recommendation are next — do not spend the benchmark story here',
+          ]],
+          ['Discovery', [
+            'Which of these six tables looks most like what is in your warehouse right now?',
+            'If you have more than one hierarchy, are they all stored the same way?',
+            'Which of your business rules do not follow the tree — sets that span branches, or that exclude a subtree?',
+            'Do those rules live in a table, in BI logic, or only in instruction text?',
+            'How often does the hierarchy itself get restructured, and what triggers it?',
+          ]],
+        ],
+        transition: 'Transition: "Here is where we would land, and what the two questions look like once you do."'
+      });
+
+      NOTES.push({
+        title: 'Taxonomy · the recommendation',
+        onscreen: 'Two worked queries, each written as a recursive CTE over adjacency and as a join over closure plus segments, with a measured/cost footnote strip.',
+        say: 'Our recommendation is two tables: a closure table for anything that walks the tree, and a segment table for the rules that do not. Take the category question first. On the left, an adjacency list needs a recursive CTE — a seed, a union all, a self-join, and only then the sum. That is correct when it is written correctly, and in our benchmark the adjacency room never once wrote it. On the right, the walk already happened at write time, so everything under Electronics is one equality on ancestor_name. Now switch tabs. The segment question is the interesting one, because the left side has nowhere to put the definition — Strategic Assortment is not a node, so the rule has to travel inside the question every single time. On the right it is a join, and the definition is owned once by whoever owns the segment table. Same shape as the rollup. And I want to be straight about the cost: a closure table is more rows and it has to be maintained whenever the hierarchy is restructured. That trade is worth pricing out loud rather than assuming.',
+        bullets: [
+          ['Purpose', ['Land closure plus segments as the recommendation, with the cost of it stated in the same breath']],
+          ['How to demo live', [
+            'Start on the category tab and read the left pane top to bottom so the room hears how many clauses have to be right',
+            'Then read the right pane — three lines — and note the only thing that changes for Laptops or All Products is the literal',
+            'Press "show the rows this join reads" and tie the ancestor and descendant ids back to the numbered diagram they just saw',
+            'Switch to the segment tab and ask where the definition of Strategic Assortment lives on the left. It lives in the prompt',
+            'Close on the cost column so the recommendation does not sound free',
+          ]],
+          ['Key nuance', [
+            'Frame the numbers as a controlled benchmark on a small retail hierarchy, not a throughput guarantee. The durable finding is the query shape, not the latency',
+            'The sharpest measured result: across seven questions the adjacency room produced zero recursive CTEs despite a worked recursive example sitting in its instructions',
+            'Inlining a definition into the question does fix it for flattened, path and closure — but only for the person who already knows the definition. Materializing the set is what makes it reusable',
+            'Closure is not the only defensible answer. Materialized path scored the same accuracy and reads well; it just rewrites every descendant row on a rename',
+          ]],
+          ['Discovery', [
+            'How often does the hierarchy change, and is it an edit, a reorganisation, or a full rebuild?',
+            'Roughly how many nodes and how many leaves, so we can size what a closure table would actually hold?',
+            'If we materialised your named business sets, who would own each definition and approve a change?',
+            'Which named sets would make the first list, and how many of them cut across branches?',
+            'What would have to be true for you to add a table to the Genie-facing model rather than adding instruction text?',
+          ]],
+        ],
+        transition: 'Transition: "That is taxonomy. Ontology is a different question entirely — it is about meaning."'
+      });
+
+      NOTES.push({
+        title: 'Ontology overview',
+        onscreen: 'Section opener — same oat canvas as the content slides, oversized headline under a full-bleed coral rule. Two-plane diagram that lights up when you switch the agent from tables-only to tables-plus-ontology, beside the answer each version produces.',
+        say: 'The most useful thing to understand about an ontology is that it is metadata. Look at the dashed line. Above it: entity types, relationship types, certified definitions. Below it: your rows, which never move — the meaning layer only describes them. Right now the agent is on tables only, so the top plane is barely there, and you can see what that costs on the right. Four candidate churn tables and it picks one. A status column it has to guess the meaning of. The word enterprise with no definition to apply. Watch what happens when I switch it on. Same rows, same warehouse, nothing migrated — but now there is a certified metric for churn, a scored authoritative source, and a governed definition of enterprise. The agent resolves meaning first and writes SQL second. That difference is the entire value of an ontology, and none of it required building a graph.',
+        bullets: [
+          ['Purpose', ['Land ontology as metadata, and make the payoff visible as a difference in answer quality rather than a definition on a slide']],
+          ['How to demo live', [
+            'Start on Tables only and let the greyed-out top plane sit there for a beat before saying anything',
+            'Read the three amber guesses out loud — they are the failure modes the customer already recognises',
+            'Switch to Tables + ontology and trace the coral path with the cursor: metric to entity to authoritative table',
+            'Point out that the bottom row of tables is identical in both states — nothing moved',
+          ]],
+          ['Key nuance', ['If someone asks whether this is just a semantic layer by another name: yes, largely, with the difference that an ontology also carries relationship types and provenance, and it is built for an agent to read rather than a BI tool']],
+          ['Discovery', [
+            'How many places does a definition like active customer or enterprise account live today?',
+            'When two dashboards disagree on a number, who resolves it and how long does that take?',
+            'Which entities matter most to you — the three or four nouns that show up in almost every question?',
+            'Which certified metrics already exist over those entities, and who signed off on them?',
+            'When you say ontology, are you asking for reasoning over what your assets mean, or for relationships between individual records?',
+          ]],
+        ],
+        transition: 'Transition: "So that is the idea. Now the two asks clients actually bring us, starting with the one we hear most."'
+      });
+
+      NOTES.push({
+        title: 'Client need · managed Genie Ontology',
+        onscreen: 'A rising timeline: four steps left to right along a generic time axis, each standing on a stack of the layers below it, with a y axis for how much semantic grounding Genie has to reason with. Under it, a three-cell strip drawing the metadata / row-level boundary.',
+        say: 'This is the ask we hear most: make Genie answer better over the data we already have. Not build us a graph. Genie Ontology is a product surface, so switching it on is not the work — the semantic map generates itself from tables, queries, dashboards, docs and connected apps, and it keeps itself current. The work is what you feed it, and there are four concrete things, in this order. First, turn Genie Ontology on. That is an enablement conversation with your account team, and nothing gets built. What you get for it is a generated semantic map over the assets you already have. Second, define your tables and columns in Unity Catalog. Descriptions and comments on the tables and columns the business actually asks about, so Genie reads what a column means instead of guessing from what it is called. Third, build out governed metric views. Certified definitions over your core entities, so when someone asks for revenue or active accounts, the measure resolves to one authored definition instead of being re-derived from scratch every question. Fourth, populate the Unity Catalog Glossary. Governed business terms written down once, so a word like enterprise carries a definition an agent can apply rather than a definition that changes by team. Read the shape of it, because the shape is the argument. The height of each column is how much meaning Genie has to work with, and every step stands on the ones before it. These are not four options to pick between, they are four layers, and each one makes the layers under it worth more. The enablement is the cheap part. Deciding what your business means and writing it down is the durable work, and it is the part that pays off on every question after it. And then the strip along the bottom, because it answers the question that always gets asked in this room. This path reasons over metadata — what your assets mean, what is authoritative, what is fresh — filtered to the assets the person asking already has access to in Unity Catalog. It does not read the contents of your rows, and it does not model how one record relates to another. That is not a flaw, it is the scope, and it does double duty: it answers a compliance question and it tells you when to climb. If the question you need answered is shaped like which suppliers sit three hops upstream of this part, nothing on this slide can reach it, and you are in knowledge graph territory. That is the third section.',
+        bullets: [
+          ['Purpose', ['Make the managed path concrete enough to commit to, in an order the customer can start on Monday, and leave the room with an accurate answer to "does Genie Ontology see my data?"']],
+          ['How to present it', [
+            'Walk the four steps left to right and name the y axis once — the columns get taller because grounding accumulates, not because the work gets harder',
+            'Land the distinction on step one: enabling the surface is not the project. Steps two through four are the project',
+            'Dwell on metric views. It is the step most customers underrate, and it is the one that stops the same measure being answered three different ways',
+            'The glossary lands best with one of their own contested words. Ask for it in the room rather than using "enterprise"',
+            'If asked for timing, give it verbally against their own scope and ownership rather than reading a number off the slide — the axis is deliberately generic',
+            'In a regulated account, land on the bottom strip last and read the first two cells close to verbatim. The three cells are the compliance answer and the climb signal in one line',
+          ]],
+          ['Key nuance', [
+            'The order is deliberate and it is about payoff per unit of effort, not difficulty. Column and table descriptions lift every question. Metric views lift every measure. The glossary lifts every term. Doing the glossary first over undescribed tables buys much less',
+            'The precise answer to "does it see my data?": it extracts knowledge snippets — metric definitions, authoritative sources, business rules — from tables, queries, dashboards, docs and connected apps, scores each by authority, usage and freshness, and gates all of it behind Unity Catalog permissions. It reasons about how best to answer using assets the user can already see. It does not derive or expose row-level relationships',
+            'Metadata is not nothing. Column names, sample-derived descriptions and query history are still information about the data, so in the most sensitive accounts the honest framing is "it sees the same catalog metadata that user can already see," not "it sees nothing"',
+            'Say "current scope," not "limitation." Accurate, and it keeps the room in design mode',
+            'Steps two through four never truly finish — coverage widens as new domains land, and definitions get reviewed and versioned like anything else that matters. Say that plainly if someone asks when it is done',
+            'The same boundary is the climb signal. A question that has to follow one record to a distant one — supply chain, ownership, blast radius — cannot be answered above this line, and that is the honest trigger for the knowledge-graph section',
+            'Product status, precisely: Genie Ontology is a gated public preview. UC Glossary was announced at DAIS 2026. Metric Views are GA with low-code authoring. Relationships has a low-code UI in private preview, with Unity Catalog support planned — that last part is internal, so do not put a date in front of the customer',
+            'The representation is deliberately flexible and model-friendly rather than OWL or RDF. Say that early if the customer has ontology people in the room, because they will ask',
+            'Governance, versioning, monitoring and quality evaluation of the ontology are the top prioritised customer asks. Ingesting external OWL ontologies is acknowledged and not currently planned — say that plainly rather than implying a date',
+            'The decision rule: run their own benchmark questions against this stack. If the questions pass, this is the whole project and nothing further down the deck needs funding',
+          ]],
+          ['Discovery', [
+            'Who owns business definitions today — is that a funded stewardship role or somebody\'s twenty percent?',
+            'Have you requested Genie Ontology preview access through your account team yet?',
+            'How much of the estate Genie would be pointed at already carries table and column comments, and who would write the ones that are missing?',
+            'Which three or four entities would you certify metrics over first, and who signs off on those definitions?',
+            'Which business terms get argued over most in reporting — the ones where two teams produce different numbers?',
+            'Have your failing questions been run against Genie Ontology, the Glossary, or Metric Views yet, and what happened?',
+            'What review does a new AI capability touching this data have to pass, and who sits on that review?',
+            'Is there a question you need answered today that requires following one record to a distant one — supply chain, ownership, blast radius?',
+            'What would have to be true for you to call this done rather than moving to a graph build?',
+          ]],
+        ],
+        transition: 'Transition: "That path assumes Databricks is where the meaning lives. Sometimes the ask is deliberately bigger than that."'
+      });
+
+      NOTES.push({
+        title: 'Client need · the company brain',
+        onscreen: 'One nested scope map shown twice: the governance reading with Unity Catalog inside and an enterprise catalog outside, then the same shape with OntoBricks inside and Ontos spanning.',
+        say: 'This is a genuinely different need, not a bigger version of the last one. The customer wants an enterprise-wide semantic layer — one company brain — and they are telling you up front that Databricks is part of the picture and not all of it. The good news is that they have already answered this scope question once. Look at the diagram as it stands. Unity Catalog governs everything inside the Databricks estate, and almost every organisation this size also runs an enterprise catalog — Atlan, Collibra, something in that family — to define the things that sit outside the data estate. Nobody argues about that; it is just how the two layers divide. Now watch the same diagram one layer up. OntoBricks sits exactly where Unity Catalog sits: Databricks-native, extracting the relationships out of Unity Catalog assets and feeding them into a broader company knowledge graph. Ontos sits exactly where the enterprise catalog sits: governing that graph plus the resources that were never in Databricks to begin with. Same shape, same division of labour, one layer up from technical governance into meaning. Both are open source Databricks Labs projects that run as Databricks Apps, and both expose themselves to agents over MCP.',
+        bullets: [
+          ['Purpose', ['Separate the enterprise-semantics ask from the managed-Genie ask, and let the customer place the two Labs projects using a scope decision they have already made']],
+          ['How to demo live', [
+            'Leave the diagram on Governance while you describe it and get a nod — you want agreement on the familiar reading before you reuse it',
+            'Switch to Semantics and pause. The ghost labels underneath each box say where Unity Catalog and the enterprise catalog were, so the mapping is on screen',
+            'Only then name the two projects underneath, and keep it to one line each — builds the graph, governs the meaning. The detail is the next slide and this one is the scope argument',
+          ]],
+          ['Key nuance', [
+            'Be careful with the analogy in one direction: OntoBricks is not a catalog and Ontos does not replace Collibra. The parallel is about scope and position, not feature-for-feature substitution. If someone pushes on it, say the analogy is about where each thing sits, not what it is',
+            'What OntoBricks actually does: OWL ontology design, R2RML mapping to Unity Catalog tables, a materialized Delta triple store plus a Lakebase Postgres graph engine, and reasoning with OWL 2 RL, SWRL rules and SHACL validation. Nothing lighter in this deck offers that inference tier',
+            'What Ontos actually does: data products and contracts on the ODCS and ODPS standards, a semantic-model layer linking technical UC assets to business concepts, domains, teams and projects, steward review workflows with audit trails, and compliance automation',
+            'OntoBricks can go from Unity Catalog metadata to a queryable reasoning graph in a handful of clicks. That makes it the cheapest way to pressure-test whether formal semantics are genuinely needed before anyone budgets for them',
+            'With Ontos the software is the easy part and organisational adoption is the work. Say so, because a customer who hears otherwise is disappointed by month three',
+            'Ontop VKG is the virtualization counterpart if the customer refuses to materialize anything: SPARQL translated to SQL at runtime, no triple store',
+          ]],
+          ['Discovery', [
+            'Is an enterprise catalog like Atlan or Collibra already in play, and who owns it?',
+            'What lives outside Databricks that has to be in this picture — SaaS applications, a warehouse, third-party data, documents?',
+            'Is formal OWL reasoning or SHACL validation a stated requirement, or a preference someone inherited from a previous role?',
+            'Do you need to interoperate with an ontology that already exists outside Databricks?',
+            'Do you have data stewards with allocated time, and what is your appetite for a review workflow?',
+          ]],
+        ],
+        transition: 'Transition: "Two names is not enough to choose from. Here is the whole family, and what each one is actually for."'
+      });
+
+      NOTES.push({
+        title: 'Ontology · building the semantic layer',
+        onscreen: 'A four-row ledger ascending from describing meaning to governing it, each project with what runs, when it fits, when it fails, and the tradeoff.',
+        say: 'Two names were on the previous slide and here they are with two more, arranged by the tier of meaning each one owns rather than by which is best — because they are not competing. Bottom row up. dbxmetagen is where you go when nobody has written down what anything means yet: it classifies tables and columns into an entity taxonomy with AI and emits tags, metric views, even a graph. Fast, and the honest limit is that a taxonomy of entity types is not an ontology and will not infer anything for you. Ontop is the virtual option — a Virtual Knowledge Graph running as a Databricks App, where SPARQL gets translated at runtime into SQL over your Unity Catalog tables through R2RML mappings, and it will federate out to sources that are not in the lakehouse at all. Nothing is copied. That is the whole appeal and also the catch: no materialization to maintain, and no precomputation to lean on when a query turns out to be expensive. Then the two the source treats as primary. OntoBricks is the one to reach for when a client says the word ontology and means it — real OWL, R2RML mapping down to UC tables, triples materialized into Delta and Lakebase, and actual reasoning with OWL 2 RL, SWRL rules and SHACL validation, with a generated GraphQL API on top. Days to a working graph. Which means it is also the cheapest way to find out whether they need one. And Ontos is the other half: where OntoBricks builds the graph, Ontos governs what the meaning is — data products and contracts, domains, stewards, review workflows with audit trails. The line I would use out loud is that the app installs in an afternoon and the agreement about what a customer is does not. That is not a software problem and Ontos does not pretend it is.',
+        bullets: [
+          ['Purpose', ['Give the two names from the previous slide real shape, add the two the deck had been leaving out, and establish that these are tiers to combine rather than products to choose between']],
+          ['Key nuance', [
+            'There is no winner here and do not manufacture one. The source pairs OntoBricks and Ontos explicitly — formal ontology and reasoning on one side, business semantics and governance on the other — and says both can sit alongside a Genie stack over the same assets',
+            'The two unsized rows are marked unsized on purpose. dbxmetagen and Ontop are named in the same Labs family but carry no complexity or timeline figure, so quoting one would be inventing it. Say you would size them in scoping',
+            'Ontop is the answer to "we are not allowed to copy the data," and it is the virtual counterpart to the materialized triple store — same mappings, opposite storage decision',
+            'spark-r2r is worth knowing but not worth a row: R2RML-style transforms inside Spark Declarative Pipelines. Tagsonomy was the original ontology project and has been merged into Ontos, so do not present it as a live option',
+            'All four are open source and run in the client workspace. For a client whose objection is vendor lock-in on a semantic layer, that is the strongest thing on this slide',
+          ]],
+          ['How to demo live', [
+            'Read the tier column top to bottom first. The ascent from describing meaning to governing it is the argument; the individual projects are supporting detail',
+            'If the room has an ontologist in it, go to OntoBricks and stay there — OWL 2 RL, SWRL and SHACL are the words that establish this is not a metadata catalogue with a new name',
+            'If the room is data governance rather than data science, invert it and lead with Ontos',
+            'Offer the four-click OntoBricks path as a next step rather than a feature. Standing up a real ontology-backed graph on their own tables in days is a better answer than any slide about whether they need one',
+          ]],
+          ['Discovery', [
+            'When you say ontology, do you mean formal semantics with inference, or an agreed business vocabulary? The answer decides which two rows matter',
+            'Is there an existing ontology — OWL, RDF, an industry standard like FIBO or a supplier model — that we would need to import rather than design?',
+            'Are you permitted to materialize a copy of this data, or does something in the estate have to be answered in place?',
+            'Who owns the definition of your core business terms today, and does that person have the authority to settle a dispute about one?',
+            'Has a semantic layer been attempted here before? What stopped it — the modelling or the adoption?',
+          ]],
+        ],
+        transition: 'Transition: "Ontos, dbxmetagen and the managed path all stay on the metadata side of the line we drew two slides ago. OntoBricks is the one that crosses it, and once you are crossing it deliberately you are in the third section — this is where row-level relationships genuinely earn a graph."'
+      });
+
+      NOTES.push({
+        title: 'Knowledge graphs overview',
+        onscreen: 'Section opener — same oat canvas as the content slides, oversized headline under a full-bleed coral rule. Twenty entities toggling between a tidy grid of rows and a solved network, over a three-question ledger.',
+        say: 'Same twenty entities, twice. Right now they are rows — one row each, holding every value a row can hold. Toggle to nodes and edges and nothing about the data changed, but two facts just appeared that were not available a second ago. One of these entities is a hub inside a dense group. One is the only crossing between two groups that otherwise never touch. Neither of those is a column, and neither can be made into one. That is the entire argument for a row-level graph, and the ledger underneath is how it shows up in a real conversation. Which entities sit at the center. How does this one reach that one, and what is cut off if it fails. Those are not hard queries over the columns — they are not expressible over the columns at all. And the third row is the one we come back to at the end of this section: two records holding identical values, where the neighborhood is the only thing that can tell them apart.',
+        bullets: [
+          ['Purpose', ['Give a visceral, non-technical reason why relationships are not just another column']],
+          ['How to demo live', [
+            'Open on Rows and columns and let the grid sit there for a beat — it should look boring',
+            'Toggle to Nodes and edges and say nothing until the room finds the hub and the bridge',
+            'Then read the three questions in the ledger in order, ending on the third',
+          ]],
+          ['Key nuance', ['This is the framing slide for the section, not a need. The five slides after it are the five needs clients actually arrive with, and they are separable — most clients want one or two of them, not all five']],
+          ['Discovery', [
+            'Which decisions get made today without any view of how the entities involved connect?',
+            'Is there a score or a prediction where you suspect the connections matter more than the attributes?',
+            'Have you had two records that looked the same on paper and then behaved completely differently?',
+          ]],
+        ],
+        transition: 'Transition: "One need drives most of this section, and it is easiest to see as something an agent gets wrong."'
+      });
+
+      NOTES.push({
+        title: 'Knowledge graphs · what the agent cannot do',
+        onscreen: 'One indexed corpus of four documents, then two question lanes side by side, both answered wrong, with the retrieved evidence marked in each.',
+        say: 'Four documents, all already indexed, and between them they contain every fact needed to answer both questions below correctly. Two questions, two wrong answers. Left lane. Who leads the parent company of Beta Logistics? The retriever returns the Beta press release, because that is the document that looks most like the question, and the press release names Beta\'s own Chief Operating Officer. Nothing in what came back even mentioned that Beta has a parent, so the agent answered the question it could see rather than the one it was asked. Note what did not happen: the 10-K holding the ownership link was never retrieved, because it reads nothing like the question. Right lane, and this is the one people underestimate. Who leads Acme Holdings? The 2018 annual report comes back top, and it says Ray Duval. The 2019 leadership page, which is correct, ranks below it. And here is the part that matters — both of those passages are true statements. Neither one is wrong on its own. The 2018 report was accurate when it was written. What is missing is anywhere in the index that records that the 2019 appointment replaced the 2018 one. So the agent has no basis on which to prefer the newer document, and it asserts a retired executive with total confidence. Now put those two lanes together, because this is the whole argument for the section. In both cases the agent holds every fact it needs and none of the relationships between them — that Beta sits underneath Acme, and that one leadership record supersedes another. Same missing thing, twice. That is why I would not treat these as two separate requirements, and it is why almost every graph conversation I have starts as a search problem and turns out to be a memory problem.',
+        bullets: [
+          ['Purpose', ['Establish one need rather than three, by showing two different-looking failures that share a single cause: the facts are stored and the relationships between them are not']],
+          ['Key nuance', [
+            'The right lane is the one that lands hardest with an engineering audience, because both passages are true. There is no bad data to point at and no extraction bug to fix — the index simply cannot express supersession',
+            'Do not say "GraphRAG" on this slide. The room should arrive at wanting structure before it hears a product category, and naming one here invites a bake-off conversation two slides early',
+            'This slide replaces what used to be three separate need slides — traversal, retrieval, and agent memory. If someone who has seen an older version of this deck asks, that consolidation was deliberate: they are one need with two sub-problems',
+            'The left lane is the doc\'s cross-document composition failure and the right lane is the temporal half. The doc also names enumeration ("list everything about X") as a third shape — worth having ready if they push for another example',
+          ]],
+          ['How to demo live', [
+            'Click through all four documents before touching either lane, so the room accepts that every needed fact is genuinely present. The argument collapses if they think this is a data-coverage problem',
+            'On document D, read the sentence out loud and then say "that was true" — the pause is what makes the second failure land',
+            'End on the line at the bottom. If they nod at "memory problem rather than a search problem," the rest of the section is downhill',
+          ]],
+          ['Discovery', [
+            'When your agent gets something wrong, is it usually missing a fact, or combining two facts it should not have combined?',
+            'Has anyone caught it asserting something that used to be true? How did you find out — a user complaint, or an evaluation?',
+            'How do corrections reach the agent today? Is there any path other than re-indexing the corpus?',
+            'Are there questions your users have stopped asking it because they learned it gets them wrong?',
+          ]],
+        ],
+        transition: 'Transition: "So what would have to be stored for both of those to come out right."'
+      });
+
+      NOTES.push({
+        title: 'Knowledge graphs · what the structure adds',
+        onscreen: 'A three-record ledger with an as-of toggle and the four governance checks, over both of the previous slide\'s questions answered correctly.',
+        say: 'A graph adds exactly two things here, and neither of them is a database. The first is a typed edge that says which fact relates to which — Beta Logistics, parent, Acme Holdings. That is what fixes the left lane, and look at the bottom left: the two documents never had to be matched against each other at all. The edge between them was extracted once, at write time, so at question time there is nothing to figure out. The second thing is a supersedes edge, and this is the toggle. Same three records, read at two points in time. As of today, the 2018 record is struck through and retired, the 2019 record is live, and the agent answers Maya Okonjo. Now move the clock back to 2018. The same store now says Ray Duval is current and the 2019 record has not been recorded yet — so an auditor asking what was true in 2018 gets Ray Duval, correctly. That is the distinction worth holding onto: the old fact is not deleted and it is not repeated. It is retired, and it is still there. Third row on both settings is blocked, and it is blocked for a different reason entirely — it came off an unapproved forum thread and no citable source states it, so it never reaches the agent at either point in time. Which brings in the right-hand column. Four checks run before anything is exposed. Lifecycle is the one we just watched. Scope asks whether this was recorded for the context being asked about or borrowed from another client or region. Authorization reads the same Unity Catalog permissions as every other asset, so this is not a parallel permission system. And source grounding is the one I would emphasize with a security-minded room: vector search is a candidate generator here, never the authority.',
+        bullets: [
+          ['Purpose', ['Show the mechanism — a typed edge and a supersedes edge — and prove it by answering both of the previous slide\'s failures without introducing a graph database']],
+          ['Key nuance', [
+            'The as-of toggle is the most valuable interaction in the section. Retiring rather than deleting is what makes this auditable, and it is the thing a vector index structurally cannot do',
+            'Authorization reading Unity Catalog is worth stating plainly. Clients assume agent memory means a new permission model to review, and it does not',
+            'This slide is the mechanism, not the plan. Resist being pulled into what it costs — the option set and the sizing are four slides away, and rung four on that slide is the honest four-weeks-plus',
+            'The blocked row demonstrates source grounding independently of time. It stays blocked at both settings, which is the tell that it is a different gate doing the work',
+          ]],
+          ['How to demo live', [
+            'Toggle to 2018 and back at least twice. The strike-through moving is what makes supersession concrete, and one pass is not enough for it to register',
+            'Point at the blocked row and ask what they would want an agent to do with a fact from an unapproved source. It usually opens the governance conversation for you',
+            'Read the two paths at the bottom last, and say the phrase "extracted once, at write time" — it is the seed of the recommendation later in the section',
+          ]],
+          ['Discovery', [
+            'When a fact changes in your business, what is the system of record for that change, and does anything downstream get told?',
+            'Would you need to answer questions as of a past date — for an audit, a dispute, or a regulator?',
+            'Are there sources your agent can read today that you would not want it to assert from?',
+            'Who decides what your agent is allowed to state as fact, and is that written down anywhere?',
+          ]],
+        ],
+        transition: 'Transition: "That is the mechanism. Building it is two separate problems, and conflating them is where these projects go wrong."'
+      });
+
+      NOTES.push({
+        title: 'Knowledge graphs · two problems, not one',
+        onscreen: 'A single frontier canvas driven by two independent control groups — a seed resolver on the left and a hop depth on the right — with the failure mode of each named underneath.',
+        say: 'This is the slide I would keep if I could only keep one from this section. A user asks for everything connected to Delta Holdings. Three entities in the graph match that string, and the answer is however far out you decide to walk. Those are two decisions, they are independent of each other, and almost every graph project I have seen in trouble was treating them as one. Problem one, on the left: which node do we start from. Watch the picture as I move it. Deterministic SQL picks up both written forms of the company we meant — one entity, two surface strings. Switch to vector similarity and a third company arrives, and it is a genuinely different business whose name just sits close in embedding space. Everything hanging off it is now in the answer and none of it belongs there. That is problem one failing. Problem two, on the right: how far out do we walk. Leave the seed alone and step the depth. One hop, two hops, still fine. Three hops and the amber node lights up — that is a shared registered-agent address, an office that thousands of companies use as their registered address. It is a legitimate node and it is legitimately connected, and the moment it enters the frontier everything attached to it arrives too. Now read the two failure modes underneath, because they are not the same kind of problem at all. Get problem one wrong and the answer is wrong at every depth, silently, and nothing in the output looks broken. Get problem two wrong and the answer is completely correct and completely unaffordable. Different failures, different fixes, different option sets. That is why the next two slides are separate.',
+        bullets: [
+          ['Purpose', ['Separate the seed axis from the hop axis, and make it physical by putting two independent controls on one picture — this is the frame the rest of the section hangs on']],
+          ['Key nuance', [
+            'The supernode is the concrete version of the depth argument. A shared registered-agent address is a real example from the Orbis build, not a hypothetical, and it is why damping supernodes shows up later as a design parameter',
+            'The asymmetry between the two failures is the takeaway, not the controls. Wrong seed is a correctness failure that hides; too much depth is a cost failure that announces itself in the bill',
+            'If a client has already tried a graph and been disappointed, ask which of these two they were tuning. Very often they were tuning the traversal while the seed resolver was the thing that was wrong',
+            'This slide is deliberately not an options slide. Do not start comparing resolvers here — the matrix is next and it is better real estate for it',
+          ]],
+          ['How to demo live', [
+            'Change one control at a time and say which problem you are changing. If you move both at once the independence is lost and the slide does not work',
+            'Do the vector-similarity click slowly and let the wrong-company territory light up before you say anything',
+            'Step the depth to 3 and stop on the supernode. The callout counts the nodes returned, so read the number out loud — the jump is the argument',
+            'Ask the room which of the two problems they think they have. It is a good qualifying question and the answer routes the next ten minutes',
+          ]],
+          ['Discovery', [
+            'When your users refer to an entity, do they use one canonical identifier, or free text with aliases and abbreviations?',
+            'How many hops do your actual benchmark questions need, and how do you know that number?',
+            'Do you have hub nodes — shared addresses, shared agents, generic categories — that connect a very large number of records?',
+            'If the system resolved to the wrong entity, would anyone notice, and how?',
+          ]],
+        ],
+        transition: 'Transition: "Problem one first, because if this one is wrong nothing after it can be right."'
+      });
+
+      NOTES.push({
+        title: 'Problem 1 · resolving the seed',
+        onscreen: 'Four resolvers across the top with the deterministic one marked as the default, and four criteria as rows: what it resolves to, cost and latency, precision, and where it fails.',
+        say: 'Four ways to turn a typed string into a node, and the honest answer is that the boring one wins most of the time. Deterministic SQL first, and I mean genuinely just SQL — normalize the name, allow an edit distance, match against an indexed column. Milliseconds, nothing to build, nothing to refresh, and every match is explainable to a reviewer who asks why those two strings were treated as the same company. It fails on a real alias that shares no characters with the registered name, and the important word there is silently: you get a smaller answer and no error. Vector similarity is the one clients expect us to recommend and it is the one I would push back on hardest as a default. The query is fast; the index is the cost. Embedding tens of millions of company names is a multi-day build and then a standing refresh job forever, and what you buy is better recall on aliases at the price of precision, because close in embedding space is not the same legal entity. That is the failure we watched on the previous slide. LLM-assisted is genuinely strong on the ambiguous tail, because it can read the surrounding context and it can record why it rejected a candidate. The cost is a model call per question and non-determinism — the same question can resolve differently across runs, which makes answers hard to reproduce or cache, and that matters more than people expect once there is an evaluation harness. And user in the loop is the highest precision available, because the person asking knows what they meant, but it is unavailable to exactly the things we are usually building: scheduled jobs and autonomous agents cannot answer a disambiguation prompt. Where that leaves us is the line at the bottom. The embedding step, not the graph, is the bottleneck at scale — so deterministic SQL is the default and the other three are instruments for the ambiguous margin rather than the whole corpus.',
+        bullets: [
+          ['Purpose', ['Settle problem one with a defensible default, and pre-empt the assumption that entity resolution requires embeddings']],
+          ['Key nuance', [
+            'The default is marked on the slide because the source is unambiguous about it — the embedding index, not the traversal, is what fails to scale. This is one of the few places in the deck with a clear winner',
+            'These are not mutually exclusive. The strongest production pattern is deterministic SQL as the resolver with vector similarity demoted to an optional edge builder on the fuzzy tail',
+            'Non-determinism in the LLM row is the underrated objection. If they have an evaluation harness or any caching, raise it before they do',
+            'The user-in-the-loop column is worth keeping even though it looks weak, because it is the right answer for a human-facing exploratory tool — and it is the column that exposes whether the real use case has a human in it at all',
+          ]],
+          ['How to demo live', [
+            'Read down the deterministic column first, then jump to its Fails row. Leading with the limitation buys credibility for the recommendation',
+            'On the vector column, separate query cost from index cost explicitly — clients conflate them and that conflation is why they think this is cheap',
+            'If they are already committed to embeddings, do not fight it. Ask what the refresh job looks like and let the answer make the point',
+          ]],
+          ['Discovery', [
+            'Do you have a canonical entity table with the alias forms in it, or is resolution happening ad hoc in each application?',
+            'Is there an existing entity-resolution or master-data process we would be feeding off rather than replacing?',
+            'Does an incorrect resolution have a compliance consequence, or is it a quality-of-life issue?',
+            'Do the questions arrive from people, from scheduled jobs, or from agents? That decides whether the fourth column is even available to you',
+          ]],
+        ],
+        transition: 'Transition: "Seed resolved. Now problem two — walking outward from it."'
+      });
+
+      NOTES.push({
+        title: 'Problem 2 · retrieving the hops',
+        onscreen: 'Five retrieval options, banded into the three that are SQL over Delta and the two that need an engine, over a synced detail panel. The agent generated SQL option carries a callback panel to the taxonomy section.',
+        say: 'Problem one is settled, so something has to walk outward from that seed — and this is the part that gets skipped, because everyone assumes the answer is a graph database. Five options, and the band across the top is the whole argument: the first three are SQL over the same Delta table you already have, and only the last two are an engine you stand up and operate. Start on the left. Pre-materializing the hops means generating the five, ten, and fifteen hop tables ahead of time and handing them to Genie with the edge table, so multi-hop becomes a join. Days of work, predictable cost, and it goes wrong when depth is genuinely open-ended or the hierarchy keeps being restructured underneath you. Second option is agent generated SQL, and the mechanism is newer than most people realize: recursive CTEs are native in Databricks SQL and Spark now, so the agent writes the walk itself against the edge table. Pre-generation becomes an optimization for cost predictability rather than a requirement. We have already worked this exact ground in the taxonomy section — how the hierarchy was encoded is what decided whether the model wrote a correct recursive rollup, and the room that only had an adjacency list never wrote one. The same lever applies to these edges. And so does the same ceiling. This raises what an agent can pull out of a graph that lives in a normal database, and it stops well short of a real graph problem: long or branching walks, supernodes and cycles are past what generated SQL gets right, and cost per query is unbounded. Where it does work is a DAG or a tree-shaped taxonomy, which is a real and common shape, just not the one people mean when they say graph. Third, text to SPARQL to SQL. Structured graph questions compile deterministically down to SQL, about a second, and a reviewer can read the query — open-ended questions route to the agentic path instead at thirty to forty-five seconds. Notice we are three options in and no engine has appeared yet. Then the two that need one. A graph engine inside Databricks, where the catch is that model serving has no Spark, so the engine has to carry its own in-memory path. And a partner database, where the engines are genuinely good and the cost lands on operations rather than on the traversal — two systems to govern and keep in sync. One thing I want to be explicit about: the dashed blue box is us extending the pattern, not us reporting one. Maintaining those hop tables in a declarative Lakeflow pipeline is a reasonable idea with a supporting artifact behind it, and it does not have the mileage the other five rows do.',
+        bullets: [
+          ['Purpose', ['Answer problem two on its own terms, and make it obvious that three of the five options never leave SQL']],
+          ['Key nuance', [
+            'Recursive CTEs being native is the most out-of-date assumption in these conversations — plenty of "we need a graph database" asks were true two years ago and are not now',
+            'Agent generated SQL is the option most likely to be oversold, including by us. It is a genuine lift on a tree or a DAG and a genuine dead end on a real graph, and the card says both. Do not let it become the recommendation by default just because it is cheap',
+            'The taxonomy callback is on the card because slides 07 to 10 are a long way back by this point. If the room was in that section, one sentence is enough; if they joined late, walk back to slide 09 and show the closure table',
+            'The Lakeflow pipeline framing is our extension and is flagged as such on the slide. spark-r2r is the supporting artifact: R2RML-style transforms inside Spark Declarative Pipelines. Do not present it as field-proven at the same level as the other five',
+            'Partner engines are not the villain. The honest framing is two governed systems, not bad technology — and Delta stays the system of record either way',
+            'The virtualized alternative to the in-Databricks engine sits in the ontology section, so if they push on "we do not want to materialize anything," that is where to take it',
+          ]],
+          ['How to demo live', [
+            'Read the band across the top before touching any option — the three-versus-two split is the takeaway even if they remember nothing else',
+            'Click Agent Generated SQL and say out loud that recursive CTEs are native now, then see who in the room did not know',
+            'On the same card, read the fails-when row before the fits-when row. The point of that option is knowing where it stops',
+            'Land on the partner column last, so the Neo4j conversation happens with the other four already on the table',
+          ]],
+          ['Discovery', [
+            'What depth do your benchmark traversal questions actually need, and how do you know that number?',
+            'Who would own the refresh job for hop tables, and how often does your hierarchy get restructured?',
+            'Is there a concurrency or latency figure attached to the traversal requirement, or is that still to be defined?',
+            'If a graph database is already in the plan, what specifically did the SQL path fail to answer?',
+            'Are the traversals you care about tree or DAG shaped, or do they loop back on themselves? That answer decides whether agent generated SQL is a real option here',
+          ]],
+        ],
+        transition: 'Transition: "So here is where we would actually start."'
+      });
+
+      NOTES.push({
+        title: 'Knowledge graphs · where we land on both problems',
+        onscreen: 'Three lanes — start here, climb when, only past this line — over two design parameters that hold in every lane.',
+        say: 'Start with hop tables and recursive CTEs over one edge table, served through Genie. Days to two weeks, and I want to be blunt that this lane answers more traversal asks than most teams expect it to, which is why we spend a slide on it rather than treating it as a stepping stone to something better. You climb to the middle lane when your own benchmark questions are structured and graph-shaped and somebody needs the answer to be deterministic and auditable. That is text to SPARQL to SQL, and it is still not an engine — the SPARQL compiles down to SQL against the same edges. Then the line on the right. A graph engine or a partner database is justified by a benchmark query that has actually failed, plus one of three conditions: graph applications already in production, real Cypher or SPARQL depth on staff, or a genuine sub-second traversal requirement at high concurrency. If none of those three is true and no benchmark has failed, we would be selling you complexity, and I would rather say that here than six weeks in. Two parameters hold in every lane. Model serving endpoints have no Spark, so anything served that way needs its own in-memory execution path and the heavy work is precomputed to Delta and served as a lookup. And the second one is the frame we have been using for the last three slides: the seed and the depth are separate budgets. Problem one decides whether the answer is right, problem two decides what it costs, and if you do not damp the supernodes then one shared registered-agent address ends up pricing every traversal on the platform.',
+        bullets: [
+          ['Purpose', ['Give them a defensible default and a named, checkable condition for every climb, so the graph-database decision stops being a matter of taste']],
+          ['Key nuance', [
+            'The three conditions on the right-hand lane are not ours — existing graph applications, staff expertise, or sub-second at concurrency. If a customer honestly meets one, the partner path is the right recommendation and we should say so plainly',
+            'This slide deliberately echoes the ladder from early in the deck. If they take one operating rule away from the section, it should be that a climb needs a failing query behind it',
+            'The supernode point is the one that bites in production. Worth asking whether they know where their hubs are before they commit to a depth',
+            'Nothing in the middle or right lane changes the edge contract, so a climb later is not a rebuild — that is the argument for standardizing on the edge table early',
+          ]],
+          ['Discovery', [
+            'What would you accept as proof that the simpler path had run out — a latency number, a wrong answer, a cost ceiling?',
+            'Who signs off on adding a second system to govern, and what does that approval path look like?',
+            'Which of the three engine conditions applies to you today, if any?',
+            'If we started on hop tables in Genie next month, what would you measure at the end of it to decide whether to climb?',
+          ]],
+        ],
+        transition: 'Transition: "That is what is found and what it costs. The other half of the need was what the agent is allowed to say."'
+      });
+
+      NOTES.push({
+        title: 'Knowledge graphs · governed agent memory',
+        onscreen: 'Four rungs ascending from framework session memory to governed graph memory, each with what runs, when it fits, and where it fails. The top rung is dashed and marked as an extension.',
+        say: 'We have fixed finding things. This is the other half of the need we opened with — what the agent is allowed to say — and it deserves a real set of options rather than being waved at. Four rungs, and I want to start at the bottom of the credibility ladder rather than the top. Framework session memory is dashed because it is not from our source material, and I include it because a surprising number of agents are actually running on it: the framework keeps a scratchpad or a rolling summary, whatever was said earlier is in context, and nothing is written down anywhere. Fine for a prototype. Nothing survives the session, nothing is governed, and supersession is not even expressible, because there is no store in which one fact could replace another. Second rung is where most clients genuinely are: plain vector RAG, no graph. Embed the corpus, retrieve the nearest chunks, answer. And I want to be precise rather than dismissive here, because this rung is a real option and it is cheap and it already exists. Two honest numbers. On multi-hop ownership questions over a corporate-ownership benchmark, this scored 0.13 mean judged against 0.51 for a typed graph — roughly a fourfold gap. And structurally, a vector index has no way to state that one fact supersedes another. The 2018 and the 2019 record are just two similar passages, so whichever one matches the wording better wins. That is not a tuning problem. There is no chunk size that fixes it. Third rung fixes the first failure. Structure-enriched retrieval extracts a typed graph from the corpus, then embeds retrieval units that carry the verbatim text and its relationship skeleton together — one vector lookup, no traversal at query time, no graph database, and the latency of plain vector search. Two to four weeks. What it does not do is control what may be said: a retired fact that is well connected gets retrieved just as happily as a current one. Which is the fourth rung, and it is the machinery we looked at earlier — the typed graph and compiler layer running those four checks, with supersedes edges so memory updates rather than only appends. Four weeks and up, medium to high, and the evidence is one composed benchmark rather than a track record. Say that plainly. The last thing, at the bottom: three and four are layers, not alternatives. Rung three to fix what is found, rung four when what the agent is permitted to say starts to carry consequences.',
+        bullets: [
+          ['Purpose', ['Give agent memory a real option set with an honest floor, so the client can see what the cheap option does and does not buy them rather than being told graphs are the answer']],
+          ['Key nuance', [
+            'The 0.13 versus 0.51 figure is from a corporate-ownership benchmark on multi-hop ownership and coordination questions, and the typed graph achieved it with zero embedding dependency. Quote it as one benchmark, not as a general claim',
+            'The structural argument against rung two is stronger than the benchmark and harder to argue with: a vector index cannot express supersession at all. No amount of tuning or re-chunking changes that',
+            'Rung one is marked as an extension because the source does not cover it. Do not present it at the same evidentiary level as rungs three and four — it is there to name where the client probably is',
+            'Rungs three and four compose as layers and were benchmarked together as a combined stack. Presenting them as a choice would misrepresent the source, and it also loses the sequencing advice, which is the useful part',
+            'If a client wants rung four first, the sequencing conversation is the valuable one. Governing what may be said before fixing what is found answers the wrong question first and is a slower path to a visible win',
+          ]],
+          ['How to demo live', [
+            'Ask which rung they think they are on before you walk any of them. Most say two, and then the slide is about them rather than about us',
+            'Give rung two a genuinely fair hearing. Landing the two failure modes as structural rather than as a bad implementation is what makes the climb credible',
+            'Name the four-weeks-plus on rung four out loud rather than letting them read it. Volunteering the cost is what makes the recommendation trustworthy',
+          ]],
+          ['Discovery', [
+            'What does your agent memory look like today — framework session state, a vector index, or something you have built?',
+            'Do you have an evaluation set for the questions it gets wrong? Without one, none of these rungs can be shown to have worked',
+            'When the agent asserts something, does anyone need to be able to see why it believed that?',
+            'Is there a compliance or audit requirement attached to what the agent says, or is this currently an internal quality concern?',
+            'Would fixing what it finds be enough for now, or is what it is permitted to say already the pressing problem?',
+          ]],
+        ],
+        transition: 'Transition: "That closes the retrieval arc. The next needs are about computing over the graph rather than reading from it."'
+      });
+
+      NOTES.push({
+        title: 'Knowledge graphs · algorithms',
+        onscreen: 'The same network rendered four ways as small multiples, with a detail line that swaps as each family is selected.',
+        say: 'One network, read four ways, and almost every algorithm request a client brings is one of these four. Who matters — centrality, and node size here is influence, which is a property of position rather than of any column on the row. Who clusters together — community detection. How does one entity reach another — pathfinding, where the highlighted route is the entire answer. And who looks alike — similarity, where those two candidates resemble each other because they share neighbors, not because their columns match. Naming the family is most of the qualification, because the family plus the size is the whole scoping conversation. And I want to be precise about what is not on this slide: none of these four depends on how the computation is run, and none of them requires a graph database. They are all reading an edge table. Which engine executes them is a scale decision rather than an architecture decision, and it is the next slide.',
+        bullets: [
+          ['Purpose', ['Separate an algorithm requirement from a graph-database requirement, and put the compute choice on a scale axis instead of an architecture debate']],
+          ['Key nuance', [
+            'Naive connected components percolates on real data — a third of the graph can collapse into one component. Corroboration first, then a community-detection split, is what makes clustering usable at scale',
+            'Resist naming an engine on this slide even if asked directly. The engines are the next slide and they have their own tradeoffs; answering early collapses two conversations into one',
+          ]],
+          ['How to demo live', [
+            'All four panels render at once, so point rather than click — the four families should land as one picture',
+            'Click each cell to pull its detail line up, and hold on Pathfinding and Similarity where the highlight does the work',
+            'Ask which of the four they came in for. If the answer is more than two, the real requirement is probably exploration rather than a specific algorithm',
+          ]],
+          ['Discovery', [
+            'Which of these four families appears in your benchmark queries, or is the real ask exploration and agent context rather than an algorithm?',
+            'Roughly how many nodes and how many edges, and how many of those edges change on a given day?',
+            'Do algorithm results need to refresh hourly, daily, or weekly?',
+            'Does an agent need to compute a graph metric during a conversation, or is a precomputed table enough?',
+          ]],
+        ],
+        transition: 'Transition: "So what actually runs them, and how big does the graph have to get before the answer changes."'
+      });
+
+      NOTES.push({
+        title: 'Knowledge graphs · running the algorithms',
+        onscreen: 'A shared log-scale edge-count axis with the three engine bands, over three columns giving what runs, when it fits, when it fails, and the tradeoff.',
+        say: 'The four families were engine-agnostic on purpose, and this is where the engine gets picked. Look at the axis first, because it is the decision: ten thousand edges on the left, a billion on the right, and three bands. NetworkX covers the left third. That is a serverless notebook, no cluster libraries, no GPU — load the edges, run PageRank or Louvain, write the answer back to Delta, and you are done in days. It stops hard, though. Past a few million edges you are out of one machine and there is no distributed path to grow into, so outgrowing NetworkX means rewriting. SparkGraph is the band that spans almost everything, and the reason is that it tiers its own execution: if the graph fits in driver memory it takes a pure-Python fast path, mid-size gets coarsen-then-solve, and past that it goes fully distributed. Same API throughout. So if nobody in the room can tell you how big this graph ends up, that is the one to reach for. And then cuGraph on the right, which is where you go for very large graphs or when a batch job has a real latency target — Louvain over tens of millions of edges, shortest path across a power network. We have run that one. The cost is honest: GPU cluster time and a second runtime somebody maintains. Now the property at the bottom, which matters more than any of the three bands. Because SparkGraph is pure Python on the driver path, the identical package runs inside a model serving endpoint — and Spark does not exist inside a serving endpoint. Which means an agent can compute PageRank in the middle of a conversation instead of looking up a number that was precomputed last night. That is the difference between graph analytics as a report and graph analytics as something an agent reasons with.',
+        bullets: [
+          ['Purpose', ['Turn the engine question into a size question, and land the one non-obvious property: SparkGraph is the only option that also runs where Spark does not']],
+          ['Key nuance', [
+            'No engine wins outright and the overlapping bands say so. If asked to pick, the answer is a question back: how many edges, and does anything need it at query time?',
+            'The provenance on the SparkGraph serving-endpoint claim is the SMB fraud-ring sub-agent pattern — a "SparkGraph Analyst" agent computing graph metrics mid-conversation. Field-proven, so it can be said plainly',
+            'cuGraph is the optional GPU tier of the Lakehouse KG Starter kit, not a separate build. The kit runs on CPU without it, so the GPU decision can be deferred rather than made up front',
+            'The durable pattern survives all three: precompute heavy work to Delta, serve cheap lookups. If a client only remembers one line from this section, that is the one worth having',
+            'None of these is a graph database, and it is worth saying out loud here — a room that came in believing graph algorithms require Neo4j has now seen three engines that do not',
+          ]],
+          ['How to demo live', [
+            'Trace the axis left to right with a finger before reading any column. The three bands and their overlaps are the argument',
+            'Ask for their edge count before you present a recommendation. If they do not know it, that is the finding, and SparkGraph is the answer to not knowing',
+            'Save the serving-endpoint point for last and let it land. It usually reframes what they thought graph analytics could be part of',
+          ]],
+          ['Discovery', [
+            'Roughly how many edges does the graph have today, and what does that look like in a year?',
+            'Do the algorithm results need to be fresh at query time, or is a nightly precompute acceptable? This decides more than the engine does',
+            'Is there any GPU capacity in the environment now, and who would approve it if not?',
+            'Are you already running graph algorithms somewhere — a Python script, a notebook, a partner tool — and what does that cost you to keep alive?',
+          ]],
+        ],
+        transition: 'Transition: "Everything so far assumed the graph fits. The next need is what changes when it does not."'
+      });
+
+      NOTES.push({
+        title: 'Knowledge graphs · extreme scale',
+        onscreen: 'A log-scaled rail from one million to 1.45 billion edges, with the query-time share of the work shrinking as you step right.',
+        say: 'Step across this rail and watch the bar underneath, because that bar is the whole slide. The algorithms do not change as you move right. What changes is how much is still allowed to run when the question arrives. At notebook scale everything can — load the edges, run the algorithm, write the results back. By the third tick almost nothing does: a batch factory writes typed, hub-damped edges and the analytics tables, and serving does cheap instant lookups. Notice the rail is log-scaled, so the distance between sixty-two million and one and a half billion is honest rather than flattened. This was built on a corporate-ownership source of six hundred thirty-five million companies and one and a half billion ownership and linkage edges, scoped down to about nineteen million nodes and sixty-two million edges. Then two lessons that cost real time to learn. Connectivity is not coordination — naive connected components percolates, so require corroboration, split the residual chains with community detection, and rank clusters by cohesion. And the second one is the most transferable decision in the whole build: the scoping cut is a parameter, so widening it later is a configuration change rather than a rewrite. That is also where the constraint from the traversal slide comes back — at this size the vector index is the part that does not fit. The typed-graph engine itself scaled fine.',
+        bullets: [
+          ['Purpose', ['Show that extreme scale is an architecture inversion rather than a bigger cluster, and that the scoping cut is the decision worth stealing']],
+          ['Key nuance', [
+            'Model serving endpoints have no Spark, so anything served that way needs a pure-Python execution path. That constraint, more than graph size, usually decides the serving design',
+            'The proportion bar is a schematic of what runs when, not a measured split. Do not let it get read as a benchmark',
+          ]],
+          ['How to demo live', [
+            'Click all four ticks and let the proportion bar do the talking before you read the panel',
+            'Read "what breaks first" at each tick — that is the useful column in a discovery conversation',
+            'Point at the gap between the third and fourth ticks and note the rail is log-scaled',
+          ]],
+          ['Discovery', [
+            'What is the honest size of the entity and edge estate, and how much of it do your questions actually touch?',
+            'Are there natural scoping boundaries — region, business unit, legal entity?',
+            'What traversal latency and what concurrency does production need, and is a dashboard, an app, or an agent asking?',
+            'How much of the edge set changes daily, and does the analytics refresh have to keep pace with it?',
+          ]],
+        ],
+        transition: 'Transition: "Last need on the list, and the heaviest."'
+      });
+
+      NOTES.push({
+        title: 'Knowledge graphs · GNNs',
+        onscreen: 'Two accounts with near-identical feature rows, one dense and one bridging, with layer-one and layer-two aggregation drawn on the graph.',
+        say: 'Two accounts. Tenure four years, eighteen thousand in volume over ninety days, same region, three products, no disputes. For any practical purpose the rows are identical, and a model reading only those columns scores them the same — not because it is a bad model, but because there is nothing in front of it to separate them. Now look at where they sit. Account A is inside one dense group where everything it touches already touches everything else. Account B is the only path between two groups that otherwise never meet. Remove A and nothing changes about who can reach whom. Remove B and those two groups have no route to each other at all. A model that aggregates over neighbors separates them cleanly, and the only new information it received is structural. That is the test for whether you reach for a graph neural network: not whether you have a graph, but whether the thing that distinguishes your records is their position in it. The aggregation is what the arrows show — layer one pulls from direct neighbors, layer two from neighbors of neighbors, so after two layers a node encodes the shape of its neighborhood rather than just its own values. So the test for reaching for a graph neural network is not whether you have a graph. It is whether the thing distinguishing your records is their position in it. Hold the cost question for one more slide — this is the most expensive capability in the deck and there are three quite different ways to buy it.',
+        bullets: [
+          ['Purpose', ['Give them a concrete test for when structure is worth modelling at all, before the next slide prices the three ways to do it']],
+          ['Key nuance', [
+            'The scores on this slide are illustrative. They show the shape of the result, not a benchmark',
+            'Do not price anything here. Every option on the next slide is high complexity except the one we flag as an extension, and leading with cost on this slide undercuts the evidence before it lands',
+            'If a client wants a GNN before they have an edge contract or labeled outcomes, sequencing is the conversation to have rather than architecture. This slide is the argument that structure is signal; it is not permission to start',
+          ]],
+          ['How to demo live', [
+            'Read the feature table across and say "identical" before you touch the graph',
+            'Toggle Account A and Account B and let the two-hop count in the callout land — the number changes and the story changes with it',
+            'Trace one arrow chain inward to name message passing, then stop. If someone asks what it costs, that is the cue to advance',
+          ]],
+          ['Discovery', [
+            'Is there a prediction where you believe the network structure carries signal your feature columns miss?',
+            'Do you have labeled outcomes to train against, and roughly how many?',
+            'Would graph features fed into the model you already run be enough before a full GNN?',
+            'Do you have ML engineering capacity for this, or is it exploratory at this stage?',
+          ]],
+        ],
+        transition: 'Transition: "Three ways to get that, and they are not close to each other in cost."'
+      });
+
+      NOTES.push({
+        title: 'Knowledge graphs · getting structure into a model',
+        onscreen: 'Three bands ascending by cost with an effort meter on each — the extension band first, then fine-tuning, then a purpose-built heterogeneous GNN.',
+        say: 'The previous slide argued that structure is real signal. This one is about how much you should be willing to spend to use it, and the order is deliberate because both of the options the source actually offers are high complexity. Start at the top band, and note the dashed border, because this one is ours rather than theirs. You already compute centrality and community and embeddings in a batch job. Write them to Delta, add them as columns to the model you already have in production, and see whether the metric moves. No new training stack, no new serving path, and if the answer is that structure adds nothing here, you have found that out for the cost of a batch job instead of two months. The honest limit is real though: one number per node is a summary of a neighborhood, and if the decision genuinely turns on the shape of that neighborhood, you have thrown away the thing a GNN would have used. Middle band is the source\'s first real move: fine-tune a pretrained graph foundation model rather than training one from scratch. On atomistic and scientific work this is very strong, because the physics is shared — somebody already trained on millions of structures and you are adapting it to yours, and coreset training narrows that further by picking the one to ten percent of the data that actually carries the variance. Four to eight weeks. The catch is domain: if your graph is a customer network, there is no pretrained interatomic potential to inherit and this row does not apply to you. Bottom band, and I want to be careful here because it is the longest build in the deck. A purpose-made heterogeneous GNN is worth it where the graph is the decision itself. Our own worked example is partition-skew optimization — schema, runtime telemetry, query history and key distribution across seven node types, feeding a model that tells you the physical layout and which hot keys to salt. That is not a model that helps someone decide; it is the decision. Eight weeks and up, and someone owns that model for years afterwards.',
+        bullets: [
+          ['Purpose', ['Put the cost order in front of the ambition, so a client who is excited by the previous slide leaves with the cheapest test rather than the biggest project']],
+          ['Key nuance', [
+            'The top band is flagged as an extension because the source does not offer a rung below fine-tuning. Do not present it as field-proven at the same level as the other two — present it as the obvious first experiment',
+            'Both source solutions are complexity High. That is unusual in this deck and it is the reason this slide is ordered by cost rather than by capability',
+            'The fine-tuning row is domain-bound, not universally applicable. Pretrained graph foundation models exist for atomistic chemistry; they do not exist for a bank\'s counterparty network. Saying that plainly protects credibility',
+            'Coreset selection — embedding then k-means, train on 1 to 10 percent — is worth naming separately. For a client with a data volume problem rather than a modelling problem, that is the interesting half',
+            'The partition-skew example is a Databricks-internal use of the technique. It works as proof the pattern is real, and it is a good answer to "has anyone actually done this"',
+          ]],
+          ['How to demo live', [
+            'Point at the three effort meters before reading any band. The visual gradient does the argument for you',
+            'If the room is enthusiastic, slow down on the top band deliberately — enthusiasm at this rung is how eight-week builds get committed to in a first meeting',
+            'If they are a scientific or materials organization, go straight to the middle band and stay there; if they are a commercial data team, the middle band probably does not apply and you should say so',
+          ]],
+          ['Discovery', [
+            'Is there a model in production today that this structure would feed, or would this be a new model?',
+            'Does the decision depend on the shape of the neighborhood, or would a score per entity be enough? This is the question that separates the top band from the bottom two',
+            'For a scientific workload: is there a pretrained model in your field you would expect to start from, and does anyone here have experience fine-tuning one?',
+            'How often is this decision made, and what does getting it wrong cost? A trained model needs the frequency to be worth it',
+            'Who would own this model after it ships, and does that team exist yet?',
+          ]],
+        ],
+        transition: 'Transition: "That is the full range, from a metric view to a trained model. One rule runs underneath all of it."'
+      });
+
+      NOTES.push({
+        title: 'Operating rule',
+        onscreen: 'Nine check rows across two columns: need first, managed first, the metadata boundary, one contract, benchmark before climbing.',
+        say: 'If you take one screen away, take this one. Name the need before the technology, lay out the options honestly, and only then recommend — that is the shape we just ran three times. Evaluate the managed stack first. Then the row that saves the most time in a discovery call: separate metadata questions from row-level ones. If the question is what your assets mean, it is an ontology question and it is answered above the line. If it is how one record reaches another, it is a knowledge-graph rung and no amount of curation gets you there. Choose the hierarchy encoding for whoever has to read the SQL, including the model, and materialize named business sets as data rather than prose. Land one edge contract so Genie, explorers, algorithms, and agents all read the same table. Precompute the heavy work. Treat entity resolution as first-class, because deciding two records are the same thing is reliably the hardest part of any real knowledge graph. Keep Delta as the system of record. And climb only when your own queries fail for a reason you can point at.',
+        bullets: [
+          ['Purpose', ['Leave a reusable checklist and make the escalation criteria explicit']],
+          ['SA use', ['This is the list I use to decide whether we stay in product discovery or bring Graph and Ontology SMEs in']],
+          ['Discovery', [
+            'What would a two-week pilot need to prove for you to expand?',
+            'What history, retention, or isolation constraints shape the edge contract?',
+            'Can you write down three to five benchmark questions before we schedule anything deeper?',
+          ]],
+        ],
+        transition: 'Transition: "Let\'s sort your actual needs into the three buckets."'
+      });
+
+      NOTES.push({
+        title: 'Discussion',
+        onscreen: 'Proposal plus five numbered open questions.',
+        say: 'Sit here. Do not rush it, and use their words rather than ours. The output I want is a short list of questions that must work, each one sorted into taxonomy, ontology, or knowledge graph, with a starting rung and a named owner. That is a scoped next step. A commitment to rung five on the first call is not.',
+        bullets: [
+          ['Purpose', ['Drive toward a sorted need list, a starting rung, and an escalate-or-not decision']],
+          ['Facilitation', [
+            'Capture three to five benchmark questions on a whiteboard',
+            'Sort each one into taxonomy, ontology, or knowledge graph in front of them',
+            'Name owners and one phase-one success criterion',
+            'Agree explicitly: stay on the managed or edge path, or schedule an SME deep dive — and why',
+          ]],
+          ['Discovery', [
+            'Which of the on-screen questions is hardest for your team to answer today?',
+            'If we start at rung one or two, who owns curation and who owns implementation?',
+            'What comparison criteria or procurement timelines are already in motion?',
+          ]],
+        ],
+        transition: 'Transition: "Close on the rule."'
+      });
+
+      NOTES.push({
+        title: 'Close',
+        onscreen: 'Name the need. Then climb.',
+        say: 'Pick the questions that matter. Place each one in taxonomy, ontology, or knowledge graph — that decision does most of the scoping for you. Then prove the lowest rung before you leave it. I will help scope that first rung with your team, and bring Graph or Ontology SMEs in the moment the discovery says we need them.',
+        bullets: [
+          ['Purpose', ['End on the operating rule and a concrete follow-up']],
+          ['Ask', ['A working session to list benchmark questions, sort them across the three layers, pick a starting rung, and decide SME escalation']],
+        ],
+        transition: 'End.'
+      });
+
+      /* Section › Subsection per slide, generated from src/outline.py — the same map
+         the deck rail is built from. */
+      const CRUMBS = [
+        ['Overview', 'Opening'],
+        ['Overview', 'Opening'],
+        ['Overview', 'Framing'],
+        ['Overview', 'Framing'],
+        ['Overview', 'Framing'],
+        ['Overview', 'Framing'],
+        ['Taxonomy', 'What it is'],
+        ['Taxonomy', 'The hierarchy need'],
+        ['Taxonomy', 'The hierarchy need'],
+        ['Taxonomy', 'The hierarchy need'],
+        ['Ontology', 'What it is'],
+        ['Ontology', 'The two needs'],
+        ['Ontology', 'The two needs'],
+        ['Ontology', 'The two needs'],
+        ['Knowledge graphs', 'What it is'],
+        ['Knowledge graphs', 'Connecting the dots'],
+        ['Knowledge graphs', 'Connecting the dots'],
+        ['Knowledge graphs', 'Connecting the dots'],
+        ['Knowledge graphs', 'Connecting the dots'],
+        ['Knowledge graphs', 'Connecting the dots'],
+        ['Knowledge graphs', 'Connecting the dots'],
+        ['Knowledge graphs', 'Connecting the dots'],
+        ['Knowledge graphs', 'Algorithms'],
+        ['Knowledge graphs', 'Algorithms'],
+        ['Knowledge graphs', 'Extreme scale'],
+        ['Knowledge graphs', 'GNNs'],
+        ['Knowledge graphs', 'GNNs'],
+        ['Next steps', 'Operating rules'],
+        ['Next steps', 'Discussion'],
+        ['Next steps', 'Discussion'],
       ];
 
       const els = {
         title: document.getElementById('title'),
+        section: document.getElementById('section'),
         counter: document.getElementById('counter'),
         onscreen: document.getElementById('onscreen'),
         say: document.getElementById('say'),
@@ -327,6 +900,10 @@
         const total = String(NOTES.length).padStart(2, '0');
         els.title.textContent = note.title;
         els.counter.textContent = `${n} / ${total}`;
+        const [section, sub] = CRUMBS[index] || [];
+        els.section.innerHTML = section
+          ? `<span class="section-tag">${section}<i>›</i>${sub}</span>`
+          : '';
         els.onscreen.textContent = note.onscreen;
         els.say.textContent = note.say;
         els.transition.textContent = note.transition;

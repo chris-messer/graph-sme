@@ -1,0 +1,40 @@
+NOTES.push({
+  title: 'Client need · managed Genie Ontology',
+  onscreen: 'A rising timeline: four steps left to right along a generic time axis, each standing on a stack of the layers below it, with a y axis for how much semantic grounding Genie has to reason with. Under it, a three-cell strip drawing the metadata / row-level boundary.',
+  say: 'This is the ask we hear most: make Genie answer better over the data we already have. Not build us a graph. Genie Ontology is a product surface, so switching it on is not the work — the semantic map generates itself from tables, queries, dashboards, docs and connected apps, and it keeps itself current. The work is what you feed it, and there are four concrete things, in this order. First, turn Genie Ontology on. That is an enablement conversation with your account team, and nothing gets built. What you get for it is a generated semantic map over the assets you already have. Second, define your tables and columns in Unity Catalog. Descriptions and comments on the tables and columns the business actually asks about, so Genie reads what a column means instead of guessing from what it is called. Third, build out governed metric views. Certified definitions over your core entities, so when someone asks for revenue or active accounts, the measure resolves to one authored definition instead of being re-derived from scratch every question. Fourth, populate the Unity Catalog Glossary. Governed business terms written down once, so a word like enterprise carries a definition an agent can apply rather than a definition that changes by team. Read the shape of it, because the shape is the argument. The height of each column is how much meaning Genie has to work with, and every step stands on the ones before it. These are not four options to pick between, they are four layers, and each one makes the layers under it worth more. The enablement is the cheap part. Deciding what your business means and writing it down is the durable work, and it is the part that pays off on every question after it. And then the strip along the bottom, because it answers the question that always gets asked in this room. This path reasons over metadata — what your assets mean, what is authoritative, what is fresh — filtered to the assets the person asking already has access to in Unity Catalog. It does not read the contents of your rows, and it does not model how one record relates to another. That is not a flaw, it is the scope, and it does double duty: it answers a compliance question and it tells you when to climb. If the question you need answered is shaped like which suppliers sit three hops upstream of this part, nothing on this slide can reach it, and you are in knowledge graph territory. That is the third section.',
+  bullets: [
+    ['Purpose', ['Make the managed path concrete enough to commit to, in an order the customer can start on Monday, and leave the room with an accurate answer to "does Genie Ontology see my data?"']],
+    ['How to present it', [
+      'Walk the four steps left to right and name the y axis once — the columns get taller because grounding accumulates, not because the work gets harder',
+      'Land the distinction on step one: enabling the surface is not the project. Steps two through four are the project',
+      'Dwell on metric views. It is the step most customers underrate, and it is the one that stops the same measure being answered three different ways',
+      'The glossary lands best with one of their own contested words. Ask for it in the room rather than using "enterprise"',
+      'If asked for timing, give it verbally against their own scope and ownership rather than reading a number off the slide — the axis is deliberately generic',
+      'In a regulated account, land on the bottom strip last and read the first two cells close to verbatim. The three cells are the compliance answer and the climb signal in one line',
+    ]],
+    ['Key nuance', [
+      'The order is deliberate and it is about payoff per unit of effort, not difficulty. Column and table descriptions lift every question. Metric views lift every measure. The glossary lifts every term. Doing the glossary first over undescribed tables buys much less',
+      'The precise answer to "does it see my data?": it extracts knowledge snippets — metric definitions, authoritative sources, business rules — from tables, queries, dashboards, docs and connected apps, scores each by authority, usage and freshness, and gates all of it behind Unity Catalog permissions. It reasons about how best to answer using assets the user can already see. It does not derive or expose row-level relationships',
+      'Metadata is not nothing. Column names, sample-derived descriptions and query history are still information about the data, so in the most sensitive accounts the honest framing is "it sees the same catalog metadata that user can already see," not "it sees nothing"',
+      'Say "current scope," not "limitation." Accurate, and it keeps the room in design mode',
+      'Steps two through four never truly finish — coverage widens as new domains land, and definitions get reviewed and versioned like anything else that matters. Say that plainly if someone asks when it is done',
+      'The same boundary is the climb signal. A question that has to follow one record to a distant one — supply chain, ownership, blast radius — cannot be answered above this line, and that is the honest trigger for the knowledge-graph section',
+      'Product status, precisely: Genie Ontology is a gated public preview. UC Glossary was announced at DAIS 2026. Metric Views are GA with low-code authoring. Relationships has a low-code UI in private preview, with Unity Catalog support planned — that last part is internal, so do not put a date in front of the customer',
+      'The representation is deliberately flexible and model-friendly rather than OWL or RDF. Say that early if the customer has ontology people in the room, because they will ask',
+      'Governance, versioning, monitoring and quality evaluation of the ontology are the top prioritised customer asks. Ingesting external OWL ontologies is acknowledged and not currently planned — say that plainly rather than implying a date',
+      'The decision rule: run their own benchmark questions against this stack. If the questions pass, this is the whole project and nothing further down the deck needs funding',
+    ]],
+    ['Discovery', [
+      'Who owns business definitions today — is that a funded stewardship role or somebody\'s twenty percent?',
+      'Have you requested Genie Ontology preview access through your account team yet?',
+      'How much of the estate Genie would be pointed at already carries table and column comments, and who would write the ones that are missing?',
+      'Which three or four entities would you certify metrics over first, and who signs off on those definitions?',
+      'Which business terms get argued over most in reporting — the ones where two teams produce different numbers?',
+      'Have your failing questions been run against Genie Ontology, the Glossary, or Metric Views yet, and what happened?',
+      'What review does a new AI capability touching this data have to pass, and who sits on that review?',
+      'Is there a question you need answered today that requires following one record to a distant one — supply chain, ownership, blast radius?',
+      'What would have to be true for you to call this done rather than moving to a graph build?',
+    ]],
+  ],
+  transition: 'Transition: "That path assumes Databricks is where the meaning lives. Sometimes the ask is deliberately bigger than that."'
+});

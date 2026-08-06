@@ -1,0 +1,42 @@
+    <!-- 11 · ONTOLOGY overview · layout: reactive two-plane diagram driven by a shared with/without toggle -->
+    <section class="slide section-open" data-section-mark="02" aria-label="Ontology overview">
+      <div class="eyebrow"><span class="num">11</span> Ontology</div>
+      <div class="content">
+        <h2>An ontology is metadata: the meaning layer an agent reads before it touches a row</h2>
+        <div class="dual-toolbar" role="group" aria-label="What the agent can read">
+          <span class="ctrl-label">What the agent can read</span>
+          <button type="button" class="mode-btn active" data-ans="without" aria-pressed="true">Tables only</button>
+          <button type="button" class="mode-btn" data-ans="with" aria-pressed="false">Tables + ontology</button>
+        </div>
+        <div class="onto-split">
+          <div>
+            <div class="viz-shell onto-viz" id="viz-onto-schema"></div>
+            <p class="viz-caption"><b>Two planes</b>Entity types, relationship types and certified definitions sit above the dashed line. The rows below it never move — the meaning layer only describes them.</p>
+          </div>
+          <div class="answer-panel">
+            <div class="q-chip"><b>One question, asked twice</b>“Which enterprise accounts churned last quarter?”</div>
+            <div class="answer-stack">
+              <div class="answer-card weak live" data-ans-pane="without">
+                <h3>Names first, then inference</h3>
+                <p>Table and column names are all there is. Everything else the agent has to guess.</p>
+                <div class="trace">
+                  <span class="guess">four candidate churn tables · picks one</span>
+                  <span class="guess">status column · guesses which value means churned</span>
+                  <span class="guess">“enterprise” · no definition to apply</span>
+                </div>
+              </div>
+              <div class="answer-card strong" data-ans-pane="with">
+                <h3>Meaning first, then SQL</h3>
+                <p>Definitions, authority and relationship types resolve before a query is written.</p>
+                <div class="trace">
+                  <span class="hit">churn_rate · certified Metric View</span>
+                  <span class="hit">dim_account · authoritative source</span>
+                  <span class="hit">“enterprise” · governed glossary term</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span class="brand">Databricks × Graph SME</span><span class="counter">11 / 30</span></div>
+    </section>

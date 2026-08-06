@@ -1,0 +1,6 @@
+/* ── Agenda ──────────────────────────────────────── */
+.agenda { counter-reset: item; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 56px; max-width: 1200px; margin-top: 8px; }
+.agenda-item { counter-increment: item; display: grid; grid-template-columns: 48px 1fr; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.agenda-item::before { content: "0" counter(item); color: var(--signal); font: 700 22px/1 var(--display); }
+.agenda-item b { display: block; font: 700 19px/1.15 var(--display); margin-bottom: 4px; }
+.agenda-item span { color: var(--muted); font-size: 14px; line-height: 1.35; }

@@ -1,0 +1,45 @@
+    <!-- 21 · retrieval recommendation · layout: three-lane boundary split + design parameter rows -->
+    <section class="slide" aria-label="Recommendation: where we land on graph retrieval">
+      <div class="eyebrow"><span class="num">21</span> Recommendation</div>
+      <div class="content">
+        <h2>Start with materialized hops in Genie; an engine needs a failing benchmark query to justify it</h2>
+        <p class="lead rec-lead">One default, one condition that earns a climb, and one line not worth crossing without evidence. Most retrieval asks are answered in the first lane, on the deterministic seed from the slide before it.</p>
+        <div class="rec-lanes">
+          <div class="rec-lane start">
+            <div class="rec-head">
+              <span class="kicker green">Start here</span>
+              <span class="rec-meta">Low · days to two weeks</span>
+            </div>
+            <h3>Hop tables and recursive CTEs over one edge table, served through Genie</h3>
+            <p>Genie writes recursive queries against the edge table directly, and pre-generated closures make the cost of the questions you ask most often quotable in advance. Most traversal asks never leave this lane.</p>
+          </div>
+          <div class="rec-lane climb">
+            <div class="rec-head">
+              <span class="kicker blue">Climb when</span>
+              <span class="rec-meta">Medium · two to four weeks</span>
+            </div>
+            <h3>Your benchmark questions are structured, graph-shaped, and have to be deterministic</h3>
+            <p>Compile Text → SPARQL → SQL over the same edges for roughly one-second answers a reviewer can read, and route the open-ended questions to the agentic path instead. This is still not an engine — the SPARQL compiles down to SQL.</p>
+          </div>
+          <div class="rec-lane bound">
+            <div class="rec-head">
+              <span class="kicker" style="color:var(--danger)">Only past this line</span>
+              <span class="rec-meta">Medium–high · four to eight weeks</span>
+            </div>
+            <h3>A graph engine or a partner database, once a benchmark query has actually failed</h3>
+            <p>A demonstrated failure, plus one of three conditions: graph applications already in production, deep Cypher or SPARQL expertise on staff, or a real sub-second traversal requirement at high concurrency. Delta stays the system of record and the edges sync outward.</p>
+          </div>
+        </div>
+        <div class="rec-params">
+          <div class="rec-param">
+            <b>Model serving endpoints have no Spark</b>
+            <span>Any engine served from an endpoint needs an in-memory execution path of its own, and anything heavy is precomputed in batch to Delta and served as a cheap lookup.</span>
+          </div>
+          <div class="rec-param">
+            <b>The seed and the depth are separate budgets</b>
+            <span>The resolver decides whether the answer is right. The depth decides what it costs. Damp the supernodes explicitly, or one shared registered-agent address prices every traversal on the platform.</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span class="brand">Databricks × Graph SME</span><span class="counter">21 / 30</span></div>
+    </section>

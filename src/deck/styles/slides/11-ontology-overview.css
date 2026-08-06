@@ -1,0 +1,28 @@
+/* ── 11 ontology two planes + answer toggle ─────── */
+.onto-split { display: grid; grid-template-columns: 1.14fr .86fr; gap: 22px; margin-top: 12px; align-items: start; }
+.onto-viz { height: min(42vh, 368px); margin-top: 0; }
+/* relationship labels sit on top of the highlighted path, so give them a halo */
+.onto-viz .rl { paint-order: stroke; stroke: rgba(255,255,255,.95); stroke-width: 3px; stroke-linejoin: round; }
+.answer-panel { display: grid; gap: 12px; align-content: start; }
+.q-chip {
+  background: rgba(255,255,255,.85); border: 1px solid var(--line); border-left: 3px solid var(--blue);
+  border-radius: 0 10px 10px 0; padding: 11px 14px; font-size: 15px; line-height: 1.35; color: var(--ink);
+}
+.q-chip b { color: var(--blue); font: 700 10px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; display: block; margin-bottom: 6px; }
+.answer-card {
+  display: none;
+  border: 1px solid var(--line); border-radius: 10px; background: rgba(255,255,255,.78); padding: 14px 16px;
+}
+.answer-card.live { display: block; animation: onto-ans-in .26s ease both; }
+@keyframes onto-ans-in { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
+.answer-card.weak { border-left: 4px solid var(--amber); }
+.answer-card.strong { border-left: 4px solid var(--green); }
+.answer-card h3 { font-size: 16px; margin-bottom: 6px; }
+.answer-card p { color: var(--muted); font-size: 13.5px; line-height: 1.4; margin: 0 0 10px; }
+.trace { display: grid; gap: 6px; }
+.trace span {
+  font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+  background: var(--oat-2); border-radius: 6px; padding: 7px 10px;
+}
+.trace span.hit { background: rgba(0,169,114,.11); color: var(--ink); }
+.trace span.guess { background: rgba(176,96,0,.11); color: var(--ink); }
