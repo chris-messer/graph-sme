@@ -5521,10 +5521,19 @@
         const key = (a, b) => `${Math.min(a, b)}-${Math.max(a, b)}`;
         const edgeKey = d => key(endId(d.source), endId(d.target));
 
-        /* A6 out to C6, crossing both bridges — five hops end to end. */
-        const WALK = [5, 1, 6, 7, 12, 17];
+        /* A6 out to C5, crossing both bridges. Five hops is genuinely the distance
+           between those two — nothing in this network sits further from A6 — which is
+           what the legend's "shortest path" is asserting, and every hop below is a
+           real edge in the list above. C6 is four hops out and its last leg is not an
+           edge at all, so it cannot be the target however inviting it looks.
+           PATH_LINKS is the single source for the highlight, the hop badges and the
+           count in the caption, so those three can no longer disagree. */
+        const WALK = [5, 1, 6, 7, 12, 16];
         const ON_PATH = new Set(WALK);
-        const PATH_EDGES = new Set(WALK.slice(1).map((id, i) => key(WALK[i], id)));
+        const HOP_NO = new Map(WALK.slice(1).map((id, i) => [key(WALK[i], id), i + 1]));
+        const PATH_LINKS = LINKS.filter(d => HOP_NO.has(edgeKey(d)));
+        const PATH_EDGES = new Set(PATH_LINKS.map(edgeKey));
+        const HOPWORD = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven'];
 
         /* C2 and C4 share both C1 and C3 and have no edge between them — the shape
            node similarity is actually looking for. */
@@ -5565,7 +5574,8 @@
             algos: 'Shortest path · single-\nsource shortest path',
             use: 'Supply chains, network routing, blast radius. The highlighted route is the whole answer, and its length is the second half of it.',
             qs: ['How does this part reach that finished good?', 'What goes down if this node fails?'],
-            caption: 'A6 → C6 · five hops, and the route is the answer',
+            caption: `${NODES[WALK[0]].label} → ${NODES[WALK[WALK.length - 1]].label}`
+              + ` · ${HOPWORD[PATH_LINKS.length]} hops, and the route is the answer`,
             legend: [[C.signal, 'Shortest path'], [C.faint, 'Off the route']],
           },
           similarity: {
@@ -5742,9 +5752,12 @@
 
           if (mode === 'pathfinding') {
             const R = view.small ? 7 : 8.5;
-            WALK.slice(1).forEach((id, i) => {
-              const s = at.get(WALK[i]);
-              const t = at.get(id);
+            /* one badge per drawn segment, off the same list the highlight is drawn
+               from — so a badge can never end up floating over a leg that is not
+               there, which is what a walk built out of node pairs allowed */
+            PATH_LINKS.forEach(d => {
+              const s = at.get(endId(d.source));
+              const t = at.get(endId(d.target));
               const dx = t.x - s.x, dy = t.y - s.y;
               const len = Math.hypot(dx, dy) || 1;
               let nx = -dy / len, ny = dx / len;
@@ -5757,7 +5770,7 @@
               hop.append('text').attr('text-anchor', 'middle').attr('dy', '.34em')
                 .attr('font-family', 'var(--display)').attr('font-weight', 700)
                 .attr('font-size', view.small ? '7.5px' : '9px').attr('fill', C.panel)
-                .text(i + 1);
+                .text(HOP_NO.get(edgeKey(d)));
             });
           }
 
