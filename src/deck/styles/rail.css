@@ -8,7 +8,7 @@
    No rule here may key `top`, `left`, `right` or `height` off a slide class, off
    which section is open, or off which subsection is expanded. All four are
    declared exactly once, below, and the deck is verified by asserting each
-   resolves to a single value on all 26 slides in both directions.
+   resolves to a single value on all 29 slides in both directions.
 
    Two consequences worth knowing before changing anything here:
 
@@ -32,8 +32,11 @@
    slides as pips. Everything else stays collapsed to its label. */
 .rail {
   /* The widest expanded state, with headroom. Raising this moves the origin
-     left, toward the eyebrow — check the clearance if you change it. */
-  --rail-w: 940px;
+     left, toward the eyebrow — check the clearance if you change it, and raise
+     the breakpoint at the bottom of this file to match. Six sections and the
+     Knowledge graphs subsections measure 1040px, and the widest eyebrow in the
+     deck ends at 316px, so a 1060px box leaves the origin at 463px. */
+  --rail-w: 1060px;
   --rail-gutter: clamp(34px, 4.8vw, 88px);
 
   position: fixed; z-index: 15;
@@ -139,16 +142,29 @@
 .rail-pip.is-here:hover i { background: var(--signal); }
 .rail-pip:focus-visible { outline: 2px solid rgba(34,114,180,.45); outline-offset: 0; }
 
+/* ── the appendix ───────────────────────────────
+   The last section is the appendix. It sits after the close, so it is not a
+   sixth chapter of the argument and does not belong on the progress spine: it
+   carries no fill track and a quieter label than the five before it, which is
+   also what keeps six labels inside the band. Scoped to :last-child, so nothing
+   here can reach the sections above it. */
+.rail-sec:last-child .rail-sname {
+  padding-bottom: 0; font-size: 8.5px; letter-spacing: .1em;
+}
+.rail-sec:last-child .rail-sname::after,
+.rail-sec:last-child .rail-fill { display: none; }
+
 @media (prefers-reduced-motion: reduce) {
   .rail-sname, .rail-uname, .rail-fill, .rail-pip i { transition: none; }
 }
 
-/* Below this a 940px box would put the origin back into the eyebrow, so the rail
+/* Below this a 1060px box would put the origin back into the eyebrow, so the rail
    drops its two inner levels and keeps only the section spine. That spine has the
    same width on every slide, so there is nothing left to reflow and the rail can
    go back to hanging off the right margin — the fixed origin is only needed while
-   something expands. */
-@media (max-width: 1420px) {
+   something expands. This threshold tracks --rail-w: widen the box and this has
+   to move with it, or the origin lands on the eyebrow just under the old one. */
+@media (max-width: 1480px) {
   .rail { left: auto; justify-content: flex-end; gap: 10px; }
   .rail-sec.is-open .rail-subs { display: none; }
 }

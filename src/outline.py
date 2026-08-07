@@ -59,13 +59,25 @@ OUTLINE = [
         ("What it is", [
             "kg-overview",
         ]),
-        # One need, its two decisions, the options and the recommendation —
-        # deliberately one subsection, because seed selection and hop retrieval
-        # are two problems inside a single need rather than two needs.
+        # The need and the destination: the corpus that fails, then the same
+        # corpus as a graph. Neither slide has said yet how you get one.
         ("Connecting the dots", [
             "agent-disconnect",
             "graph-answer",
-            "problem-space",
+        ]),
+        # A graph problem splits in two, and these two subsections are that
+        # split — named in one word each so the rail carries the division
+        # rather than a sentence about it. Construction first:
+        # build-and-retrieve names both halves, build-options is the three ways
+        # of getting entities and edges out of sources.
+        ("Build", [
+            "build-and-retrieve",
+            "build-options",
+        ]),
+        # Then retrieval: the ways to walk what construction produced, and
+        # where we land. Seed selection and hop volume are two problems inside
+        # this half, and the appendix slide is the long form of both.
+        ("Retrieve", [
             "hop-options",
             "retrieval-recommendation",
         ]),
@@ -94,6 +106,17 @@ OUTLINE = [
         ("Discussion", [
             "discussion",
             "close",
+        ]),
+    ]),
+
+    # Everything after the close. The rail renders a section per entry, so an
+    # appendix is just a sixth one — it draws itself, and rail.css gives the
+    # last section a compact treatment so the six labels still fit the band.
+    ("Appendix", [
+        # Pulled out of the retrieval run: it is the long form of the two
+        # decisions inside a walk, kept for the rooms that want to go there.
+        ("The two decisions", [
+            "problem-space",
         ]),
     ]),
 ]

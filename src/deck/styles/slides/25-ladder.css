@@ -1,0 +1,105 @@
+/* ── 25 closing synthesis · three-rung climb ─────────
+   Every class here is prefixed lad- on purpose. Per-slide sheets are
+   concatenated into one global scope, so a bare .climb or .rung would
+   style those words wherever else in the deck they appear.
+   Rung 1 sits at the bottom and the stack is read upward, so the climb gates can
+   live between the steps rather than inside them — the argument for climbing is
+   visible whichever rung is selected. Selection only drives the right column. */
+/* min-height is the tallest rung's natural height at the deck's 1600x900 target.
+   Rung 2 carries six components and the others four, so without it the block
+   re-centres on every click and the caption and footer walk up and down. */
+.lad-climb {
+  display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 22px;
+  align-items: start; align-content: start; min-height: 464px; margin-top: 16px;
+}
+
+.lad-climb-rail { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 10px; }
+.lad-climb-axis { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; justify-items: center; gap: 7px; }
+.lad-climb-axis i {
+  writing-mode: vertical-rl; transform: rotate(180deg); font-style: normal;
+  font: 700 9px/1 var(--display); letter-spacing: .14em; text-transform: uppercase; color: var(--dim);
+}
+.lad-climb-axis b { width: 1px; background: linear-gradient(to top, rgba(27,49,57,.1), rgba(255,54,33,.55)); }
+
+.lad-climb-stack { display: grid; gap: 7px; }
+.lad-climb-cap {
+  margin: 0 0 0 30px; padding-left: 9px; border-left: 2px solid var(--line);
+  color: var(--dim); font-size: 11.5px; line-height: 1.3;
+}
+.lad-climb-gate {
+  display: grid; grid-template-columns: 13px minmax(0, 1fr); gap: 7px; align-items: start;
+  margin: 1px 0 1px 8px; color: var(--muted); font-size: 11.5px; line-height: 1.3;
+}
+.lad-climb-gate::before { content: "\2191"; font: 700 13px/1.15 var(--display); color: var(--signal); }
+.lad-climb-gate b {
+  display: block; margin-bottom: 3px; color: var(--signal);
+  font: 700 9px/1 var(--display); letter-spacing: .12em; text-transform: uppercase;
+}
+
+/* The staircase indent is small on purpose — the axis and the arrows carry the
+   climb, and a deeper offset would crowd the copy in a 400px column. */
+/* No width here: these are stretched grid items, and a declared 100% would
+   ignore the staircase margin and push the card into the detail column. */
+.lad-rung {
+  position: relative; text-align: left; cursor: pointer;
+  display: grid; gap: 3px;
+  font-family: var(--body); color: var(--ink);
+  background: rgba(255,255,255,.75);
+  border: 1px solid var(--line); border-left: 3px solid var(--line); border-radius: 12px;
+  padding: 10px 13px;
+  transition: border-color .2s ease, background .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+.lad-rung.lad-r1 { margin-left: 0; border-left-color: var(--green); }
+.lad-rung.lad-r2 { margin-left: 15px; border-left-color: var(--blue); }
+.lad-rung.lad-r3 { margin-left: 30px; border-left-color: var(--signal); }
+.lad-rung:hover { transform: translateX(2px); border-color: rgba(255,54,33,.35); }
+.lad-rung.active { background: rgba(255,54,33,.06); border-color: var(--signal); box-shadow: inset 0 0 0 1px rgba(255,54,33,.22); }
+
+.lad-rung .lad-rn { font: 700 9.5px/1 var(--display); letter-spacing: .13em; text-transform: uppercase; color: var(--dim); }
+.lad-rung .lad-rn em { display: none; font-style: normal; color: var(--signal); margin-left: 5px; }
+.lad-rung.active .lad-rn em { display: inline; }
+.lad-rung .lad-rt { font: 700 15px/1.15 var(--display); letter-spacing: -.012em; }
+.lad-rung .lad-rd { color: var(--muted); font-size: 11.5px; line-height: 1.3; }
+.lad-rung .lad-re { margin-top: 2px; font: 700 10.5px/1 var(--display); letter-spacing: .04em; color: var(--ink); }
+.lad-rung .lad-rbadge {
+  position: absolute; right: 11px; top: 9px;
+  font: 700 8.5px/1 var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--green);
+  border: 1px solid rgba(0,169,114,.4); border-radius: 999px; padding: 3px 6px;
+}
+
+.lad-climb-detail {
+  overflow: hidden;
+  border: 1px solid var(--line); border-top: 3px solid var(--lad-cd-line, var(--line)); border-radius: 12px;
+  background: rgba(255,255,255,.8);
+}
+.lad-cd-head { padding: 9px 15px; background: var(--lad-cd-bg, rgba(0,169,114,.1)); border-bottom: 1px solid var(--line); }
+.lad-cd-tag { display: block; font: 700 13.5px/1.2 var(--display); }
+.lad-cd-qual { margin: 4px 0 0; color: var(--muted); font-size: 12px; line-height: 1.32; }
+
+.lad-climb-parts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.lad-climb-parts .lad-cp { padding: 8px 15px; border-bottom: 1px solid rgba(215,214,209,.65); }
+.lad-climb-parts .lad-cp:nth-child(odd) { border-right: 1px solid rgba(215,214,209,.65); }
+.lad-climb-parts .lad-cp b { display: block; margin-bottom: 3px; font: 700 12.5px/1.2 var(--display); }
+.lad-climb-parts .lad-cp span { color: var(--muted); font-size: 11.5px; line-height: 1.32; }
+.lad-climb-parts .lad-cp span b { display: inline; margin: 0; font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--ink); }
+
+.lad-cd-facets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; padding: 10px 15px 0; }
+.lad-cd-facets div { border-left: 2px solid var(--line); padding-left: 9px; }
+.lad-cd-facets b { display: block; margin-bottom: 4px; color: var(--dim); font: 700 9.5px/1 var(--display); letter-spacing: .1em; text-transform: uppercase; }
+.lad-cd-facets span { color: var(--muted); font-size: 12px; line-height: 1.33; }
+
+.lad-cd-back { margin: 10px 15px 11px; padding-left: 10px; border-left: 2px solid var(--blue); }
+.lad-cd-back b { display: block; margin-bottom: 4px; color: var(--blue); font: 700 9.5px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; }
+.lad-cd-back span { color: var(--muted); font-size: 12px; line-height: 1.33; }
+
+.lad-climb-foot { margin-top: 11px; }
+
+/* Own narrow-viewport fallback: the shared responsive sheet knows the layouts
+   this slide used to have, not these. */
+@media (max-width: 1180px) {
+  .lad-climb { grid-template-columns: minmax(0, 1fr); }
+  .lad-climb-detail { min-height: 0; }
+  .lad-climb-parts, .lad-cd-facets { grid-template-columns: minmax(0, 1fr); }
+  .lad-climb-parts .lad-cp:nth-child(odd) { border-right: 0; }
+  .lad-rung.lad-r2, .lad-rung.lad-r3 { margin-left: 0; }
+}
