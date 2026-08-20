@@ -1,0 +1,76 @@
+    <!-- 17 · the two halves · layout: two demarcated stages either side of the graph, which is the hinge both halves share -->
+    <section class="slide" aria-label="A graph problem is two problems: construction and retrieval">
+      <div class="eyebrow"><span class="num">17</span> Two halves</div>
+      <div class="content">
+        <h2>Building the graph and retrieving from it are two different problems, and the edges have to exist first</h2>
+        <p class="lead bh-lead">The last slide drew the graph. Nothing so far has said where the edges came from. Those are two halves, and the deck does them in order.</p>
+        <div class="bh-flow">
+          <section class="bh-half build" aria-label="Half one: building the graph">
+            <header class="bh-head">
+              <span class="bh-tag">Half one · Build the graph</span>
+              <span class="bh-when">Runs once, at write time</span>
+            </header>
+            <div class="bh-track">
+              <div class="bh-step">
+                <b>Sources</b>
+                <div class="bh-chips">
+                  <span class="doc">doc A</span><span class="doc">doc B</span>
+                  <span class="doc">doc C</span><span class="doc">doc D</span>
+                  <i class="bh-cbreak" aria-hidden="true"></i>
+                  <span class="tbl">warehouse tables</span>
+                </div>
+                <p>The indexed corpus from two slides back, and the tables next to it.</p>
+              </div>
+              <i class="bh-arrow" aria-hidden="true"><em>extract</em><span>&rarr;</span></i>
+              <div class="bh-step">
+                <b>Construction</b>
+                <p>Entities and the edges between them, pulled out of each source and written down as node and edge rows.</p>
+              </div>
+            </div>
+            <p class="bh-decides"><b>What this half decides</b>What counts as a node, what counts as an edge, and which source each one came from.</p>
+            <p class="bh-where">Next slide &mdash; three ways to do it</p>
+          </section>
+
+          <i class="bh-arrow bh-join" aria-hidden="true"><em>writes</em><span>&rarr;</span></i>
+
+          <div class="bh-hinge" aria-label="The graph, shared by both halves">
+            <span class="bh-hinge-tag">The graph</span>
+            <svg class="bh-glyph" viewBox="0 0 120 96" aria-hidden="true">
+              <line x1="24" y1="26" x2="72" y2="16"/>
+              <line x1="72" y1="16" x2="100" y2="52"/>
+              <line x1="24" y1="26" x2="40" y2="72"/>
+              <line x1="40" y1="72" x2="100" y2="52"/>
+              <circle cx="24" cy="26" r="7"/>
+              <circle cx="72" cy="16" r="7"/>
+              <circle cx="100" cy="52" r="7"/>
+              <circle cx="40" cy="72" r="7"/>
+            </svg>
+            <span class="bh-hinge-note">Nodes and typed edges &mdash; what the last slide drew, and the only thing the two halves share.</span>
+          </div>
+
+          <i class="bh-arrow bh-join" aria-hidden="true"><em>reads</em><span>&rarr;</span></i>
+
+          <section class="bh-half read" aria-label="Half two: retrieving from the graph">
+            <header class="bh-head">
+              <span class="bh-tag">Half two &middot; Retrieve from it</span>
+              <span class="bh-when">Runs on every question</span>
+            </header>
+            <div class="bh-track">
+              <div class="bh-step">
+                <b>Retrieval</b>
+                <p>Resolve the question to a starting node, walk out from it, and hand back what the walk reached.</p>
+              </div>
+              <i class="bh-arrow" aria-hidden="true"><em>context</em><span>&rarr;</span></i>
+              <div class="bh-step">
+                <b>Answer</b>
+                <div class="bh-chips"><span class="agent">Agent</span></div>
+                <p>Structure the agent already holds, rather than two documents happening to rank together.</p>
+              </div>
+            </div>
+            <p class="bh-decides"><b>What this half decides</b>Where the walk starts, how much comes back, and what has to be standing up to serve it.</p>
+            <p class="bh-where">Everything after that &mdash; the options, then where to start</p>
+          </section>
+        </div>
+      </div>
+      <div class="footer"><span class="brand">Databricks × Graph SME</span><span class="counter">17 / 31</span></div>
+    </section>

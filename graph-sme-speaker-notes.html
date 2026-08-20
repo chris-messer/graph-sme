@@ -190,6 +190,21 @@
       });
 
       NOTES.push({
+        title: 'Client needs',
+        onscreen: 'An index, three bands — taxonomy, ontology, knowledge graph — with the needs under each as hairline rows. Every row is clickable and jumps straight to the slide that states that need.',
+        say: 'Every need we actually hear sorts into one of those three layers, and here they all are on one screen. One in taxonomy, two in ontology, four in the knowledge graph. This is a menu, not a summary — read it, tell me which of these is the reason we are in the room, and I will go straight there. Nothing is lost by skipping the rest; the layers are peers.',
+        bullets: [
+          ['How to use it', [
+            'Ask which one or two matter before presenting any of them — the rows are live, so you can open on their need instead of walking the deck in order',
+            'Come back here with the rail if the room changes direction, and jump again',
+          ]],
+          ['Key nuance', ['The shape of the list is itself the argument: most needs land in the knowledge-graph layer, and most of those are answered without a graph engine']],
+          ['Discovery', ['Which of these is written down as a project already, and which is somebody\'s hunch?']],
+        ],
+        transition: 'Transition: "Unless the room steers us somewhere, start with taxonomy — the simplest of the three to pin down."'
+      });
+
+      NOTES.push({
         title: 'Taxonomy overview',
         onscreen: 'Section opener — same oat canvas as the content slides, oversized headline under a full-bleed coral rule. The product hierarchy with each depth band named root, category, subcategory, leaf category, one edge drawn coral, and a closing band showing where taxonomy sits against the other two layers.',
         say: 'A taxonomy is a classification tree. Every node has exactly one parent, and you read it from the root down: category, subcategory, and then the lowest category, the one products actually hang under. This is the product hierarchy — all products, electronics, computers, laptops — and it is the same tree for the rest of this section. Now look at what that drawing actually is. Twelve nodes, eleven edges, one edge type, and the coral one is doing nothing special — it just says that computers is a child of electronics. So yes, a taxonomy is a graph. It is the simplest graph there is. And that matters mainly because of what it does not imply: nothing on this canvas needs a graph database or a traversal engine. A table holds this perfectly well, and every question anyone will ask of it can be answered in SQL. The decision this section is really about is how you encode the tree in that table, because that is what determines whether an agent writes correct SQL over it or quietly writes wrong SQL. There are several encodings, they are not equivalent, and we compare them on the next two slides.',
@@ -828,6 +843,42 @@
       });
 
       NOTES.push({
+        title: 'How Genie Ontology works',
+        onscreen: 'One question banner across the top, then the same eight Databricks assets down the left in the same eight positions in both states. The toggle swaps the middle band: without the ontology, numbered round trips out to one asset at a time off a dashed spine, a dead end, a budget cap and four assets dimmed; with it, every asset feeding a pre-built ontology store of ranked snippets, one retrieval arrow down from the question, a permission gate and citations. On the right, the same context window box in both states — nearly full on the crawl, barely touched on the ranked retrieval. Counters under the rail.',
+        say: 'Slide ten said an ontology is metadata. This is how the Databricks one actually works, and the whole slide is one axis: is the context built before the question, or crawled after it. Same question both ways — what was enterprise churn last quarter — and the same eight assets down the left. A certified metric view, a certified account table, a draft table, a dashboard, a query, a notebook, a Genie Agent, and a governed glossary page for the word enterprise. Nothing on that list lives outside Databricks, which matters and I will come back to it. Start on the left toggle, without the ontology. An agent has to discover its context at question time, so watch the numbers. One: it name-matches and lands on stg_account_v2, because nothing in the name tells it that is a draft. Two: it follows the relationship to the dashboard built on that table. Three: the query behind the tile. Four: a backtest notebook whose logic no longer applies, and that is a dead end. Every one of those is a round trip, and look at the box on the right — each step is still sitting in the window when the next step runs, so by hop four the window is nearly full. And then the important part, which is what is dimmed. It never reached the certified metric view, it never reached the certified account table, and it never reached the page that defines the word enterprise. The three most authoritative things in the estate, and the crawl ran out of budget before it got to any of them. If that shape looks familiar, it should — it is the same failure we walk through on the agent traversal card later in the deck. Now switch it on. Nothing about the assets changed. What changed is when the work happened. Genie extracts knowledge out of metric views, dashboards, queries, notebooks, pipelines and Genie Agents continuously, on its own schedule, before anybody asks anything — those are the faint lines, and they all fire at once rather than in sequence. What comes out are snippets: metric definitions, authoritative sources, business rules. Those get scored and indexed, and the scoring uses an approach similar to PageRank — it weighs where a definition came from, how much authority its author has, how often people actually rely on it, how tightly it ties to certified and widely-used assets, and how fresh it is. So at question time there is one retrieval against a store that already exists. One round trip, not four. It passes a permission filter on the way out, which is why two people can ask the same question and get two different correct answers — you only ever get back what you could already see in Unity Catalog. And notice what came back first: the glossary page. Where a page defines a concept, that definition beats anything Genie inferred, and the answer cites it. Same window on the right, same budget line, and almost all of it still free. The last thing on the slide is the actionable part. Model the head, let Genie infer the tail. You certify the authoritative table or view and deprecate the drafts, you assign domain membership, you write the glossary pages, and you define metric views so a measure is computed once instead of re-derived every question. Those four levers are exactly what the next slide turns into an order you can start on.',
+        bullets: [
+          ['Purpose', ['Make the mechanism concrete enough that the four curation levers on the next slide read as obvious rather than as faith, and land the axis: precomputed and ranked against discovered by crawling']],
+          ['How to demo live', [
+            'Read the banner once and then stop reading it. Same question, same eight assets — the only thing the toggle changes is when the knowledge was extracted',
+            'On the crawl state, count the badges out loud, one to four, and then go quiet and point at the four dimmed rows. The silence does more than the sentence does',
+            'Name the dimmed three specifically: the certified metric view, the certified table, and the page. It ran out of budget before the authoritative assets, not before the obscure ones',
+            'Switch states and immediately point at the context box rather than the store. The box is the same box with the same budget line, and the difference in fill is the whole argument',
+            'Say "all at once" when you trace the faint extraction lines, and "one" when you trace the retrieval arrow. Those two words are the slide',
+            'Land the permission gate with a live example from their own org — the same question from a finance analyst and from a regional manager, both answered correctly and differently',
+          ]],
+          ['Key nuance', [
+            'The ranked side is one retrieval against a pre-built store. It is not a graph walk, it does not expand a neighbourhood of connected assets, and it does not rank tables, columns or join paths — it ranks extracted knowledge snippets. If someone hears "graph" here, correct it, because the whole point of the section is that this rung is not a graph',
+            'Stay at the conceptual level on the ranking. "Weighs authority, usage and freshness, in an approach similar to PageRank" is the ceiling, and it is enough. Do not describe how the score is computed',
+            'The ranking has an internal name and internal mechanics. Neither belongs in a customer room, on this slide, or in an email afterwards — the published description is the only version to use',
+            'Sources are Databricks assets: metric views, dashboards, SQL queries, notebooks, pipelines and Genie Agents. Documents in SharePoint, Drive or Confluence do not feed the ontology. If they ask, say so plainly rather than hedging — getting this wrong sets up a scoping failure later',
+            'The 40% figure is the one that speaks to this picture, and the caveat is part of the number: it is table-discovery accuracy on internal benchmarks, which is retrieval quality, not end-to-end answer accuracy. Say the caveat in the same breath',
+            'The 84.5 against 52.4 comparison is Genie against a third-party general-purpose coding agent connected to the same data over MCP, across 28 enterprise data-analysis questions, with Genie roughly twice as fast. Both halves of that number are Genie against another vendor. If you have seen an internal deck attribute the lower score to Genie without the ontology, that reading is wrong — there is no published figure for what the ranking alone contributes, so do not let the comparison stand in for one',
+            'Product status if asked: Genie Ontology is in Public Preview and on by default since early August 2026. Metric Views are GA, Domains are Public Preview, Pages are Beta. The marker is on the slide so you do not have to remember it',
+            'The draft table is the most useful object on the slide in a room that has one. Every estate has a stg_account_v2, and the crawl landing on it first is the argument for certification in one picture',
+          ]],
+          ['Discovery', [
+            'Which table would your team say is the authoritative one for accounts, and is that the one a new analyst would find first by name?',
+            'How many drafts and staging copies sit next to your certified tables today, and are any of them marked as drafts anywhere a tool could read?',
+            'Which measure gets re-derived most often, and would you rather it resolved to one definition every time?',
+            'Which business terms would you write a governed page for first — the ones two teams currently answer differently?',
+            'Who would sign off on certifying an asset, and does that role exist today or would you be creating it?',
+            'If two people asked the same question and correctly got different answers because of what they can see, would that surprise anyone in your governance review?',
+          ]],
+        ],
+        transition: 'Transition: "None of that was a build. Which is why the ask we hear most is not for one."'
+      });
+
+      NOTES.push({
         title: 'Appendix · the two decisions inside a walk',
         onscreen: 'One line naming GraphRAG, then a single frontier canvas driven by two independent control groups — a seed resolver on the left and a walk depth on the right — with a live readout of how much comes back, and the failure mode of each named underneath.',
         say: 'First, the name, since we used it on the options slide without ever unpacking it. This is GraphRAG. That is all the word means — using a graph to serve retrieval — and there is no single product or architecture behind it. The options we walked through are several ways to build one, and what separates them is how they answer the two decisions on this slide. Now the picture. A user asks for everything connected to Delta Holdings. Three entities in the graph match that string, and whatever the walk reaches comes back in full. Those are two decisions, they are independent of each other, and the graph projects I have seen in trouble were treating them as one. Problem one, on the left: which node do we start from. Watch the picture as I move it. Deterministic SQL picks up both written forms of the company we meant — one entity, two surface strings. Switch to vector similarity and a third company arrives, and it is a genuinely different business whose name just sits close in embedding space. Everything hanging off it is now in the answer and none of it belongs there. That is problem one failing. Problem two, on the right, and I want to be precise about what it is, because it is usually described wrongly. The question is not how far we walk. The question is how much comes back and whether the agent can do anything with it. Depth is just the dial. Leave the seed alone and step it. One hop, two hops, and look at the readout in the corner — small, readable, the agent can hold all of it. Three hops and the amber node lights up. That is a shared registered-agent address, an office that thousands of companies use as their registered address. It is a legitimate node, legitimately connected. Take one more hop and everything attached to it comes back with it, and now read the meter: the agent is being handed most of the graph. Every single row of that is true. It is just far more than the question needed, and the model now has to rank it, hold it in context, and reason over it. That is where the answer degrades — not because retrieval was wrong, but because the volume made it unreadable. So read the two failures underneath, because they are not the same kind of problem at all. Get problem one wrong and the answer is silently wrong and nothing in the output looks broken. Get problem two wrong and the answer is completely correct and completely unusable.',
@@ -865,6 +916,7 @@
         ['Overview', 'Framing'],
         ['Overview', 'Framing'],
         ['Overview', 'Framing'],
+        ['Overview', 'Framing'],
         ['Taxonomy', 'What it is'],
         ['Taxonomy', 'The hierarchy need'],
         ['Taxonomy', 'The hierarchy need'],
@@ -888,6 +940,7 @@
         ['Next steps', 'Operating rules'],
         ['Next steps', 'Discussion'],
         ['Next steps', 'Discussion'],
+        ['Appendix', 'Genie mechanics'],
         ['Appendix', 'The two decisions'],
       ];
 

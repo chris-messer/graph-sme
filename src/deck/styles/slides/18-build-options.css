@@ -1,0 +1,262 @@
+/* ── 18 graph construction options: paradigm rail + per-paradigm illustration ──
+   Same geometry contract as slide 19, deliberately: a fixed-width rail on the
+   left and a stage on the right whose two tracks are declared heights rather
+   than content heights. Three illustrations of very different natural sizes
+   share this box, and one of them has a nested toggle inside it, so a stage
+   that sized itself would move the rail on every click.
+
+   Every class is prefixed bo- (chrome) or bv- (illustration vocabulary), so
+   nothing here can reach slide 19 and nothing there can reach this. */
+.bo-lead { margin-top: 6px; font-size: clamp(13.5px, 1.08vw, 16px); }
+
+.bo-split {
+  display: grid; grid-template-columns: minmax(0, 296px) minmax(0, 1fr);
+  gap: 18px; margin-top: 12px; align-items: start;
+}
+
+/* ── left rail: band labels, then the cards under each ── */
+.bo-rail { display: grid; align-content: start; gap: 7px; }
+.bo-rail .bb {
+  font: 700 9.5px/1 var(--display); letter-spacing: .12em; text-transform: uppercase;
+  color: var(--dim); padding-bottom: 6px; border-bottom: 1px solid var(--line);
+}
+.bo-rail .bb.have { border-bottom-color: rgba(0,169,114,.5); }
+.bo-rail .bb.text { border-bottom-color: rgba(255,54,33,.5); margin-top: 8px; }
+
+.bo-card {
+  appearance: none; cursor: pointer; text-align: left; width: 100%;
+  font-family: var(--body); color: var(--ink);
+  background: rgba(255,255,255,.75); border: 1px solid var(--line);
+  border-left: 3px solid var(--line); border-radius: 10px; padding: 9px 12px;
+  display: grid; align-content: start; gap: 3px;
+  transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+.bo-card:hover { transform: translateX(2px); border-color: rgba(255,54,33,.35); }
+.bo-card.active { background: rgba(255,54,33,.06); border-color: var(--signal); box-shadow: inset 0 0 0 1px rgba(255,54,33,.22); }
+.bo-card:focus-visible { outline: 3px solid rgba(34,114,180,.28); outline-offset: 2px; }
+.bo-card.b1 { border-left-color: var(--green); }
+.bo-card.b2, .bo-card.b3 { border-left-color: var(--signal); }
+.bo-card .bh { font: 700 13px/1.16 var(--display); letter-spacing: -.015em; }
+.bo-card .bh code { font-family: var(--mono); font-size: 12px; font-weight: 600; }
+.bo-card .bp { color: var(--muted); font-size: 11px; line-height: 1.28; }
+.bo-card.active .bp { color: var(--ink); }
+
+/* ── right stage: illustration over the detail rows ── */
+.bo-stage { display: grid; grid-template-rows: 392px 214px; gap: 10px; }
+.bo-viz {
+  border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.55);
+  padding: 11px 13px; overflow: hidden;
+}
+
+/* ── illustration vocabulary, shared by all three ──────────────────────────
+   Three declared rows: a header strip, the stage, and the caption. All three
+   paradigms fill exactly these, so the middle track is the same height on every
+   selection and on every domain toggle inside the first one. */
+.bv { display: grid; grid-template-rows: 40px 1fr 40px; gap: 10px; height: 100%; }
+.bv-row { display: grid; gap: 0; align-items: stretch; min-width: 0; }
+
+.bv-note {
+  border-left: 3px solid var(--blue); border-radius: 0 8px 8px 0;
+  background: rgba(34,114,180,.06); padding: 0 13px;
+  display: flex; align-items: center; gap: 11px; overflow: hidden;
+}
+.bv-note b {
+  flex: none; color: var(--blue); font: 700 9px/1 var(--display);
+  letter-spacing: .13em; text-transform: uppercase;
+}
+.bv-note span {
+  font: 600 12.5px/1.25 var(--display); color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.bv-toggle { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.bv-tlabel {
+  font: 700 10px/1 var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--dim);
+}
+
+.bv-cap {
+  margin: 0; padding-left: 11px; border-left: 2px solid var(--signal);
+  color: var(--muted); font-size: 11.5px; line-height: 1.34;
+  display: flex; flex-direction: column; justify-content: center; overflow: hidden;
+}
+.bv-cap b { color: var(--ink); font-weight: 600; }
+
+.bv-beat {
+  border: 1px solid var(--line); border-radius: 9px; background: var(--panel);
+  padding: 9px 11px 10px; display: flex; flex-direction: column; gap: 7px;
+  min-width: 0; overflow: hidden;
+}
+.bv-beat > b {
+  font: 700 9px/1.2 var(--display); letter-spacing: .12em; text-transform: uppercase; color: var(--dim);
+}
+.bv-beat.hot { border-color: rgba(255,54,33,.35); }
+.bv-beat.good { border-color: rgba(0,169,114,.4); }
+
+.bv-arrow {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px; color: var(--dim); min-width: 0;
+}
+.bv-arrow em {
+  font: 700 7.5px/1.15 var(--display); font-style: normal; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--dim); text-align: center;
+}
+.bv-arrow > span { font-size: 17px; line-height: 1.2; }
+
+/* sized so the widest line of the statement fits its column without clipping —
+   the block is `pre`, so anything too wide is lost silently rather than wrapped */
+.bv-code {
+  margin: 0; padding: 8px 9px; background: var(--oat-2); border-radius: 6px;
+  font-family: var(--mono); font-size: 9.5px; line-height: 1.55; color: var(--ink);
+  white-space: pre; overflow: hidden;
+}
+.bv-code .kw { color: var(--blue); font-weight: 600; }
+.bv-code .lit { color: var(--signal); }
+
+/* ── paradigm one · the graph that is already there ────────────────────────
+   The network takes the stage and the schema sits beside it at a fixed width,
+   so switching domains cannot move either one. */
+.bv-lane-tag {
+  font: 700 9px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; color: var(--dim);
+}
+.bv-stage2 {
+  display: grid; grid-template-columns: minmax(0, 1fr) 232px;
+  grid-template-rows: minmax(0, 1fr); gap: 14px; height: 100%; min-height: 0;
+}
+
+.bv-schema {
+  border-left: 1px solid var(--line); padding-left: 14px;
+  display: flex; flex-direction: column; gap: 8px; min-height: 0; overflow: hidden;
+}
+.bv-schema ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
+.bv-schema li {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+  border-bottom: 1px solid rgba(215,214,209,.55); padding-bottom: 5px; min-width: 0;
+}
+.bv-schema li:last-child { border-bottom: 0; }
+.bv-schema li b {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 600; color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.bv-schema li em {
+  flex: none; font-family: var(--mono); font-style: normal; font-size: 8.5px; color: var(--dim);
+}
+/* a table that became an edge type rather than a node type */
+.bv-schema li.became b { color: var(--dim); }
+.bv-schema li.became em { color: var(--signal); }
+.bv-schema p {
+  margin: auto 0 0; color: var(--dim); font-size: 10px; line-height: 1.35;
+}
+
+/* ── paradigm two · triples out of documents ── */
+.bv-quote {
+  margin: 0; padding: 8px 9px; background: var(--oat-2); border-radius: 6px;
+  color: var(--muted); font-size: 11.5px; line-height: 1.4;
+}
+.bv-quote b { color: var(--ink); font-weight: 600; }
+.bv-docs {
+  margin-top: auto; font-family: var(--mono); font-size: 9.5px; color: var(--dim);
+}
+
+.bv-tblx { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 8.5px; }
+.bv-tblx th {
+  text-align: left; color: var(--dim); font-weight: 600;
+  padding: 0 3px 5px 0; border-bottom: 1px solid var(--line); white-space: nowrap;
+}
+.bv-tblx td {
+  padding: 5px 3px 5px 0; color: var(--ink);
+  border-bottom: 1px solid rgba(215,214,209,.55); white-space: nowrap;
+}
+.bv-tblx tr:last-child td { border-bottom: 0; }
+.bv-tblx td.p { color: var(--blue); }
+.bv-tblx tr.asm td { background: rgba(255,54,33,.07); }
+
+.bv-flag {
+  margin: auto 0 0; border-left: 2px solid var(--amber); padding-left: 8px; color: var(--amber);
+  font: 700 8.5px/1.3 var(--display); letter-spacing: .07em; text-transform: uppercase;
+}
+
+/* Graph hosts take their size from the layout and never give size back to it:
+   a percentage-height SVG inside an auto-height box is a sizing cycle, so the
+   drawing is positioned out of flow and the box is measured on its own. */
+.bv-gfx { flex: 1; }
+.bv-net, .bv-gfx { position: relative; min-width: 0; min-height: 0; }
+.bv-net > svg, .bv-gfx > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* ── paradigm three · a fine-tuned tagger ── */
+.bv-tok { display: flex; flex-wrap: wrap; gap: 4px; }
+.bv-t {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--oat-2);
+  padding: 4px 7px 5px; font-size: 11px; line-height: 1.1; color: var(--dim);
+}
+.bv-t em {
+  font-family: var(--mono); font-style: normal; font-size: 7.5px; color: var(--dim);
+}
+.bv-t.on { color: var(--ink); background: var(--panel); }
+.bv-t.drug { border-color: rgba(176,96,0,.5); }
+.bv-t.drug em { color: var(--amber); }
+.bv-t.sym { border-color: rgba(34,114,180,.45); }
+.bv-t.sym em { color: var(--blue); }
+.bv-bio {
+  margin: auto 0 0; color: var(--dim); font-size: 10px; line-height: 1.3;
+}
+
+.bv-ent { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.bv-ent li {
+  display: flex; align-items: center; gap: 7px; min-width: 0;
+  font-size: 11.5px; color: var(--ink);
+}
+.bv-e {
+  flex: none; font: 700 8.5px/1 var(--display); letter-spacing: .1em; text-transform: uppercase;
+  border-radius: 5px; padding: 5px 7px;
+}
+.bv-e.drug { color: var(--amber); background: rgba(176,96,0,.1); border: 1px solid rgba(176,96,0,.4); }
+.bv-e.sym { color: var(--blue); background: rgba(34,114,180,.09); border: 1px solid rgba(34,114,180,.35); }
+.bv-set {
+  margin: auto 0 0; font-family: var(--mono); font-size: 9px; color: var(--dim); line-height: 1.3;
+}
+
+.bv-bars { display: grid; gap: 7px; }
+.bv-bar { display: grid; grid-template-columns: 56px minmax(0, 1fr) 34px; gap: 7px; align-items: center; }
+.bv-bar b { font: 600 10px/1 var(--display); color: var(--muted); }
+.bv-bar i { display: block; height: 8px; border-radius: 999px; background: var(--oat-2); overflow: hidden; }
+.bv-bar i s { display: block; height: 100%; background: var(--green); text-decoration: none; }
+.bv-bar em {
+  font-family: var(--mono); font-style: normal; font-size: 9.5px; color: var(--muted); text-align: right;
+}
+.bv-bar.low i s { background: var(--danger); }
+.bv-bar.low b, .bv-bar.low em { color: var(--danger); }
+
+/* ── detail rows under the illustration ── */
+.bo-panel {
+  border: 1px solid var(--line); border-radius: 12px;
+  background: rgba(255,255,255,.8); padding: 10px 14px 11px; overflow: hidden;
+}
+.bo-rows { display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px 24px; }
+.bo-row { border-left: 2px solid var(--line); padding-left: 10px; }
+.bo-row.fail { border-left-color: var(--danger); }
+.bo-row.trade { border-left-color: var(--signal); }
+.bo-row b {
+  display: block; font: 700 9px/1 var(--display); letter-spacing: .11em;
+  text-transform: uppercase; color: var(--dim); margin-bottom: 3px;
+}
+.bo-row.fail b { color: var(--danger); }
+.bo-row.trade b { color: var(--signal); }
+.bo-row span { color: var(--muted); font-size: 11.5px; line-height: 1.33; }
+
+.bo-aside {
+  margin: 8px 0 0; padding-left: 10px; border-left: 2px solid var(--line);
+  color: var(--dim); font-size: 11.5px; line-height: 1.33;
+}
+
+@media (max-width: 1000px) {
+  .bo-split { grid-template-columns: 1fr; }
+  .bo-stage { grid-template-rows: auto auto; }
+  .bo-viz { overflow: auto; }
+  .bv { grid-template-rows: auto auto auto; }
+  .bv-row { grid-template-columns: 1fr !important; gap: 8px; }
+  .bv-arrow { flex-direction: row; gap: 6px; }
+  .bv-stage2 { grid-template-columns: 1fr; }
+  .bv-gfx, .bv-net { min-height: 150px; }
+  .bo-rows { grid-template-columns: 1fr; }
+}

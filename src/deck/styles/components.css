@@ -167,3 +167,11 @@
   padding: 8px 12px; border-radius: 999px; cursor: pointer;
 }
 .notes-link:hover { border-color: var(--signal); color: var(--signal); }
+.notes-link:focus-visible { outline: 3px solid rgba(34,114,180,.28); outline-offset: 2px; }
+/* The jump back to the client-needs index is utility chrome, not a second
+   primary action, so it takes the neutral-hairline-to-coral-on-hover treatment
+   the in-slide .mode-btn and .hop-btn controls use and leaves the one coral
+   pill as the loudest thing down here. core.js hides it on the slides where
+   jumping back to the index would mean nothing. */
+.nav-back { border-color: var(--line); color: var(--muted); }
+.nav-hint button[hidden] { display: none; }

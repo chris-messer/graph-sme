@@ -46,6 +46,23 @@ BANNER = (
 
 NAME_RE = re.compile(r"^(\d{2})-([a-z0-9][a-z0-9-]*)$")
 
+# ── work-in-progress marking ───────────────────────────────────────────────
+# Slides listed here are unfinished, and the build stamps a full-bleed WORK IN
+# PROGRESS watermark over them: it adds `is-wip` to the <section> and appends
+# the overlay element that the .slide.is-wip rule in src/deck/styles/base.css
+# draws. That rule is the only place the look is defined.
+#
+# To mark a slide, add its stem — the slug without its NN- prefix, so the entry
+# survives a renumber the way src/outline.py's do. To clear the marking, delete
+# the stem. Either way nothing in the slide's own html, css or js changes, so a
+# slide can be marked and unmarked without touching its own files.
+WIP_STEMS = {"genie-ontology"}
+
+WIP_MARK = (
+    '<div class="wip-mark" role="note" '
+    'aria-label="Work in progress: this slide is unfinished"></div>'
+)
+
 errors: list[str] = []
 notices: list[str] = []
 
@@ -149,6 +166,15 @@ if len(set(deck_stems)) != len(deck_stems):
     duped = sorted({s for s in deck_stems if deck_stems.count(s) > 1})
     fail("two slides share a stem, so the outline cannot address them: " + ", ".join(duped))
 
+# A stem that no longer names a slide would silently mark nothing, so it fails
+# the build for the same reason a stale outline entry does.
+for stem in sorted(WIP_STEMS):
+    if stem not in deck_stems:
+        fail(
+            f"build.py lists '{stem}' in WIP_STEMS but no slide "
+            f"src/deck/slides/NN-{stem}.html exists — remove it or add the slide"
+        )
+
 outline_stems: list[str] = []
 outline_where: dict[str, tuple[str, str]] = {}
 for section_name, subsections in OUTLINE:
@@ -206,9 +232,26 @@ SECTION_RE = re.compile(r'(<section\s+class="[^"]*")((?:\s+data-slide-id="[^"]*"
 COUNTER_RE = re.compile(r'(<span class="counter">)([^<]*)(</span>)')
 EYEBROW_NUM_RE = re.compile(r'(<span class="num">)([^<]*)(</span>)')
 LEAD_COMMENT_RE = re.compile(r"^(\s*<!--\s*)(\d+)(\s*·)")
+SECTION_CLASS_RE = re.compile(r'(<section\s+class=")([^"]*)(")')
+
+
+def mark_wip(body: str, where: str) -> str:
+    """Add the `is-wip` class and append the watermark overlay element."""
+    body, count = SECTION_CLASS_RE.subn(r"\1\2 is-wip\3", body, count=1)
+    if count != 1:
+        sys.exit(f"build: {where} has no <section class=\"…\"> to mark work in progress")
+    lines = body.split("\n")
+    for i in range(len(lines) - 1, -1, -1):
+        if lines[i].strip() == "</section>":
+            pad = " " * (len(lines[i]) - len(lines[i].lstrip()) + 2)
+            lines.insert(i, pad + WIP_MARK)
+            return "\n".join(lines)
+    sys.exit(f"build: {where} has no closing </section> to append the marking to")
+
 
 rewrites: list[str] = []
 slide_markup: list[str] = []
+marked: list[str] = []
 
 for position, (_, slug, path) in enumerate(slides, start=1):
     body = read(path)
@@ -217,6 +260,10 @@ for position, (_, slug, path) in enumerate(slides, start=1):
     body, count = SECTION_RE.subn(rf'\1 data-slide-id="{slug}"', body, count=1)
     if count != 1:
         sys.exit(f"build: {path.relative_to(ROOT)} has no <section class=\"slide …\"> element")
+
+    if stem_of[slug] in WIP_STEMS:
+        body = mark_wip(body, str(path.relative_to(ROOT)))
+        marked.append(slug)
 
     def stamp(regex: re.Pattern[str], value: str, label: str, text: str) -> str:
         def repl(match: re.Match[str]) -> str:
@@ -376,6 +423,8 @@ for path, text in outputs.items():
 print(f"built {total} slides · {len(notes)} notes entries · {len(slide_js)} slide modules")
 for line in notices:
     print(f"  note: {line}")
+for slug in marked:
+    print(f"  marked {slug} work in progress")
 for line in rewrites:
     print(f"  renumbered {line}")
 for path in outputs:

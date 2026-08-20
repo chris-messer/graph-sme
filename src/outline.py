@@ -24,11 +24,15 @@ OUTLINE = [
         ]),
         # The climb used to sit here and now closes the deck, so this run is
         # purely the setup: why the request usually is not a graph estate, the
-        # vocabulary, and the three layers the middle of the deck walks through.
+        # vocabulary, the three layers the middle of the deck walks through, and
+        # then every client need sorted into those three layers — an index the
+        # presenter can jump from, so it closes the framing rather than opening
+        # the taxonomy section.
         ("Framing", [
             "framing",
             "graph-101",
             "semantic-layers",
+            "client-needs",
         ]),
     ]),
 
@@ -44,6 +48,9 @@ OUTLINE = [
     ]),
 
     ("Ontology", [
+        # Just the concept now. The mechanism slide that used to sit under here
+        # is unfinished and has moved to the appendix, so this run is the one
+        # explainer and then straight into the two client needs.
         ("What it is", [
             "ontology-overview",
         ]),
@@ -113,6 +120,16 @@ OUTLINE = [
     # appendix is just a sixth one — it draws itself, and rail.css gives the
     # last section a compact treatment so the six labels still fit the band.
     ("Appendix", [
+        # The appendix runs in the order the body does, so a pulled-out slide
+        # sits here in the same relative place it sat there. Genie mechanics
+        # came out of Ontology / "What it is", which precedes the retrieval
+        # run, so it leads and problem-space keeps the last slot.
+        #
+        # Unfinished, and marked as such: its stem is listed in build.py's
+        # WIP_STEMS, which stamps the watermark over it.
+        ("Genie mechanics", [
+            "genie-ontology",
+        ]),
         # Pulled out of the retrieval run: it is the long form of the two
         # decisions inside a walk, kept for the rooms that want to go there.
         ("The two decisions", [

@@ -1,0 +1,76 @@
+/* ── 06 · Client-needs index ─────────────────────────
+   The agenda's band grammar, with the three semantic layers as the bands: a
+   label column on the left and the needs themselves on the right. This is an
+   index and nothing else, so a row is a need phrase and a target — no
+   descriptions, no second line. Each band takes its layer's colour on the left
+   rule, the same green / blue / coral the agenda cards and the layer compare
+   use, so the grouping reads before any single row does. */
+.need-index { display: grid; gap: 26px; max-width: 1400px; margin-top: 34px; }
+
+.need-band {
+  position: relative; padding-left: 20px;
+  display: grid; grid-template-columns: 158px minmax(0, 1fr); gap: 26px; align-items: start;
+}
+.need-band::before {
+  content: ""; position: absolute; left: 0; top: 1px; bottom: 1px;
+  width: 3px; border-radius: 2px; background: var(--line);
+}
+.need-band.tax::before { background: var(--green); }
+.need-band.onto::before { background: var(--blue); }
+.need-band.kg::before { background: var(--signal); }
+.need-band .kicker { margin-bottom: 0; padding-top: 20px; }
+
+/* One column, full measure. Two columns fitted the seven rows in half the
+   canvas and left the type too small to carry a slide this sparse; down one
+   column the rows can take the size they deserve, and the reading order of the
+   list stops being ambiguous. */
+.need-list { list-style: none; margin: 0; padding: 0; display: grid; }
+
+/* ── the rows ──────────────────────────────────────
+   Full-width buttons under a hairline, so a row is legible as a target before
+   it is read. The arrow sits quiet at rest and comes forward on hover or focus,
+   which is what carries "this goes somewhere" without a line of instruction. */
+.need-jump {
+  /* height fills the grid cell, so the hover band of a row that wraps and one
+     that does not are still the same height as each other */
+  appearance: none; width: 100%; height: 100%; background: none; cursor: pointer;
+  border: 0; border-top: 1px solid var(--line); border-radius: 3px;
+  display: flex; align-items: baseline; gap: 14px;
+  padding: 20px 14px 20px 0; text-align: left; color: var(--ink);
+  font: 700 27px/1.12 var(--display); letter-spacing: -.02em;
+  transition: color .2s ease, background .2s ease;
+}
+.need-jump::after {
+  content: "\2192"; margin-left: auto; flex: none;
+  color: var(--dim); font-size: 21px; opacity: .5;
+  transition: transform .2s ease, opacity .2s ease, color .2s ease;
+}
+.need-jump:hover { color: var(--signal); background: rgba(255,54,33,.05); }
+.need-jump:focus-visible {
+  color: var(--signal); outline: 3px solid rgba(34,114,180,.28); outline-offset: 2px;
+}
+.need-jump:hover::after,
+.need-jump:focus-visible::after {
+  color: var(--signal); opacity: 1; transform: translateX(3px);
+}
+/* Only reachable if a target stem stops resolving, which the build should have
+   caught — fail visibly inert rather than as a dead click in front of a room. */
+.need-jump[disabled] { color: var(--dim); cursor: default; }
+.need-jump[disabled]::after { content: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .need-jump, .need-jump::after { transition: none; }
+}
+
+@media (max-width: 1240px) {
+  .need-index { gap: 18px; margin-top: 22px; }
+  .need-jump { font-size: 20px; padding: 13px 10px 13px 0; }
+  .need-jump::after { font-size: 17px; }
+  .need-band .kicker { padding-top: 15px; }
+}
+@media (max-width: 1000px) {
+  .need-index { gap: 14px; margin-top: 18px; }
+  .need-band { grid-template-columns: 1fr; gap: 8px; padding-left: 12px; }
+  .need-band .kicker { padding-top: 0; }
+  .need-jump { font-size: 17px; padding: 11px 8px 11px 0; }
+}

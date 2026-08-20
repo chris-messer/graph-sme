@@ -1,8 +1,8 @@
 /* Narrow-viewport fallback, emitted last so it wins on ties.
 
    Only layouts whose own per-slide stylesheet has no @media block belong here.
-   Slides 07, 08, 10, 12, 14, 15, 16, 17, 18, 20, 21 and 22 collapse their own
-   grids. */
+   Slides 07, 08, 10, 11, 13, 15, 16, 17, 18, 19, 21, 22 and 23 collapse their
+   own grids. */
 @media (max-width: 1000px) {
   .slide { padding: 22px 22px 20px; }
   .agenda, .metric-showcase, .triple-compare, .ladder, .rd-facets, .dual-view,

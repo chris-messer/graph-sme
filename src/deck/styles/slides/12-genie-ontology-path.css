@@ -1,0 +1,124 @@
+/* ── 12 cumulative grounding timeline + the metadata boundary ── */
+.gp-head { display: flex; align-items: baseline; gap: 16px; margin-top: 20px; }
+.gp-label {
+  flex: none;
+  font: 700 10px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; color: var(--dim);
+}
+.gp-note { margin: 0; max-width: 1000px; color: var(--dim); font-size: 12px; line-height: 1.3; }
+
+/* Time runs left to right along the x axis; height is how much semantic
+   grounding Genie has to reason with. Each column's riser is a stack of unit
+   layers — one per step taken so far — so step four literally stands on the
+   three below it. Card tops therefore climb by exactly one layer per step. */
+.grounding-path {
+  margin-top: 10px; max-width: 1360px;
+  display: grid; grid-template-columns: 42px 1fr; grid-template-rows: auto auto;
+}
+.gp-y {
+  position: relative;
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between;
+  padding: 1px 15px 3px 0;
+}
+.gp-y::before {
+  content: ""; position: absolute; right: 0; top: 7px; bottom: 0; width: 1px;
+  background: linear-gradient(to top, var(--line), rgba(255,54,33,.75));
+}
+.gp-y::after {
+  content: ""; position: absolute; right: -3px; top: 0;
+  border-left: 3.5px solid transparent; border-right: 3.5px solid transparent;
+  border-bottom: 7px solid rgba(255,54,33,.75);
+}
+.gp-y span { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; }
+.gp-y-name { font: 800 13.5px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.gp-y-cap { font: 700 9.5px/1 var(--display); letter-spacing: .16em; text-transform: uppercase; color: var(--dim); }
+
+.gp-steps {
+  list-style: none; margin: 0; padding: 0; height: 330px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 16px;
+}
+.gp-step { position: relative; display: flex; flex-direction: column; justify-content: flex-end; }
+/* the joints read as additions, not as arrows to somewhere else */
+.gp-step + .gp-step::before {
+  content: "+"; position: absolute; left: -16px; bottom: 5px; width: 16px; text-align: center;
+  color: rgba(255,54,33,.75); font: 700 23px/1 var(--display);
+}
+.gp-card {
+  background: rgba(255,255,255,.72); border: 1px solid var(--line); border-bottom: 0;
+  border-top: 3px solid var(--signal); border-radius: 10px 10px 0 0;
+  padding: 12px 14px 13px;
+}
+.gp-n { display: block; font: 800 12px/1 var(--display); letter-spacing: .12em; color: var(--signal); font-variant-numeric: tabular-nums; }
+.gp-card b {
+  display: block; margin-top: 7px; min-height: 39px;
+  font: 700 16px/1.22 var(--display); letter-spacing: -.015em; color: var(--ink);
+}
+.gp-do { display: block; margin-top: 5px; min-height: 34px; color: var(--dim); font-size: 12.5px; line-height: 1.34; }
+.gp-buys {
+  display: block; margin-top: 9px; min-height: 49px; padding-left: 10px;
+  border-left: 2px solid rgba(255,54,33,.55); color: var(--muted); font-size: 13px; line-height: 1.36;
+}
+.gp-buys i {
+  display: block; margin-bottom: 4px; font: 700 9.5px/1 var(--display); font-style: normal;
+  letter-spacing: .13em; text-transform: uppercase; color: var(--signal);
+}
+/* one unit layer per step already taken: strongest band on top is the new one,
+   the fainter bands beneath it are what the step inherits */
+.gp-riser {
+  border: 1px solid var(--line); border-top: 0; background-color: rgba(255,255,255,.5);
+  background-image:
+    linear-gradient(to bottom, rgba(255,54,33,.32) 0 34px, transparent 34px),
+    repeating-linear-gradient(to bottom, rgba(255,255,255,.92) 0 2px, rgba(255,54,33,.14) 2px 34px);
+}
+.gp-riser.l1 { height: 34px; }
+.gp-riser.l2 { height: 68px; }
+.gp-riser.l3 { height: 102px; }
+.gp-riser.l4 { height: 136px; }
+
+.gp-x {
+  position: relative; grid-column: 1 / -1; padding-left: 42px; padding-top: 7px;
+  border-top: 1px solid rgba(27,49,57,.28);
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 16px;
+}
+.gp-x::after {
+  content: ""; position: absolute; right: -1px; top: -4.5px;
+  border-top: 4px solid transparent; border-bottom: 4px solid transparent;
+  border-left: 7px solid rgba(27,49,57,.28);
+}
+.gp-x span {
+  position: relative; text-align: center;
+  font: 700 11px/1 var(--display); letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+}
+.gp-x span::before {
+  content: ""; position: absolute; left: 50%; top: -8px; width: 1px; height: 5px; background: var(--line);
+}
+
+/* The metadata / row-level boundary — the answer to "does this see my data?" */
+.boundary-strip {
+  margin-top: 16px; padding-top: 11px; max-width: 1360px;
+  border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 24px;
+}
+.boundary-strip .bs-label {
+  grid-column: 1 / -1; margin-bottom: 9px;
+  font: 700 10px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; color: var(--dim);
+}
+.bs-cell { padding-left: 12px; border-left: 2px solid var(--line); }
+.bs-cell b { display: block; font: 700 11px/1 var(--display); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 5px; }
+.bs-cell span { display: block; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
+.bs-cell.reads { border-left-color: rgba(34,114,180,.5); }
+.bs-cell.reads b { color: var(--blue); }
+.bs-cell.stops { border-left-color: rgba(152,16,42,.45); }
+.bs-cell.stops b { color: var(--danger); }
+.bs-cell.next { border-left-color: rgba(255,54,33,.5); }
+.bs-cell.next b { color: var(--signal); }
+
+@media (max-width: 1000px) {
+  .gp-head { flex-direction: column; gap: 4px; }
+  .grounding-path { grid-template-columns: 1fr; }
+  .gp-y, .gp-x, .gp-riser { display: none; }
+  .gp-steps { height: auto; grid-template-columns: 1fr; gap: 10px; }
+  .gp-step + .gp-step::before { display: none; }
+  .gp-card { border-bottom: 1px solid var(--line); border-radius: 10px; }
+  .gp-card b, .gp-do, .gp-buys { min-height: 0; }
+  .boundary-strip { grid-template-columns: 1fr; }
+}

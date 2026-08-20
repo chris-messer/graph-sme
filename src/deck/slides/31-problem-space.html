@@ -1,0 +1,47 @@
+    <!-- 31 · the problem space · layout: one frontier canvas driven by two independent control groups, with a live readout of how much comes back -->
+    <section class="slide" aria-label="The problem space: seed selection versus how much the walk returns">
+      <div class="eyebrow"><span class="num">31</span> Problem space</div>
+      <div class="content">
+        <h2>Two independent decisions sit inside every graph retrieval, and they fail in different ways</h2>
+        <p class="ps-named"><b>This is GraphRAG.</b> The name means nothing more than using a graph to serve retrieval, and the options we walked through are several ways to build one &mdash; they differ mainly in how they answer the two decisions below.</p>
+        <p class="lead ps-lead">One picture, two controls. A user asks for <b>&ldquo;everything connected to Delta Holdings&rdquo;</b> &mdash; three entities match that string, and whatever the walk reaches comes back in full. Move either control and the frontier changes for a completely different reason.</p>
+        <div class="ps-controls">
+          <div class="ps-ctrl" role="group" aria-label="Problem one: which node to start from">
+            <span class="ps-num">Problem 1</span>
+            <span class="ps-name">Which node do we start from?</span>
+            <div class="ps-btns">
+              <button type="button" class="ps-btn active" data-seed="sql" aria-pressed="true">Deterministic SQL</button>
+              <button type="button" class="ps-btn" data-seed="vector" aria-pressed="false">Vector similarity</button>
+              <button type="button" class="ps-btn" data-seed="llm" aria-pressed="false">LLM-assisted</button>
+              <button type="button" class="ps-btn" data-seed="human" aria-pressed="false">User in the loop</button>
+            </div>
+          </div>
+          <div class="ps-ctrl" role="group" aria-label="Problem two: how much comes back">
+            <span class="ps-num">Problem 2</span>
+            <span class="ps-name">How much comes back, and can the agent read it?</span>
+            <div class="ps-btns">
+              <span class="ps-dial">Walk depth &mdash; one input to the volume</span>
+              <button type="button" class="ps-btn active" data-seedhops="1" aria-pressed="true">1 hop</button>
+              <button type="button" class="ps-btn" data-seedhops="2" aria-pressed="false">2</button>
+              <button type="button" class="ps-btn" data-seedhops="3" aria-pressed="false">3</button>
+              <button type="button" class="ps-btn" data-seedhops="4" aria-pressed="false">4</button>
+            </div>
+          </div>
+        </div>
+        <div class="viz-shell seed-canvas" id="viz-seed">
+          <div class="viz-callout" id="seed-callout"></div>
+        </div>
+        <div class="ps-load" id="seed-load" aria-live="polite"></div>
+        <div class="ps-fails">
+          <div class="ps-fail one">
+            <b>Get problem 1 wrong and the answer is silently wrong</b>
+            <span>Resolve to the wrong company and every hop after it is confidently, quietly wrong. No amount of tuning the traversal recovers from it, and nothing in the output looks broken.</span>
+          </div>
+          <div class="ps-fail two">
+            <b>Get problem 2 wrong and the answer is correct and unusable</b>
+            <span>Walk far enough to catch the shared registered-agent address and everything attached to it returns with it. Every row is a true fact about something. There are simply more of them than the agent can hold, so the context fills with neighborhood it cannot rank and the answer degrades even though the retrieval was right.</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span class="brand">Databricks × Graph SME</span><span class="counter">31 / 31</span></div>
+    </section>

@@ -30,7 +30,7 @@ function arrowDef(svg, id, color) {
     .append('path').attr('d', 'M0,-4L8,0L0,4').attr('fill', color);
 }
 
-/* ── graph traversal helpers (slides 04, 15) ── */
+/* ── graph traversal helpers (slides 04, 16) ── */
 function endId(v) { return typeof v === 'object' ? v.id : v; }
 
 function neighborhood(seed, hops, links) {

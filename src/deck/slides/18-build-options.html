@@ -1,0 +1,31 @@
+    <!-- 18 · graph construction options · layout: vertical paradigm rail on the left, per-paradigm illustration over its detail rows on the right -->
+    <section class="slide" aria-label="Options: ways to build the graph">
+      <div class="eyebrow"><span class="num">18</span> Options</div>
+      <div class="content">
+        <h2>Three ways to get the entities and edges, and the first one extracts nothing</h2>
+        <p class="lead bo-lead">Same destination each time. What separates them is where the relationships already live.</p>
+        <div class="bo-split">
+          <div class="bo-rail" role="group" aria-label="Graph construction options">
+            <span class="bb have">Already in the schema &middot; nothing to extract</span>
+            <button type="button" class="bo-card b1 active" data-para="structured" aria-pressed="true">
+              <span class="bh">Relationships you already have</span>
+              <span class="bp">Join keys between warehouse tables are edges. No extraction step at all.</span>
+            </button>
+            <span class="bb text">Pulled out of text</span>
+            <button type="button" class="bo-card b2" data-para="extract" aria-pressed="false">
+              <span class="bh">Extraction with <code>ai_extract</code></span>
+              <span class="bp">Subject, predicate and object out of each document, in one SQL pass.</span>
+            </button>
+            <button type="button" class="bo-card b3" data-para="finetuned" aria-pressed="false">
+              <span class="bh">A fine-tuned extraction model</span>
+              <span class="bp">Domain entities a general extractor keeps missing.</span>
+            </button>
+          </div>
+          <div class="bo-stage">
+            <div class="bo-viz" id="bo-viz"></div>
+            <div class="bo-panel" id="bo-panel" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span class="brand">Databricks × Graph SME</span><span class="counter">18 / 31</span></div>
+    </section>

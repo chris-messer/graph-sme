@@ -1,0 +1,9 @@
+/* ── 27 decision grid ──────────────────────────── */
+.decision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 32px; margin-top: 14px; max-width: 1240px; }
+.decision-row { display: grid; grid-template-columns: 26px 1fr; gap: 12px; align-items: start; padding: 11px 0; border-bottom: 1px solid var(--line); }
+.or-check {
+  width: 21px; height: 21px; border-radius: 50%; border: 2px solid var(--green);
+  display: grid; place-items: center; color: var(--green); font-size: 11px; font-weight: 700; margin-top: 2px;
+}
+.decision-row b { display: block; font: 700 15px/1.2 var(--display); margin-bottom: 3px; }
+.decision-row span { color: var(--muted); font-size: 13.5px; line-height: 1.35; }

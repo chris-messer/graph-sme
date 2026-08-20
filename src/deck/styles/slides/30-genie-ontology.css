@@ -1,0 +1,49 @@
+/* ── 30 how Genie Ontology works: one full-width stage, two retrieval states ──
+   The drawing is the argument here, so the slide gives it the whole width and
+   everything else is one line: lead, toggle, counters, footnote. The stage is a
+   fixed-height box and the counter strip is a fixed three-column grid, so
+   switching states can only change what is drawn, never where anything sits.
+   Every selector is go- prefixed, so nothing here can reach another slide. */
+.go-lead { margin-top: 6px; font-size: clamp(14px, 1.15vw, 17px); }
+.go-lead b { color: var(--ink); font-weight: 600; }
+
+.go-bar { margin-top: 10px; }
+.go-status {
+  margin-left: auto; color: var(--dim);
+  font: 700 9.5px/1.4 var(--display); letter-spacing: .07em; text-transform: uppercase;
+}
+
+/* Definite height rather than aspect or content: both states draw into the same
+   box, and the box is what stops either of them from moving the counters. The
+   cap is a few px under what would fit so the counter strip and the footnote
+   below it clear the footer at 16:9 instead of running 6px past it. */
+.go-canvas { margin-top: 12px; height: min(54vh, 490px); }
+
+.go-counts {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 240px));
+  gap: 26px; margin-top: 10px;
+}
+.go-count { border-top: 2px solid var(--line); padding-top: 6px; }
+.go-count b {
+  display: block; font-family: var(--mono); font-size: 20px; font-weight: 600;
+  line-height: 1.1; color: var(--ink); font-variant-numeric: tabular-nums;
+}
+.go-count span {
+  display: block; margin-top: 3px; color: var(--dim);
+  font: 700 8.5px/1.25 var(--display); letter-spacing: .1em; text-transform: uppercase;
+}
+.go-count.hot { border-top-color: var(--danger); }
+.go-count.hot b { color: var(--danger); }
+.go-count.good { border-top-color: var(--green); }
+.go-count.good b { color: var(--green); }
+
+.go-note {
+  margin: 10px 0 0; max-width: 1080px;
+  color: var(--dim); font-size: 11.5px; line-height: 1.4;
+}
+
+@media (max-width: 1000px) {
+  .go-canvas { height: min(44vh, 340px); }
+  .go-counts { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .go-status { margin-left: 0; }
+}

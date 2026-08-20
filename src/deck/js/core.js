@@ -128,6 +128,7 @@ function show(next, opts = {}) {
   });
   progress.style.width = `${((index + 1) / slides.length) * 100}%`;
   paintRail(slides[index]);
+  paintBackToIndex(slides[index]);
   history.replaceState(null, '', `#${index + 1}`);
   if (!opts.silent && !applyingRemote) broadcastSlide(index);
   enterSlide(slides[index]);
@@ -158,6 +159,39 @@ document.querySelector('#open-notes')?.addEventListener('click', () => {
   win?.focus();
   broadcastSlide(index);
 });
+
+/* ── back to the client-needs index ──────────────────────── */
+/* One control in the footer chrome rather than an affordance per slide, so the
+   whole deck gets the same back door and no slide has to know it exists.
+
+   chrome.html names the target by stem, and it is resolved here rather than
+   written down as a number: a slug is `NN-stem` and the NN moves on every
+   renumber, so a number in this file would rot the way the rail's would. The
+   jump itself goes through show(), which is the one thing in the deck that
+   moves a slide — the rail's click handler below is the same call. */
+const backToIndex = document.querySelector('#back-to-index');
+const stemOf = slide => (slideId(slide) || '').replace(/^\d+-/, '');
+const indexAt = backToIndex
+  ? slides.findIndex(slide => stemOf(slide) === backToIndex.dataset.stem)
+  : -1;
+
+if (backToIndex && indexAt < 0) {
+  /* Same reasoning as the index slide's own resolver: a target that stopped
+     existing should be gone from the chrome, not discovered live in a room. */
+  console.error(`DECK: no slide answers to the stem "${backToIndex.dataset.stem}"`);
+  backToIndex.remove();
+} else if (backToIndex) {
+  backToIndex.addEventListener('click', () => show(indexAt));
+}
+
+/* Shown only where it means something. Past the index, because before it there
+   is nothing to go back to; never on the index itself, where it would be a
+   control that does nothing; and never on a slide with no eyebrow, which is the
+   rule the rail already follows and is what keeps it off the title and close. */
+function paintBackToIndex(slide) {
+  if (!backToIndex || indexAt < 0) return;
+  backToIndex.hidden = !(index > indexAt && slide?.querySelector('.eyebrow'));
+}
 
 /* Arrow keys must keep working after a control is clicked, but Space still
    belongs to a focused button so it can activate it. */

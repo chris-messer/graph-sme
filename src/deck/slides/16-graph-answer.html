@@ -1,0 +1,55 @@
+    <!-- 16 · graph answer · layout: one extracted graph of the four documents, with the two failing questions redrawn as walks -->
+    <section class="slide" aria-label="GraphRAG: both questions answered by traversing edges">
+      <div class="eyebrow"><span class="num">16</span> Graph answer</div>
+      <div class="content">
+        <h2>Store the relationships and both questions become a walk</h2>
+        <p class="lead ga-lead"><b>This is GraphRAG.</b> The same four documents, read once into nodes and typed edges. Neither question needs a better retriever.</p>
+        <div class="dual-toolbar ga-toolbar" role="group" aria-label="Which question to trace">
+          <span class="ctrl-label">Trace</span>
+          <button type="button" class="mode-btn active" data-ga="both" aria-pressed="true">Both</button>
+          <button type="button" class="mode-btn" data-ga="parent" aria-pressed="false">Question one · parent company</button>
+          <button type="button" class="mode-btn" data-ga="expired" aria-pressed="false">Question two · expired fact</button>
+        </div>
+        <div class="ga-split">
+          <div class="viz-shell ga-canvas" id="viz-graph-answer">
+            <div class="viz-legend">
+              <span><i style="background:#1b3139"></i> Company</span>
+              <span><i style="background:#00a972"></i> Person</span>
+              <span><i style="background:#52666d"></i> Place</span>
+              <span><i style="background:#2272b4"></i> Question one</span>
+              <span><i style="background:#ff3621"></i> Question two</span>
+              <span><i style="background:#c9cecf"></i> Retired</span>
+            </div>
+          </div>
+          <div class="ga-answers">
+            <article class="ga-ans" data-ga-card="parent">
+              <div class="ga-ans-head">
+                <span class="kicker blue">Question one</span>
+                <span class="ga-hops">2 hops</span>
+              </div>
+              <b class="ga-q">&ldquo;Who leads the parent company of Beta Logistics?&rdquo;</b>
+              <ol class="ga-walk">
+                <li><span class="ga-node">Beta Logistics</span></li>
+                <li><span class="ga-rel">PARENT_OF</span><span class="ga-node">Acme Holdings</span></li>
+                <li><span class="ga-rel">LED_BY</span><span class="ga-node win">Maya Okonjo</span></li>
+              </ol>
+              <p class="ga-note">Doc A and doc C never have to be matched to each other. The edge between them was extracted once, at write time.</p>
+            </article>
+            <article class="ga-ans" data-ga-card="expired">
+              <div class="ga-ans-head">
+                <span class="kicker">Question two</span>
+                <span class="ga-hops">1 edge</span>
+              </div>
+              <b class="ga-q">&ldquo;Who leads Acme Holdings?&rdquo;</b>
+              <ol class="ga-walk">
+                <li><span class="ga-node retired">Ray Duval</span></li>
+                <li><span class="ga-rel hot">SUPERSEDED_BY</span><span class="ga-node win">Maya Okonjo</span></li>
+              </ol>
+              <p class="ga-note">The 2018 record is retired by an edge rather than outranked by a score &mdash; still auditable, and still the right answer about 2018.</p>
+            </article>
+          </div>
+        </div>
+        <p class="viz-caption ga-caption"><b>What GraphRAG closes</b>Every edge above was extracted once, at write time. At question time the agent walks structure it already holds, so nothing depends on two documents happening to rank next to each other.</p>
+      </div>
+      <div class="footer"><span class="brand">Databricks × Graph SME</span><span class="counter">16 / 31</span></div>
+    </section>

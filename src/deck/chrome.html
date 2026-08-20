@@ -1,6 +1,12 @@
   <div class="progress" aria-hidden="true"></div>
 __RAIL__
   <div class="nav-hint">
+    <!-- The deck's one back door to the client-needs index. It lives here, in the
+         chrome, so every slide inherits it instead of 31 slides each growing their
+         own. The target is named by stem because slide numbers move on every
+         renumber; core.js resolves it and decides which slides show it. -->
+    <button type="button" class="notes-link nav-back" id="back-to-index"
+            data-stem="client-needs" hidden>Back to client needs</button>
     <button type="button" class="notes-link" id="open-notes">Open speaker notes</button>
     <span>← → · Space</span>
   </div>

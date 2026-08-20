@@ -37,6 +37,41 @@ body::before {
   background: var(--signal);
 }
 
+/* ── work in progress ───────────────────────────────────────────────────────
+   The marking for a slide that is not finished, and it is deliberately the
+   whole frame rather than a badge: diagonal hazard stripes across the slide, a
+   signal ring around it, and the words on the diagonal through the middle.
+   Loud enough to read from the back of a room, transparent enough that the
+   slide underneath is still worth talking over.
+
+   Applying and removing it is one edit in one place. Add the slide's stem to
+   WIP_STEMS in build.py and the build adds `is-wip` to the <section> and
+   appends the .wip-mark element; delete the stem and both go away. No slide's
+   own html, css or js takes part, so any slide can be marked or cleared
+   without being touched.
+
+   Two details that keep it from breaking the slide it covers. It is
+   pointer-events: none, so toggles, chips and tables underneath keep working.
+   And it clips itself rather than leaning on .slide's overflow, so the rotated
+   wordmark can run off both edges without adding scrollable overflow. The
+   child selector outranks .slide.section-open > *, which would otherwise pull
+   the overlay back into the flow on a section opener. */
+.slide.is-wip > .wip-mark {
+  position: absolute; inset: 0; z-index: 5; overflow: hidden;
+  pointer-events: none; user-select: none;
+  background: repeating-linear-gradient(135deg,
+    rgba(255,54,33,.075) 0 15px, transparent 15px 42px);
+  box-shadow: inset 0 0 0 5px rgba(255,54,33,.42);
+}
+.slide.is-wip > .wip-mark::before {
+  content: "Work in progress";
+  position: absolute; inset: 0; display: grid; place-items: center;
+  transform: rotate(-15deg); white-space: nowrap;
+  font: 800 clamp(38px, 6.4vw, 112px)/1 var(--display);
+  letter-spacing: -.02em; text-transform: uppercase;
+  color: rgba(255,54,33,.17);
+}
+
 .eyebrow {
   display: flex; align-items: center; gap: 14px;
   color: var(--signal); text-transform: uppercase; letter-spacing: .18em;
