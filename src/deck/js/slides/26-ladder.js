@@ -40,7 +40,7 @@ DECK.registerViz('26-ladder', (slide) => {
       qual: 'A partner or specialist team joins, because the scope now reaches past the platform or past the patterns. Delta stays the system of record throughout.',
       tintBg: 'rgba(255,54,33,.09)', tintLine: 'var(--signal)',
       parts: [
-        ['Enterprise knowledge graph', 'Business semantics, data contracts and steward workflows across the estate with Ontos, including the resources that were never in Databricks.'],
+        ['Enterprise knowledge graph', 'Business semantics, data contracts and steward workflows across the estate with Ontos — multi-platform by design, with Unity Catalog the connector that ships today.'],
         ['Billion-node graphs', 'The full source estate rather than a scoped cut — 1.45 billion edges over 635 million companies, with the scope kept in configuration.'],
         ['Graph neural networks', 'Structure itself as the model input, once an edge contract and labeled outcomes both already exist.'],
         ['Graph foundation models', 'Fine-tuning a pretrained graph model where one exists for the domain, which today means chemistry and materials rather than every industry.'],

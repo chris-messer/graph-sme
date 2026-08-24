@@ -12,9 +12,9 @@ DECK.registerViz('13-ontology-design', (slide) => {
     },
     semantics: {
       inner: { title: 'OntoBricks', sub: 'extracts relationships out of Unity Catalog', color: C.blue, ghost: 'where Unity Catalog sits' },
-      outer: { title: 'Ontos', sub: 'governs that graph plus non-Databricks resources', color: C.green, ghost: 'where Atlan or Collibra sits' },
+      outer: { title: 'Ontos', sub: 'governs that graph — Unity Catalog today, more planned', color: C.green, ghost: 'where Atlan or Collibra sits' },
       link: 'feeds the company knowledge graph',
-      note: 'Databricks-native extraction feeding, and governance spanning, a scope wider than Databricks alone.',
+      note: 'Databricks-native extraction feeding a governance layer built to span wider than Databricks, with Unity Catalog connected today.',
     },
   };
 
